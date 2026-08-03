@@ -1,0 +1,25 @@
+{
+  "datasetVersion": "7.0.0",
+  "generatedDate": "2026-07-15",
+  "jurisdiction": "Ontario, Canada",
+  "sources": [
+    {
+      "title": "PCCU Pocket Reference Card",
+      "date": "2003-05-23",
+      "type": "Historical local source",
+      "coverage": "Emergency/PCCU medications and algorithms"
+    },
+    {
+      "title": "IWK Pediatric Drug Dosing Guidelines",
+      "date": "2025-08-22",
+      "type": "Current Canadian hospital dosing reference",
+      "coverage": "211 matched catalogue medications"
+    },
+    {
+      "title": "CHEO Emergency Drug Calculator",
+      "date": "2024-03",
+      "type": "Current Ontario emergency reference",
+      "coverage": "11 emergency medications"
+    }
+  ]
+}

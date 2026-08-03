@@ -1,0 +1,19 @@
+PedsFlow v17.1.0 — Vomiting & Antiemetic Update
+Implemented July 25, 2026
+
+Medication updates:
+- Expanded ondansetron, dimenhydrinate, diphenhydramine, metoclopramide, domperidone, promethazine, lorazepam and olanzapine safety/dosing sections.
+- Added prochlorperazine, droperidol, haloperidol, topical capsaicin and aprepitant monographs.
+- Added QT, electrolyte, sedation and extrapyramidal-reaction safeguards.
+
+Admission-plan updates:
+- Acute gastroenteritis with dehydration
+- Migraine and status migrainosus
+- Undifferentiated abdominal pain
+- Bowel obstruction/bilious vomiting
+- Acute pancreatitis
+- Feeding intolerance/vomiting in medically complex children
+- Pediatric cannabis ingestion
+- New Cannabis Hyperemesis Syndrome (CHS) plan
+
+All treatment guidance requires confirmation with the current local formulary, pharmacist, institutional pathway and attending physician.

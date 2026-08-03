@@ -1,0 +1,33 @@
+PedsFlow v11.0 update
+
+Implemented:
+- Admission Plans search now searches diagnosis titles, aliases, and specialty/category only.
+- Home/global search now returns admission plans only; medications and antibiotics remain searchable in their own tabs.
+- Added detailed plans for:
+  1. Acetaminophen (Tylenol) overdose
+  2. Neonatal HSV infection / HSV encephalitis
+  3. Hypokalemia
+  4. Hypophosphatemia
+  5. Refeeding syndrome
+- Updated app version to 11.0.0+1100.
+
+Clinical safety:
+- Acetaminophen management points to the Ontario Poison Centre protocol effective April 1, 2026.
+- Neonatal HSV content includes the second-week presentation and unexplained transaminitis as important warning features.
+- High-alert IV potassium/phosphate preparation and infusion limits remain linked to current local pharmacy/institutional protocols.
+
+Open in VS Code:
+1. Extract the ZIP.
+2. Open the folder containing pubspec.yaml.
+3. Run: flutter pub get
+4. Run: flutter analyze
+5. Run: flutter run -d chrome
+
+v11.0.1
+- Replaced the acetaminophen overdose plan with a complete Ontario Poison Centre-aligned management pathway.
+- Added exact q12h routine laboratory monitoring, q4h high-risk monitoring, q1-2h bedside glucose monitoring, NAC dosing, stopping criteria, infusion reaction management and escalation triggers.
+- Removed the duplicate acetaminophen topic.
+
+
+PedsFlow v11.1.0 — Toxicology expansion
+Added 12 practical pediatric toxicology modules: cannabis, beta-blocker, calcium-channel blocker, clonidine/alpha-2 agonist, sulfonylurea, anticholinergic/antihistamine, hydrocarbon, lithium, methemoglobinemia, isoniazid, digoxin, and toxic seizure/severe agitation. All high-risk antidote and infusion pathways explicitly require Ontario Poison Centre and local PICU/pharmacy confirmation.

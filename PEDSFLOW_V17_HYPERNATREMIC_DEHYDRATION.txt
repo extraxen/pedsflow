@@ -1,0 +1,16 @@
+PedsFlow v17.0.0
+Implemented: July 24, 2026
+
+Added:
+- Hypernatremic Dehydration calculator under Calculators
+- Premorbid-weight, clinical-sign, and clinician-entered percentage pathways
+- Derived premorbid weight
+- Maintenance + deficit rate
+- Actual-rate replacement-duration comparison
+- Sodium target and observed trajectory
+- Free-water deficit and Adrogue-Madias educational estimates
+- D5RL, D5NS, D5 0.45% NS, D5 0.2% NS, and custom fluids
+- Hard-stop safety warnings and EMR-copyable summary
+- Version and implementation date displayed on Home
+
+Verify with local institutional protocols, formulary, pharmacist, and attending physician before implementation.

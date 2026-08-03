@@ -1,0 +1,16 @@
+PedsFlow v18.4.0 — Native Pediatric DKA Integration
+Implemented: July 31, 2026
+
+Changes:
+- Replaced the externally embedded DKA website with a native Flutter module.
+- Added CPS/TREKK-aligned DKA assessment, severity, corrected sodium, anion gap,
+  effective osmolality, HHS screening, fluid rates, two-bag calculations,
+  insulin and potassium safety logic, cerebral-injury treatment calculations,
+  monitoring trends, alerts, and a copyable handoff summary.
+- Added native DKA engine unit tests.
+- Removed iframe and url_launcher dependency.
+- Preserved PedsFlow custom icon, complete PCCU content, and existing calculators.
+
+Clinical limitation:
+This module is decision support only. Verify calculations and treatment against
+current local DKA pathways and involve endocrinology/PCCU/pharmacy as indicated.

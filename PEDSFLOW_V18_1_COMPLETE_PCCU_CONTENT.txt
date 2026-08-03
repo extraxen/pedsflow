@@ -1,0 +1,19 @@
+PedsFlow v18.1.0 — Complete PCCU Clinical Content Rebuild
+Implemented: July 26, 2026
+
+This release replaces the duplicated PCCU placeholder text with topic-specific clinical content across all 14 PCCU categories and all listed topics.
+
+Each page now contains:
+- Clinical overview
+- Initial stabilization
+- Disease-specific treatment or settings
+- Monitoring
+- Expected response
+- Failure criteria and escalation
+- Complications and cautions
+- Sources and local verification
+- Copyable PCCU plan
+
+High-priority respiratory, airway, asthma, ARDS, septic shock, status epilepticus, raised ICP, DKA, cerebral injury, hyperkalemia and anaphylaxis pathways were rewritten with detailed bespoke content. All remaining pages use category- and topic-specific clinical guidance rather than the previous identical scaffold.
+
+This remains clinician decision support only. Verify current local protocols, doses, concentrations and equipment standards before implementation.

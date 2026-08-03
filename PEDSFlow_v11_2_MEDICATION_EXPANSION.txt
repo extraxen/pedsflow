@@ -1,0 +1,15 @@
+PedsFlow v11.2.0 — Medication Expansion
+
+Medication database expanded from 300 to 386 monographs.
+Added 86 high-yield medications after a systematic gap audit.
+
+Major additions:
+- Toxicology antidotes and rescue therapies
+- Anticoagulants, reversal agents, blood products and hematology drugs
+- Constipation, IBD, liver and nutrition medications
+- Electrolyte, renal and fluid therapies
+- Neonatal surfactants, caffeine, nitric oxide and RSV prophylaxis
+- Tumor lysis and metabolic-emergency agents
+- Resistant-organism antimicrobials and tropical medicine drugs
+
+All new monographs are intentionally marked for local verification. High-alert therapy must be checked against the current hospital formulary, pharmacy, Ontario Poison Centre, and relevant specialty protocol.

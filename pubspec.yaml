@@ -1,0 +1,26 @@
+name: pediatric_night_companion
+description: PedsFlow pediatric night companion.
+publish_to: "none"
+version: 18.4.0+1840
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  shared_preferences: ^2.3.2
+  image_picker: ^1.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/admission_plans.json
+    - assets/medications_300.json
+    - assets/antibiotic_guide.json
+    - assets/clinical_sources.json

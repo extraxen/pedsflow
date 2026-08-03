@@ -1,0 +1,269 @@
+{
+  "lastReviewed": "2026-07-17",
+  "jurisdiction": "Ontario / Canada",
+  "warning": "Educational reference. Verify local antibiogram, patient age, allergy, renal function, culture data and institutional order sets.",
+  "syndromes": [
+    {
+      "title": "Community-acquired pneumonia",
+      "category": "Respiratory",
+      "organisms": [
+        "Streptococcus pneumoniae",
+        "Group A Streptococcus",
+        "Haemophilus influenzae",
+        "Staphylococcus aureus after influenza or severe/necrotizing disease",
+        "Atypical organisms in selected school-aged children"
+      ],
+      "approach": "Choose narrow beta-lactam therapy for uncomplicated bacterial CAP when appropriate. Broaden for severe disease, empyema, post-influenza staphylococcal concern, immunocompromise or resistant prior cultures.",
+      "linkedDrugs": [
+        "Amoxicillin",
+        "Ampicillin",
+        "Ceftriaxone",
+        "Cefotaxime",
+        "Cefazolin",
+        "Cloxacillin",
+        "Vancomycin",
+        "Azithromycin"
+      ]
+    },
+    {
+      "title": "Febrile UTI / pyelonephritis",
+      "category": "Urinary",
+      "organisms": [
+        "Escherichia coli",
+        "Klebsiella species",
+        "Proteus species",
+        "Enterococcus in selected hosts",
+        "Pseudomonas in selected urinary anomalies/instrumentation"
+      ],
+      "approach": "Obtain a properly collected urine culture before treatment when feasible. Select oral versus IV therapy by age, severity, hydration and local susceptibility. Narrow promptly to culture.",
+      "linkedDrugs": [
+        "Cefixime",
+        "Cephalexin",
+        "Amoxicillin-clavulanate",
+        "Trimethoprim-sulfamethoxazole",
+        "Ceftriaxone",
+        "Cefotaxime",
+        "Gentamicin",
+        "Ampicillin",
+        "Cefazolin"
+      ]
+    },
+    {
+      "title": "Bacterial meningitis",
+      "category": "CNS",
+      "organisms": [
+        "Age-dependent: Group B Streptococcus and Gram-negative enteric bacilli in neonates",
+        "Streptococcus pneumoniae",
+        "Neisseria meningitidis",
+        "Haemophilus influenzae in incompletely immunized children",
+        "Listeria risk in selected neonatal/immunocompromised patients"
+      ],
+      "approach": "This is an emergency. Use age-specific empiric therapy with meningitic dosing and add vancomycin when resistant pneumococcus is a concern. Add acyclovir when HSV risk exists. Do not delay antibiotics for imaging or LP when unstable.",
+      "linkedDrugs": [
+        "Ceftriaxone",
+        "Cefotaxime",
+        "Vancomycin",
+        "Ampicillin",
+        "Acyclovir",
+        "Dexamethasone"
+      ]
+    },
+    {
+      "title": "Cellulitis / skin infection",
+      "category": "Skin",
+      "organisms": [
+        "Group A Streptococcus",
+        "Staphylococcus aureus",
+        "MRSA depending on purulence and epidemiology",
+        "Pasteurella after animal bites",
+        "Oral anaerobes and Eikenella after human bites"
+      ],
+      "approach": "Nonpurulent cellulitis usually targets streptococci and MSSA. Drain abscesses when indicated. Modify for bites, water exposure, immunocompromise, necrotizing features or prior MRSA.",
+      "linkedDrugs": [
+        "Cephalexin",
+        "Cefazolin",
+        "Cloxacillin",
+        "Clindamycin",
+        "Vancomycin",
+        "Amoxicillin-clavulanate",
+        "Piperacillin-tazobactam"
+      ]
+    },
+    {
+      "title": "Osteomyelitis / septic arthritis",
+      "category": "Bone & joint",
+      "organisms": [
+        "Staphylococcus aureus",
+        "Group A Streptococcus",
+        "Kingella kingae in young children",
+        "Salmonella in sickle cell disease",
+        "Gram-negative organisms in selected neonates/immunocompromised patients"
+      ],
+      "approach": "Obtain blood cultures and aspirate/source cultures when feasible. Empiric treatment should cover S. aureus and be modified by age, sickle cell disease, hardware and local MRSA epidemiology.",
+      "linkedDrugs": [
+        "Cefazolin",
+        "Cloxacillin",
+        "Clindamycin",
+        "Vancomycin",
+        "Ceftriaxone"
+      ]
+    },
+    {
+      "title": "Febrile neutropenia",
+      "category": "Immunocompromised",
+      "organisms": [
+        "Gram-negative bacilli including Pseudomonas",
+        "Enterobacterales",
+        "Staphylococci and streptococci",
+        "Fungi with prolonged neutropenia"
+      ],
+      "approach": "Give antipseudomonal empiric therapy promptly using the oncology/local pathway. Add gram-positive coverage only for defined indications such as instability, line infection, skin/soft tissue focus or resistant colonization.",
+      "linkedDrugs": [
+        "Cefepime",
+        "Piperacillin-tazobactam",
+        "Meropenem",
+        "Vancomycin",
+        "Tobramycin",
+        "Amikacin"
+      ]
+    },
+    {
+      "title": "Intra-abdominal infection",
+      "category": "GI / surgery",
+      "organisms": [
+        "Enterobacterales",
+        "Enterococci in selected healthcare-associated disease",
+        "Bacteroides and other anaerobes"
+      ],
+      "approach": "Source control is essential. Choose therapy covering enteric Gram-negative organisms and anaerobes; broaden for shock, perforation, healthcare exposure or resistant prior cultures.",
+      "linkedDrugs": [
+        "Ceftriaxone",
+        "Metronidazole",
+        "Piperacillin-tazobactam",
+        "Meropenem",
+        "Ampicillin-sulbactam"
+      ]
+    },
+    {
+      "title": "Neonatal sepsis",
+      "category": "Neonatal",
+      "organisms": [
+        "Group B Streptococcus",
+        "Escherichia coli and other enteric Gram-negative bacilli",
+        "Listeria monocytogenes",
+        "Staphylococci and unit-specific organisms in late-onset/device-associated infection"
+      ],
+      "approach": "Use gestational-age and onset-specific neonatal protocols. Include meningitis and HSV considerations when indicated. Narrow or stop according to cultures and clinical course.",
+      "linkedDrugs": [
+        "Ampicillin",
+        "Gentamicin",
+        "Cefotaxime",
+        "Vancomycin",
+        "Acyclovir"
+      ]
+    },
+    {
+      "title": "Orbital cellulitis",
+      "category": "Head & neck",
+      "organisms": [
+        "Streptococcus species",
+        "Staphylococcus aureus",
+        "Haemophilus influenzae",
+        "Sinus-associated anaerobes"
+      ],
+      "approach": "Urgent ophthalmology/ENT assessment and imaging. Use IV therapy covering sinus pathogens; add MRSA coverage when severe, abscess, necrosis or epidemiologic concern.",
+      "linkedDrugs": [
+        "Ceftriaxone",
+        "Cefotaxime",
+        "Ampicillin-sulbactam",
+        "Metronidazole",
+        "Vancomycin",
+        "Clindamycin"
+      ]
+    },
+    {
+      "title": "Mastoiditis",
+      "category": "Head & neck",
+      "organisms": [
+        "Streptococcus pneumoniae",
+        "Group A Streptococcus",
+        "Staphylococcus aureus",
+        "Haemophilus influenzae",
+        "Pseudomonas in chronic ear disease"
+      ],
+      "approach": "ENT assessment and imaging for complications. Empiric IV treatment depends on uncomplicated versus chronic ear disease, intracranial extension and local resistance.",
+      "linkedDrugs": [
+        "Ceftriaxone",
+        "Cefotaxime",
+        "Cefazolin",
+        "Vancomycin",
+        "Piperacillin-tazobactam"
+      ]
+    },
+    {
+      "title": "Bacterial tracheitis / epiglottitis concern",
+      "category": "Airway",
+      "organisms": [
+        "Staphylococcus aureus",
+        "Streptococcus species",
+        "Haemophilus influenzae",
+        "Moraxella catarrhalis"
+      ],
+      "approach": "Airway management comes first. Obtain cultures only when safe. Use broad IV therapy including staphylococcal coverage and tailor to airway cultures.",
+      "linkedDrugs": [
+        "Ceftriaxone",
+        "Cefotaxime",
+        "Vancomycin",
+        "Clindamycin"
+      ]
+    },
+    {
+      "title": "Sepsis without source",
+      "category": "Systemic",
+      "organisms": [
+        "Age-, host- and source-dependent Gram-positive and Gram-negative organisms"
+      ],
+      "approach": "Obtain cultures rapidly without delaying antibiotics in shock. Select age/host/source-specific empiric therapy, give source control and narrow within 24–48 hours when data allow.",
+      "linkedDrugs": [
+        "Ceftriaxone",
+        "Cefotaxime",
+        "Cefepime",
+        "Piperacillin-tazobactam",
+        "Meropenem",
+        "Vancomycin",
+        "Ampicillin",
+        "Gentamicin"
+      ]
+    }
+  ],
+  "coveragePearls": [
+    {
+      "title": "Cefazolin",
+      "text": "Strong MSSA and streptococcal agent; not MRSA, Enterococcus, Pseudomonas or atypical coverage."
+    },
+    {
+      "title": "Ceftriaxone / cefotaxime",
+      "text": "Broad streptococcal and many Enterobacterales/H. influenzae/Neisseria coverage; not Enterococcus, Listeria, MRSA, atypicals or reliable Pseudomonas coverage."
+    },
+    {
+      "title": "Vancomycin",
+      "text": "Gram-positive coverage including MRSA; no Gram-negative or anaerobic coverage. Dosing and monitoring depend on indication, renal function and local AUC/trough protocol."
+    },
+    {
+      "title": "Piperacillin-tazobactam",
+      "text": "Broad Gram-negative including Pseudomonas, many Gram-positive organisms and anaerobes; not reliable MRSA coverage."
+    },
+    {
+      "title": "Meropenem",
+      "text": "Very broad Gram-negative and anaerobic coverage with many Gram-positive organisms; reserve for defined resistant or severe indications and stewardship review."
+    },
+    {
+      "title": "Metronidazole",
+      "text": "Anaerobic and selected protozoal coverage; no aerobic bacterial coverage."
+    },
+    {
+      "title": "Aminoglycosides",
+      "text": "Concentration-dependent Gram-negative activity; require renal and therapeutic drug monitoring according to age and duration. Poor standalone tissue penetration for several syndromes."
+    }
+  ]
+}
