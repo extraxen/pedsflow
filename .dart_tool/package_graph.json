@@ -5,9 +5,10 @@
   "packages": [
     {
       "name": "pediatric_night_companion",
-      "version": "19.1.0+1910",
+      "version": "19.2.0+1920",
       "dependencies": [
         "flutter",
+        "growth_standards",
         "image_picker",
         "shared_preferences"
       ],
@@ -39,6 +40,17 @@
         "stream_channel",
         "test_api",
         "vector_math"
+      ]
+    },
+    {
+      "name": "growth_standards",
+      "version": "5.0.0",
+      "dependencies": [
+        "clock",
+        "dart_numerics",
+        "freezed_annotation",
+        "json_annotation",
+        "super_measurement"
       ]
     },
     {
@@ -167,6 +179,34 @@
         "stream_channel",
         "string_scanner",
         "term_glyph"
+      ]
+    },
+    {
+      "name": "super_measurement",
+      "version": "4.0.1",
+      "dependencies": []
+    },
+    {
+      "name": "json_annotation",
+      "version": "4.12.0",
+      "dependencies": [
+        "meta"
+      ]
+    },
+    {
+      "name": "freezed_annotation",
+      "version": "3.1.0",
+      "dependencies": [
+        "collection",
+        "json_annotation",
+        "meta"
+      ]
+    },
+    {
+      "name": "dart_numerics",
+      "version": "0.0.6",
+      "dependencies": [
+        "tuple"
       ]
     },
     {
@@ -370,6 +410,11 @@
         "source_span",
         "string_scanner"
       ]
+    },
+    {
+      "name": "tuple",
+      "version": "2.0.2",
+      "dependencies": []
     },
     {
       "name": "file_selector_windows",

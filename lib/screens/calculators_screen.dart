@@ -1,4 +1,6 @@
 import '../features/dka/dka_calculator_screen.dart';
+import '../features/bilirubin/bilirubin_screen.dart';
+import 'pediatric_reference_screen.dart';
 import 'pccu_screen.dart';
 import 'dart:math' as math;
 
@@ -15,6 +17,18 @@ class CalculatorsScreen extends StatelessWidget {
         subtitle: 'Ventilation, vasoactives, oxygenation, cardiac and monitoring tools',
         icon: Icons.monitor_heart_outlined,
         screen: const PccuCalculatorsScreen(),
+      ),
+      _CalculatorItem(
+        title: 'CPS neonatal bilirubin',
+        subtitle: 'Advanced phototherapy, exchange, ΔTSB, TcB and rebound support',
+        icon: Icons.wb_sunny_outlined,
+        screen: const BilirubinScreen(),
+      ),
+      _CalculatorItem(
+        title: 'Pediatric reference & growth',
+        subtitle: 'Vital signs, BP/MAP thresholds and WHO growth percentiles',
+        icon: Icons.show_chart,
+        screen: const PediatricReferenceScreen(),
       ),
       _CalculatorItem(
         title: 'Pediatric DKA',
