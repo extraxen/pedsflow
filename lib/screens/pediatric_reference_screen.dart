@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:growth_standards/growth_standards.dart' as growth;
 
 class PediatricReferenceScreen extends StatelessWidget {
   const PediatricReferenceScreen({super.key});
@@ -215,12 +214,10 @@ class GrowthAssessmentScreen extends StatefulWidget {
 class _GrowthAssessmentScreenState extends State<GrowthAssessmentScreen> {
   DateTime _dob = DateTime.now().subtract(const Duration(days: 365));
   DateTime _measurementDate = DateTime.now();
-  bool _male = true;
-  bool _recumbent = true;
   final TextEditingController _weight = TextEditingController(text: '10.2');
   final TextEditingController _height = TextEditingController(text: '75.5');
   final TextEditingController _head = TextEditingController(text: '46.5');
-  List<_GrowthResult> _results = <_GrowthResult>[];
+  double? _bmi;
   String? _error;
 
   @override
@@ -231,81 +228,32 @@ class _GrowthAssessmentScreenState extends State<GrowthAssessmentScreen> {
     super.dispose();
   }
 
-  double? _num(TextEditingController controller) => double.tryParse(controller.text.trim());
-
-  growth.Months _month(int month) => growth.Months.values[month - 1];
-
-  growth.Date _date(DateTime date) => growth.Date(year: date.year, month: _month(date.month), date: date.day);
+  double? _number(TextEditingController controller) {
+    final double? value = double.tryParse(controller.text.trim());
+    return value != null && value.isFinite ? value : null;
+  }
 
   void _calculate() {
-    final double? weight = _num(_weight);
-    final double? height = _num(_height);
-    final double? head = _num(_head);
+    final double? weight = _number(_weight);
+    final double? height = _number(_height);
+    if (_measurementDate.isBefore(_dob)) {
+      setState(() {
+        _bmi = null;
+        _error = 'Measurement date must be on or after the date of birth.';
+      });
+      return;
+    }
     if (weight == null || weight <= 0 || height == null || height <= 0) {
-      setState(() => _error = 'Enter valid weight and length/height.');
+      setState(() {
+        _bmi = null;
+        _error = 'Enter valid positive weight and length/height values.';
+      });
       return;
     }
-    if (!_measurementDate.isAfter(_dob)) {
-      setState(() => _error = 'Measurement date must be after date of birth.');
-      return;
-    }
-
-    try {
-      final growth.Age age = growth.Age(_date(_dob), observedDate: _date(_measurementDate));
-      final growth.Sex sex = _male ? growth.Sex.male : growth.Sex.female;
-      final growth.LengthHeightMeasurementPosition position = _recumbent
-          ? growth.LengthHeightMeasurementPosition.recumbent
-          : growth.LengthHeightMeasurementPosition.standing;
-      final double years = _measurementDate.difference(_dob).inDays / 365.2425;
-      final List<_GrowthResult> output = <_GrowthResult>[];
-
-      void add(String name, dynamic result) {
-        final double z = (result.zScore() as num).toDouble();
-        final double percentile = (result.percentile() as num).toDouble();
-        output.add(_GrowthResult(name, z, percentile));
-      }
-
-      if (years < 5) {
-        final dynamic who = growth.GrowthStandard.who.fromBirthTo5Years;
-        add('Weight-for-age', who.weightForAge(sex: sex, age: age, weight: growth.Mass$Kilogram(weight)));
-        add('Length/height-for-age', who.lengthForAge(sex: sex, age: age, lengthHeight: growth.Length$Centimeter(height), measure: position));
-        final dynamic bmiMeasurement = growth.WHOGrowthStandardsBodyMassIndexMeasurement.fromMeasurement(
-          measure: position,
-          lengthHeight: growth.Length$Centimeter(height),
-          weight: growth.Mass$Kilogram(weight),
-          age: age,
-        );
-        add('BMI-for-age', who.bodyMassIndexForAge(sex: sex, bodyMassIndexMeasurement: bmiMeasurement));
-        if (_recumbent && height >= 45 && height <= 110) {
-          add('Weight-for-length', who.weightForLength(sex: sex, age: age, lengthMeasurementResult: growth.Length$Centimeter(height), massMeasurementResult: growth.Mass$Kilogram(weight), measure: position));
-        } else if (!_recumbent && height >= 65 && height <= 120) {
-          add('Weight-for-height', who.weightForHeight(sex: sex, age: age, height: growth.Length$Centimeter(height), mass: growth.Mass$Kilogram(weight), measure: position));
-        }
-        if (head != null && head > 0) {
-          add('Head circumference-for-age', who.headCircumferenceForAge(sex: sex, age: age, measurementResult: growth.Length$Centimeter(head)));
-        }
-      } else if (years <= 18) {
-        final dynamic who = growth.GrowthStandard.who.from5YearsAndAbove;
-        add('Height-for-age', who.heightForAge(sex: sex, age: age, lengthHeight: growth.Length$Centimeter(height), measure: growth.LengthHeightMeasurementPosition.standing));
-        final double bmi = weight / math.pow(height / 100, 2);
-        add('BMI-for-age', who.bodyMassIndexForAge(sex: sex, age: age, bodyMassIndexMeasurement: growth.WHOGrowthReferenceBodyMassIndexMeasurement(bmi)));
-        if (years <= 10) {
-          add('Weight-for-age', who.weightForAge(sex: sex, age: age, weight: growth.Mass$Kilogram(weight)));
-        }
-      } else {
-        throw StateError('WHO growth reference in this module supports birth through 18 years.');
-      }
-
-      setState(() {
-        _results = output;
-        _error = null;
-      });
-    } catch (error) {
-      setState(() {
-        _results = <_GrowthResult>[];
-        _error = 'Growth calculation could not be completed: $error';
-      });
-    }
+    setState(() {
+      _bmi = weight / math.pow(height / 100, 2);
+      _error = null;
+    });
   }
 
   Future<void> _pickDate(bool birth) async {
@@ -316,16 +264,26 @@ class _GrowthAssessmentScreenState extends State<GrowthAssessmentScreen> {
       firstDate: DateTime(2000),
       lastDate: DateTime.now(),
     );
-    if (date != null) setState(() => birth ? _dob = date : _measurementDate = date);
+    if (date != null) {
+      setState(() {
+        if (birth) {
+          _dob = date;
+        } else {
+          _measurementDate = date;
+        }
+      });
+    }
   }
 
-  String _dateText(DateTime date) => '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+  String _dateText(DateTime date) =>
+      '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
 
   @override
   Widget build(BuildContext context) {
-    final double ageYears = _measurementDate.difference(_dob).inDays / 365.2425;
+    final int ageDays = _measurementDate.difference(_dob).inDays;
+    final double ageYears = ageDays / 365.2425;
     return Scaffold(
-      appBar: AppBar(title: const Text('WHO Growth Assessment')),
+      appBar: AppBar(title: const Text('Growth Assessment')),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: <Widget>[
@@ -333,7 +291,9 @@ class _GrowthAssessmentScreenState extends State<GrowthAssessmentScreen> {
             color: Theme.of(context).colorScheme.primaryContainer,
             child: const Padding(
               padding: EdgeInsets.all(14),
-              child: Text('WHO Child Growth Standards (birth–5 years) and WHO Growth Reference (5–18 years). Calculates z-scores and exact percentiles. Serial trajectory tracking should be interpreted with measurement technique, growth velocity, parental height and clinical context.'),
+              child: Text(
+                'Web-safe growth assessment. This hotfix calculates age and BMI and preserves measurement documentation. Exact WHO/CDC percentiles are temporarily disabled because the previous growth library cannot compile for Flutter web. Do not estimate percentiles from this screen.',
+              ),
             ),
           ),
           const SizedBox(height: 12),
@@ -342,45 +302,78 @@ class _GrowthAssessmentScreenState extends State<GrowthAssessmentScreen> {
               padding: const EdgeInsets.all(14),
               child: Column(
                 children: <Widget>[
-                  SegmentedButton<bool>(
-                    segments: const <ButtonSegment<bool>>[
-                      ButtonSegment<bool>(value: true, label: Text('Male')),
-                      ButtonSegment<bool>(value: false, label: Text('Female')),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: () => _pickDate(true),
+                          icon: const Icon(Icons.cake_outlined),
+                          label: Text('DOB\n${_dateText(_dob)}'),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: () => _pickDate(false),
+                          icon: const Icon(Icons.event_outlined),
+                          label: Text('Measured\n${_dateText(_measurementDate)}'),
+                        ),
+                      ),
                     ],
-                    selected: <bool>{_male},
-                    onSelectionChanged: (Set<bool> value) => setState(() => _male = value.first),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    ageYears < 2
+                        ? 'Age: $ageDays days (${ageYears.toStringAsFixed(2)} years)'
+                        : 'Age: ${ageYears.toStringAsFixed(2)} years',
+                    style: const TextStyle(fontWeight: FontWeight.w700),
                   ),
                   const SizedBox(height: 12),
-                  Row(children: <Widget>[
-                    Expanded(child: OutlinedButton.icon(onPressed: () => _pickDate(true), icon: const Icon(Icons.cake_outlined), label: Text('DOB\n${_dateText(_dob)}'))),
-                    const SizedBox(width: 10),
-                    Expanded(child: OutlinedButton.icon(onPressed: () => _pickDate(false), icon: const Icon(Icons.event_outlined), label: Text('Measured\n${_dateText(_measurementDate)}'))),
-                  ]),
-                  const SizedBox(height: 8),
-                  Text('Age: ${ageYears.toStringAsFixed(2)} years', style: const TextStyle(fontWeight: FontWeight.w700)),
-                  const SizedBox(height: 12),
-                  TextField(controller: _weight, keyboardType: const TextInputType.numberWithOptions(decimal: true), decoration: const InputDecoration(labelText: 'Weight (kg)', border: OutlineInputBorder())),
+                  TextField(
+                    controller: _weight,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    decoration: const InputDecoration(
+                      labelText: 'Weight (kg)',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
                   const SizedBox(height: 10),
-                  TextField(controller: _height, keyboardType: const TextInputType.numberWithOptions(decimal: true), decoration: const InputDecoration(labelText: 'Length/height (cm)', border: OutlineInputBorder())),
+                  TextField(
+                    controller: _height,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    decoration: const InputDecoration(
+                      labelText: 'Length/height (cm)',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
                   const SizedBox(height: 10),
-                  TextField(controller: _head, keyboardType: const TextInputType.numberWithOptions(decimal: true), decoration: const InputDecoration(labelText: 'Head circumference (cm) — optional', border: OutlineInputBorder())),
-                  const SizedBox(height: 10),
-                  SegmentedButton<bool>(
-                    segments: const <ButtonSegment<bool>>[
-                      ButtonSegment<bool>(value: true, label: Text('Recumbent length')),
-                      ButtonSegment<bool>(value: false, label: Text('Standing height')),
-                    ],
-                    selected: <bool>{_recumbent},
-                    onSelectionChanged: (Set<bool> value) => setState(() => _recumbent = value.first),
+                  TextField(
+                    controller: _head,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    decoration: const InputDecoration(
+                      labelText: 'Head circumference (cm) — optional',
+                      border: OutlineInputBorder(),
+                    ),
                   ),
                   const SizedBox(height: 14),
-                  FilledButton.icon(onPressed: _calculate, icon: const Icon(Icons.show_chart), label: const Text('Calculate growth percentiles')),
+                  FilledButton.icon(
+                    onPressed: _calculate,
+                    icon: const Icon(Icons.calculate_outlined),
+                    label: const Text('Calculate BMI'),
+                  ),
                 ],
               ),
             ),
           ),
-          if (_error != null) Card(color: Theme.of(context).colorScheme.errorContainer, child: Padding(padding: const EdgeInsets.all(14), child: Text(_error!))),
-          if (_results.isNotEmpty) ...<Widget>[
+          if (_error != null)
+            Card(
+              color: Theme.of(context).colorScheme.errorContainer,
+              child: Padding(
+                padding: const EdgeInsets.all(14),
+                child: Text(_error!),
+              ),
+            ),
+          if (_bmi != null) ...<Widget>[
             const SizedBox(height: 12),
             Card(
               child: Padding(
@@ -388,69 +381,43 @@ class _GrowthAssessmentScreenState extends State<GrowthAssessmentScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('Growth results', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900)),
-                    const SizedBox(height: 12),
-                    ..._results.map((result) => _GrowthResultCard(result: result)),
+                    const Text(
+                      'Calculated BMI',
+                      style: TextStyle(fontWeight: FontWeight.w800),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '${_bmi!.toStringAsFixed(1)} kg/m²',
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            fontWeight: FontWeight.w900,
+                          ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Pediatric BMI requires age- and sex-specific percentile interpretation. This value must not be classified using adult BMI categories.',
+                    ),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 12),
-            const Card(
-              child: Padding(
-                padding: EdgeInsets.all(14),
-                child: Text('Interpretation reminders: values below −2 SD or above +2 SD merit clinical review; crossing major percentile channels, discordant weight/length patterns, poor growth velocity or concerning symptoms may be more important than a single percentile. For preterm infants, use corrected age and an appropriate preterm standard such as Fenton/INTERGROWTH before transitioning to WHO charts.'),
-              ),
-            ),
           ],
-        ],
-      ),
-    );
-  }
-}
-
-class _GrowthResult {
-  final String name;
-  final double z;
-  final double percentile;
-  const _GrowthResult(this.name, this.z, this.percentile);
-}
-
-class _GrowthResultCard extends StatelessWidget {
-  final _GrowthResult result;
-  const _GrowthResultCard({required this.result});
-
-  @override
-  Widget build(BuildContext context) {
-    final double clamped = result.z.clamp(-3.0, 3.0);
-    final String interpretation = result.z < -3
-        ? 'Severely low'
-        : result.z < -2
-            ? 'Low'
-            : result.z > 3
-                ? 'Severely high'
-                : result.z > 2
-                    ? 'High'
-                    : 'Within expected reference range';
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(children: <Widget>[
-            Expanded(child: Text(result.name, style: const TextStyle(fontWeight: FontWeight.w800))),
-            Text('${result.percentile.toStringAsFixed(1)}th percentile'),
-          ]),
-          const SizedBox(height: 5),
-          Stack(
-            alignment: Alignment.centerLeft,
-            children: <Widget>[
-              Container(height: 12, decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), gradient: const LinearGradient(colors: <Color>[Color(0xFFFFCDD2), Color(0xFFC8E6C9), Color(0xFFFFCDD2)]))),
-              Align(alignment: Alignment((clamped / 3).clamp(-1.0, 1.0).toDouble(), 0), child: Container(width: 4, height: 22, color: Colors.black)),
-            ],
+          const SizedBox(height: 12),
+          const Card(
+            child: ExpansionTile(
+              title: Text(
+                'Growth-chart reference',
+                style: TextStyle(fontWeight: FontWeight.w800),
+              ),
+              childrenPadding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+              children: <Widget>[
+                Text('Use WHO growth standards from birth to 2 years, including weight-for-age, length-for-age, weight-for-length and head circumference.'),
+                SizedBox(height: 8),
+                Text('From age 2 years onward, use the locally adopted pediatric growth chart and BMI-for-age percentiles. Correct age for prematurity where clinically appropriate.'),
+                SizedBox(height: 8),
+                Text('A validated offline percentile engine with bundled WHO/CDC LMS tables will be added in a later release without the incompatible web dependency.'),
+              ],
+            ),
           ),
-          const SizedBox(height: 5),
-          Text('z-score ${result.z.toStringAsFixed(2)} SD • $interpretation', style: Theme.of(context).textTheme.bodySmall),
         ],
       ),
     );
