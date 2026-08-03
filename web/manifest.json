@@ -1,7 +1,7 @@
 {
   "name": "PedsFlow",
   "short_name": "PedsFlow",
-  "start_url": ".",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#F8FBFF",
   "theme_color": "#72CFF4",
@@ -30,6 +30,28 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "id": "./",
+  "scope": "./",
+  "lang": "en-CA",
+  "categories": [
+    "medical",
+    "education",
+    "productivity"
+  ],
+  "shortcuts": [
+    {
+      "name": "Calculators",
+      "short_name": "Calculators",
+      "description": "Open pediatric calculators",
+      "url": "./"
+    },
+    {
+      "name": "Clinical search",
+      "short_name": "Search",
+      "description": "Search PedsFlow clinical content",
+      "url": "./"
     }
   ]
 }

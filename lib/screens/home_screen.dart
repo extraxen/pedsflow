@@ -319,7 +319,7 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      'PedsFlow v19.0.0',
+                      'PedsFlow v19.1.0',
                       style: TextStyle(fontWeight: FontWeight.w800),
                     ),
                     SizedBox(height: 3),

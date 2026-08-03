@@ -212,7 +212,11 @@ class _CalculatorItem {
 }
 
 double? _number(TextEditingController controller) {
-  return double.tryParse(controller.text.trim());
+  final double? value = double.tryParse(controller.text.trim());
+  if (value == null || !value.isFinite) {
+    return null;
+  }
+  return value;
 }
 
 class _CalculatorScaffold extends StatelessWidget {
@@ -251,18 +255,25 @@ class _NumberField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      keyboardType:
-          const TextInputType.numberWithOptions(decimal: true),
-      onChanged: (value) => onChanged(),
-      decoration: InputDecoration(
-        labelText: label,
-        suffixText: suffix,
-        filled: true,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide.none,
+    return Semantics(
+      textField: true,
+      label: suffix.isEmpty ? label : '$label in $suffix',
+      child: TextField(
+        controller: controller,
+        keyboardType:
+            const TextInputType.numberWithOptions(decimal: true),
+        textInputAction: TextInputAction.next,
+        autocorrect: false,
+        enableSuggestions: false,
+        onChanged: (value) => onChanged(),
+        decoration: InputDecoration(
+          labelText: label,
+          suffixText: suffix,
+          filled: true,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none,
+          ),
         ),
       ),
     );
