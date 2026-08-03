@@ -1,0 +1,8 @@
+PedsFlow v19.0.0 — Pain, Search & PCCU Clinical Upgrade
+Implemented August 2, 2026
+
+- Added 12-module pediatric pain management section.
+- Added grouped universal search across admission plans, medications, PCCU topics, calculators and emergency pathways.
+- Added aliases for common abbreviations, brands and misspellings.
+- Added contextual cross-links for status asthma, DKA, septic shock and status epilepticus.
+- Deepened priority PCCU topics with disease-specific doses/settings, monitoring, failure criteria and complications.

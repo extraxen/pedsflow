@@ -9,6 +9,7 @@ import 'backup_screen.dart';
 import 'universal_search_screen.dart';
 import 'integrated_clinical_support_screen.dart';
 import 'pccu_screen.dart';
+import 'pain_management_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final AppStore store;
@@ -121,6 +122,25 @@ class HomeScreen extends StatelessWidget {
                 subtitle: 'Fluids, doses, electrolytes, BSA and QTc',
                 meta: '22 tools',
                 onTap: () => openTab(3),
+              ),
+              const SizedBox(height: 10),
+              _ClinicalToolRow(
+                illustration: const _IllustratedBadge(
+                  icon: Icons.healing_outlined,
+                  secondaryIcon: Icons.favorite_outline,
+                  background: Color(0xFFF7E7F0),
+                  accent: Color(0xFF9B3F72),
+                ),
+                title: 'Pediatric pain management',
+                subtitle: 'Mild to severe pain, sickle-cell, SJS/TEN, opioids and naloxone',
+                meta: '12 pathways',
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (BuildContext context) => const PainManagementScreen(),
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 10),
               _ClinicalToolRow(
@@ -299,11 +319,11 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      'PedsFlow v18.4.0',
+                      'PedsFlow v19.0.0',
                       style: TextStyle(fontWeight: FontWeight.w800),
                     ),
                     SizedBox(height: 3),
-                    Text('Implemented July 31, 2026'),
+                    Text('Implemented August 2, 2026'),
                     SizedBox(height: 3),
                     Text('© 2026 Dr. Ahmed Saleh'),
                   ],
@@ -395,7 +415,7 @@ class _WelcomePanel extends StatelessWidget {
                   _MetricChip(text: '$plans plans'),
                   _MetricChip(text: '$medications medications'),
                   _MetricChip(text: '$medicationsWithDoses with doses'),
-                  _MetricChip(text: 'v18.4.0'),
+                  _MetricChip(text: 'v19.0.0'),
                 ],
               ),
             ],

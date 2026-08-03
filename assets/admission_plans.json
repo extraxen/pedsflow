@@ -172,7 +172,8 @@
     "guidance": "CPS: Bronchiolitis - diagnosis, monitoring and management.",
     "aliases": [
       "bronchiolitis",
-      "RSV"
+      "RSV",
+      "bronch"
     ],
     "contentStatus": "Clinical-support reference — verify the current local pathway",
     "lastUpdated": "2026-07-17",
@@ -353,7 +354,9 @@
     "guidance": "Standard pediatric inpatient practice; confirm the hospital order set, formulary, antibiogram and consultant-specific pathway.",
     "aliases": [
       "pneumonia",
-      "CAP"
+      "CAP",
+      "PNA",
+      "pna"
     ],
     "contentStatus": "Clinical-support reference — verify the current local pathway",
     "lastUpdated": "2026-07-17",
@@ -446,7 +449,9 @@
     "aliases": [
       "empyema",
       "complicated pneumonia",
-      "parapneumonic effusion"
+      "parapneumonic effusion",
+      "PNA",
+      "pna"
     ],
     "contentStatus": "Clinical-support reference — verify the current local pathway",
     "lastUpdated": "2026-07-17",
@@ -806,7 +811,10 @@
       }
     ],
     "guidance": "Standard pediatric inpatient practice; confirm the hospital order set, formulary, antibiogram and consultant-specific pathway.",
-    "aliases": [],
+    "aliases": [
+      "PNA",
+      "pna"
+    ],
     "contentStatus": "Clinical-support reference — verify the current local pathway",
     "lastUpdated": "2026-07-17",
     "sourceLabels": [
@@ -5223,7 +5231,10 @@
       }
     ],
     "guidance": "Standard pediatric inpatient practice; confirm the hospital order set, formulary, antibiogram and consultant-specific pathway.",
-    "aliases": [],
+    "aliases": [
+      "headache",
+      "migraine vomiting"
+    ],
     "contentStatus": "Clinical-support reference — verify the current local pathway",
     "lastUpdated": "2026-07-25",
     "sourceLabels": [
@@ -5763,7 +5774,9 @@
     "aliases": [
       "gastroenteritis",
       "dehydration",
-      "AGE"
+      "AGE",
+      "vomitting",
+      "vomiting"
     ],
     "contentStatus": "Clinical-support reference — verify the current local pathway",
     "lastUpdated": "2026-07-25",
@@ -6122,7 +6135,10 @@
       }
     ],
     "guidance": "Standard pediatric inpatient practice; confirm the hospital order set, formulary, antibiogram and consultant-specific pathway.",
-    "aliases": [],
+    "aliases": [
+      "obstruction",
+      "bilious emesis"
+    ],
     "contentStatus": "Clinical-support reference — verify the current local pathway",
     "lastUpdated": "2026-07-25",
     "sourceLabels": [
@@ -6391,7 +6407,9 @@
       }
     ],
     "guidance": "Standard pediatric inpatient practice; confirm the hospital order set, formulary, antibiogram and consultant-specific pathway.",
-    "aliases": [],
+    "aliases": [
+      "pancreatitis vomiting"
+    ],
     "contentStatus": "Clinical-support reference — verify the current local pathway",
     "lastUpdated": "2026-07-25",
     "sourceLabels": [
@@ -10446,7 +10464,11 @@
       }
     ],
     "guidance": "Current local raised-ICP/neurocritical care pathway.",
-    "aliases": [],
+    "aliases": [
+      "ICP",
+      "raised ICP",
+      "increased intracranial pressure"
+    ],
     "contentStatus": "Clinical-support reference — verify the current local pathway",
     "lastUpdated": "2026-07-17",
     "sourceLabels": [
@@ -18234,7 +18256,8 @@
       "low potassium",
       "potassium replacement",
       "K replacement",
-      "hypokalaemia"
+      "hypokalaemia",
+      "hypoK"
     ],
     "summary": "Confirm the result and severity, obtain an ECG when moderate/severe or symptomatic, correct magnesium and the underlying cause, and prefer enteral potassium when safe. IV replacement requires a controlled infusion, verified concentration/rate, cardiac monitoring at higher-risk rates, and repeat potassium.",
     "sections": [
@@ -19622,7 +19645,8 @@
       "cannabinoid hyperemesis",
       "cannabis vomiting",
       "hot shower vomiting",
-      "marijuana hyperemesis"
+      "marijuana hyperemesis",
+      "hot shower syndrome"
     ],
     "summary": "Consider CHS in an adolescent with recurrent/cyclic vomiting, abdominal pain, chronic frequent cannabis exposure and temporary relief with hot showers. Exclude pregnancy, obstruction/surgical abdomen, DKA, pancreatitis/hepatitis, intracranial disease, toxic ingestion and other dangerous causes.",
     "sections": [

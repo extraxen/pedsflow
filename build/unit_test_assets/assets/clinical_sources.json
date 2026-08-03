@@ -1,0 +1,38 @@
+{
+  "version": "10.0",
+  "lastBuilt": "2026-07-17",
+  "jurisdiction": "Ontario / Canada",
+  "disclaimer": "PedsFlow is an educational and clinical-support reference. Every plan must be reconciled with the current institutional pathway, specialist advice and patient-specific clinical context.",
+  "sources": [
+    {
+      "name": "Canadian Paediatric Society",
+      "type": "National professional guidance",
+      "use": "Position statements and practice points for Canadian pediatric care."
+    },
+    {
+      "name": "TREKK",
+      "type": "Canadian pediatric emergency knowledge translation",
+      "use": "Bottom-line recommendations and evidence repositories for emergency conditions."
+    },
+    {
+      "name": "CHEO ED Outreach",
+      "type": "Ontario pediatric clinical and drug resources",
+      "use": "Current online pediatric/neonatal monographs and emergency resources."
+    },
+    {
+      "name": "IWK Drug Information Resource",
+      "type": "Canadian pediatric and neonatal dosing/administration resource",
+      "use": "Medication dosing and parenteral administration references."
+    },
+    {
+      "name": "Ontario Poison Centre",
+      "type": "Provincial toxicology service",
+      "use": "Real-time poisoning management and antidote/dialysis decisions."
+    },
+    {
+      "name": "Current LHSC/local institutional pathways",
+      "type": "Local source of truth",
+      "use": "Order sets, antibiogram, escalation, transfer and consultant-specific practice."
+    }
+  ]
+}
