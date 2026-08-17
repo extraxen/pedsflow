@@ -496,7 +496,7 @@ class _WelcomePanel extends StatelessWidget {
                   _MetricChip(text: '$plans plans'),
                   _MetricChip(text: '$medications medications'),
                   _MetricChip(text: '$medicationsWithDoses with doses'),
-                  _MetricChip(text: 'v20.0.0'),
+                  _MetricChip(text: 'v$pedsFlowVersion'),
                 ],
               ),
             ],

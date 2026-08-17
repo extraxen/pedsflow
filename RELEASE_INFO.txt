@@ -1,7 +1,9 @@
 PedsFlow clean full release
-Version: 20.2.0+2020
+Version: 20.2.1+2021
 Release date: August 17, 2026
 Files: 71
 
 This package intentionally excludes generated Flutter state and historical patch/install scripts.
 Run flutter pub get after extraction to regenerate local dependency state.
+
+Bugfix: Home-screen version badge now reads from central app metadata instead of a hard-coded value.
