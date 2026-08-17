@@ -319,7 +319,7 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      'PedsFlow v19.3.0',
+                      'PedsFlow v19.4.0',
                       style: TextStyle(fontWeight: FontWeight.w800),
                     ),
                     SizedBox(height: 3),
@@ -415,7 +415,7 @@ class _WelcomePanel extends StatelessWidget {
                   _MetricChip(text: '$plans plans'),
                   _MetricChip(text: '$medications medications'),
                   _MetricChip(text: '$medicationsWithDoses with doses'),
-                  _MetricChip(text: 'v19.0.0'),
+                  _MetricChip(text: 'v19.4.0'),
                 ],
               ),
             ],

@@ -5,7 +5,7 @@
   "packages": [
     {
       "name": "pediatric_night_companion",
-      "version": "19.3.0+1930",
+      "version": "19.4.0+1940",
       "dependencies": [
         "flutter",
         "image_picker",
