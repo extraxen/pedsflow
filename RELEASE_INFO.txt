@@ -1,5 +1,5 @@
 PedsFlow clean full release
-Version: 20.3.2+2032
+Version: 20.3.3+2033
 Release date: August 17, 2026
 
 Medication update:
@@ -25,3 +25,8 @@ Live search tuning:
 - Home results open the matching medication/plan/tool directly; 'See all' opens full Search with the query preserved.
 - Search normalization no longer treats the dosing unit 'mg' as an alias for magnesium.
 - Medication dose content itself is unchanged.
+
+Home live-search interaction fix:
+- Fixed suggestion rows disappearing before onTap completed when the search field lost focus.
+- Direct taps now open live results.
+- No clinical or medication content changed.

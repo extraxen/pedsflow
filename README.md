@@ -55,10 +55,7 @@ Copyright (c) 2026 Ahmed Saleh. All Rights Reserved. See `LICENSE`.
 - Medication-focused quick searches added.
 - Added common medication brand/colloquial aliases for faster lookup.
 
-
-### v20.3.2 live search
-- Added live ranked search suggestions directly on Home.
-- Medication suggestions show the most relevant dose/indication fragment before opening the monograph.
-- Full Search accepts the Home query and displays relevant snippets in result cards.
-- Removed the ambiguous `mg -> magnesium` search alias so dose units do not pollute magnesium searches.
-- No clinical dose data changed in this release.
+### v20.3.3 Home live-search tap fix
+- Keeps live suggestions mounted while a query has results, even when the TextField loses focus during a tap.
+- Direct suggestion taps now open the selected destination normally.
+- Clears stale Home suggestions after opening a direct result.

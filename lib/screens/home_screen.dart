@@ -689,8 +689,16 @@ class _HomeLiveSearchState extends State<_HomeLiveSearch> {
   }
 
   void _openHit(SearchHit hit) {
+    final SearchDocument document = hit.document;
+    _debounce?.cancel();
     _focusNode.unfocus();
-    openSearchDocument(context, widget.store, hit.document);
+    _controller.clear();
+    if (mounted) {
+      setState(() {
+        _hits = const <SearchHit>[];
+      });
+    }
+    openSearchDocument(context, widget.store, document);
   }
 
   @override
@@ -706,7 +714,8 @@ class _HomeLiveSearchState extends State<_HomeLiveSearch> {
   @override
   Widget build(BuildContext context) {
     final String query = _controller.text.trim();
-    final bool showSuggestions = _focused && query.length >= 2;
+    final bool showSuggestions =
+        query.length >= 2 && (_focused || _hits.isNotEmpty);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
