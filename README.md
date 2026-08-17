@@ -54,3 +54,11 @@ Copyright (c) 2026 Ahmed Saleh. All Rights Reserved. See `LICENSE`.
 - Home search now explicitly covers diagnoses, medications, doses and clinical tools.
 - Medication-focused quick searches added.
 - Added common medication brand/colloquial aliases for faster lookup.
+
+
+### v20.3.2 live search
+- Added live ranked search suggestions directly on Home.
+- Medication suggestions show the most relevant dose/indication fragment before opening the monograph.
+- Full Search accepts the Home query and displays relevant snippets in result cards.
+- Removed the ambiguous `mg -> magnesium` search alias so dose units do not pollute magnesium searches.
+- No clinical dose data changed in this release.

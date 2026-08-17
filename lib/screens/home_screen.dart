@@ -2,6 +2,8 @@
 // Copyright (c) 2026 Ahmed Saleh. All rights reserved.
 // See LICENSE in the repository root.
 // Third-party materials remain subject to their respective licenses.
+import 'dart:async';
+
 import '../app_metadata.dart';
 import '../features/growth/growth_suite_screen.dart';
 import '../features/neonatal/neonatal_hub_screen.dart';
@@ -12,6 +14,7 @@ import 'package:flutter/material.dart';
 
 import '../models/admission_plan.dart';
 import '../services/app_store.dart';
+import '../services/global_search.dart';
 import '../widgets/plan_tile.dart';
 import 'escalation_screen.dart';
 import 'antibiotic_guide_screen.dart';
@@ -79,16 +82,7 @@ class HomeScreen extends StatelessWidget {
                 medicationsWithDoses: medicationsWithDoses,
               ),
               const SizedBox(height: 16),
-              _SearchButton(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (BuildContext context) =>
-                          UniversalSearchScreen(store: store),
-                    ),
-                  );
-                },
-              ),
+              _HomeLiveSearch(store: store),
               const SizedBox(height: 26),
               const _SectionHeading(
                 title: 'Clinical tools',
@@ -616,50 +610,291 @@ class _HeroIllustration extends StatelessWidget {
   }
 }
 
-class _SearchButton extends StatelessWidget {
-  final VoidCallback onTap;
+class _HomeLiveSearch extends StatefulWidget {
+  final AppStore store;
 
-  const _SearchButton({required this.onTap});
+  const _HomeLiveSearch({required this.store});
+
+  @override
+  State<_HomeLiveSearch> createState() => _HomeLiveSearchState();
+}
+
+class _HomeLiveSearchState extends State<_HomeLiveSearch> {
+  final TextEditingController _controller = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+  GlobalSearchIndex? _index;
+  List<SearchHit> _hits = const <SearchHit>[];
+  Timer? _debounce;
+  bool _focused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(_onFocusChanged);
+    _loadIndex();
+  }
+
+  Future<void> _loadIndex() async {
+    final GlobalSearchIndex index = await GlobalSearchIndex.build(widget.store);
+    if (!mounted) return;
+    setState(() {
+      _index = index;
+      _updateHits();
+    });
+  }
+
+  void _onFocusChanged() {
+    if (!mounted) return;
+    setState(() {
+      _focused = _focusNode.hasFocus;
+    });
+  }
+
+  void _onChanged(String value) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 80), () {
+      if (!mounted) return;
+      setState(_updateHits);
+    });
+  }
+
+  void _updateHits() {
+    final String query = _controller.text.trim();
+    if (query.length < 2 || _index == null) {
+      _hits = const <SearchHit>[];
+      return;
+    }
+    _hits = _index!.search(query, limit: 5);
+  }
+
+  void _clear() {
+    _controller.clear();
+    setState(() {
+      _hits = const <SearchHit>[];
+    });
+    _focusNode.requestFocus();
+  }
+
+  void _openFullSearch() {
+    final String query = _controller.text.trim();
+    _focusNode.unfocus();
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => UniversalSearchScreen(
+          store: widget.store,
+          initialQuery: query,
+        ),
+      ),
+    );
+  }
+
+  void _openHit(SearchHit hit) {
+    _focusNode.unfocus();
+    openSearchDocument(context, widget.store, hit.document);
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    _focusNode
+      ..removeListener(_onFocusChanged)
+      ..dispose();
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Theme.of(context).colorScheme.surface,
-      elevation: 0.5,
-      shadowColor: const Color(0xFF173B57).withValues(alpha: 0.12),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18),
-        side: BorderSide(color: Theme.of(context).colorScheme.outline),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(18),
-        onTap: onTap,
-        child: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 17),
-          child: Row(
-            children: <Widget>[
-              Icon(Icons.search),
-              SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Search PedsFlow',
-                      style: TextStyle(fontWeight: FontWeight.w800),
+    final String query = _controller.text.trim();
+    final bool showSuggestions = _focused && query.length >= 2;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        Material(
+          color: Theme.of(context).colorScheme.surface,
+          elevation: 0.5,
+          shadowColor: const Color(0xFF173B57).withValues(alpha: 0.12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+            side: BorderSide(color: Theme.of(context).colorScheme.outline),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: TextField(
+            controller: _controller,
+            focusNode: _focusNode,
+            textInputAction: TextInputAction.search,
+            autocorrect: false,
+            enableSuggestions: false,
+            onChanged: _onChanged,
+            onSubmitted: (_) => _openFullSearch(),
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 16,
+              ),
+              prefixIcon: const Icon(Icons.search),
+              hintText: 'Search diagnoses, medications, doses & tools',
+              suffixIcon: query.isEmpty
+                  ? IconButton(
+                      tooltip: 'Open full search',
+                      onPressed: _openFullSearch,
+                      icon: const Icon(Icons.arrow_forward_rounded),
+                    )
+                  : IconButton(
+                      tooltip: 'Clear',
+                      onPressed: _clear,
+                      icon: const Icon(Icons.clear),
                     ),
-                    SizedBox(height: 2),
+            ),
+          ),
+        ),
+        if (showSuggestions) ...<Widget>[
+          const SizedBox(height: 8),
+          Material(
+            color: Theme.of(context).colorScheme.surface,
+            elevation: 1,
+            shadowColor: const Color(0xFF173B57).withValues(alpha: 0.10),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18),
+              side: BorderSide(color: Theme.of(context).colorScheme.outline),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: _index == null
+                ? const Padding(
+                    padding: EdgeInsets.all(18),
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                : _hits.isEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Text(
+                          'No quick match. Tap search to see the full search page.',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      )
+                    : Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          ..._hits.asMap().entries.map(
+                                (MapEntry<int, SearchHit> entry) => Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    if (entry.key > 0)
+                                      const Divider(height: 1),
+                                    _HomeSearchResultTile(
+                                      hit: entry.value,
+                                      onTap: () => _openHit(entry.value),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                          const Divider(height: 1),
+                          InkWell(
+                            onTap: _openFullSearch,
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(Icons.manage_search_outlined, size: 20),
+                                  SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      'See all search results',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    ),
+                                  ),
+                                  Icon(Icons.arrow_forward_rounded, size: 20),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _HomeSearchResultTile extends StatelessWidget {
+  final SearchHit hit;
+  final VoidCallback onTap;
+
+  const _HomeSearchResultTile({
+    required this.hit,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final SearchDocument document = hit.document;
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              width: 38,
+              height: 38,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primaryContainer,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                searchIconForKind(document.kind),
+                size: 21,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            const SizedBox(width: 11),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    document.title,
+                    style: const TextStyle(fontWeight: FontWeight.w900),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    document.category,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  if (hit.snippet.isNotEmpty) ...<Widget>[
+                    const SizedBox(height: 4),
                     Text(
-                      'Diagnoses, medications, doses & clinical tools',
-                      style: TextStyle(fontSize: 12.5),
+                      hit.snippet,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 13, height: 1.25),
                     ),
                   ],
-                ),
+                ],
               ),
-              Icon(Icons.arrow_forward_rounded),
-            ],
-          ),
+            ),
+            const SizedBox(width: 6),
+            const Padding(
+              padding: EdgeInsets.only(top: 8),
+              child: Icon(Icons.chevron_right_rounded),
+            ),
+          ],
         ),
       ),
     );
