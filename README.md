@@ -1,6 +1,6 @@
 # PedsFlow
 
-**Version:** 20.3.0+2030  
+**Version:** 20.2.1+2021  
 **Release date:** August 17, 2026  
 **Status:** Clean full-source release
 
@@ -17,7 +17,6 @@ PedsFlow is a Flutter pediatric clinical reference and decision-support applicat
 - Bilirubin and DKA engines
 - Current web/PWA files and GitHub Pages workflow
 - Proprietary PedsFlow license and third-party notice
-- LHSC / Children's Hospital of Western Ontario PCCU 2020 handbook medication overlay (411 medication entries total)
 
 ## Build
 
@@ -49,3 +48,9 @@ PedsFlow is a clinical decision-support and educational reference. Verify medica
 ## Copyright
 
 Copyright (c) 2026 Ahmed Saleh. All Rights Reserved. See `LICENSE`.
+
+
+### v20.3.1 search tuning
+- Home search now explicitly covers diagnoses, medications, doses and clinical tools.
+- Medication-focused quick searches added.
+- Added common medication brand/colloquial aliases for faster lookup.

@@ -1,5 +1,5 @@
 PedsFlow clean full release
-Version: 20.3.0+2030
+Version: 20.3.1+2031
 Release date: August 17, 2026
 
 Medication update:
@@ -13,3 +13,8 @@ Medication update:
 
 This package excludes generated Flutter state and historical patch/install scripts.
 Run flutter pub get after extraction to regenerate local dependency state.
+
+Search tuning:
+- Universalized the Home search label.
+- Surfaced medication searches and common drug aliases.
+- No medication-dose data changed in this patch.

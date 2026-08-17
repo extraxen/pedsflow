@@ -642,8 +642,19 @@ class _SearchButton extends StatelessWidget {
               Icon(Icons.search),
               SizedBox(width: 12),
               Expanded(
-                child: Text(
-                  'Search diagnoses and admission plans',
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Search PedsFlow',
+                      style: TextStyle(fontWeight: FontWeight.w800),
+                    ),
+                    SizedBox(height: 2),
+                    Text(
+                      'Diagnoses, medications, doses & clinical tools',
+                      style: TextStyle(fontSize: 12.5),
+                    ),
+                  ],
                 ),
               ),
               Icon(Icons.arrow_forward_rounded),

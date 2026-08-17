@@ -115,7 +115,7 @@ class _UniversalSearchScreenState extends State<UniversalSearchScreen> {
         padding:const EdgeInsets.fromLTRB(16,8,16,28),
         children:<Widget>[
           TextField(controller:_controller,autofocus:true,textInputAction:TextInputAction.search,autocorrect:false,enableSuggestions:false,onChanged:_onChanged,onSubmitted:(q)=>_remember(q),decoration:InputDecoration(
-            hintText:'Search anything — or type “ketamine dose 25 kg”…',prefixIcon:const Icon(Icons.search),
+            hintText:'Search diagnoses, medications, doses, calculators or pathways…',prefixIcon:const Icon(Icons.search),
             suffixIcon:_query.isEmpty?null:IconButton(tooltip:'Clear',onPressed:(){_controller.clear();setState((){_query='';_hits=const[];});},icon:const Icon(Icons.clear)),
           )),
           if(weight!=null) Padding(padding:const EdgeInsets.only(top:8),child:Card(color:Theme.of(context).colorScheme.primaryContainer,child:Padding(padding:const EdgeInsets.all(10),child:Row(children:[const Icon(Icons.scale_outlined),const SizedBox(width:8),Expanded(child:Text('Command parser detected ${weight.toStringAsFixed(weight%1==0?0:1)} kg • clinical query: “$_semanticQuery”. Dose results still require opening the verified medication/pathway; PedsFlow will not infer a dose from free text.'))])))),
@@ -146,7 +146,7 @@ class _UniversalSearchScreenState extends State<UniversalSearchScreen> {
           else if(_query.trim().isEmpty)...[
             const SizedBox(height:18),
             const Text('Quick clinical commands',style:TextStyle(fontSize:17,fontWeight:FontWeight.w900)),const SizedBox(height:8),
-            Wrap(spacing:7,runSpacing:7,children:['ketamine dose 25 kg','ceftriaxone meningitis','LP sedation','hyperK','nimbex infusion','CPS bilirubin','DKA cerebral edema','hypophos IV'].map((q)=>ActionChip(label:Text(q),onPressed:()=>_applyQuery(q))).toList()),
+            Wrap(spacing:7,runSpacing:7,children:['ketamine dose 25 kg','ceftriaxone meningitis','epinephrine','hydromorphone','LP sedation','hyperK','nimbex infusion','CPS bilirubin','DKA cerebral edema','hypophos IV'].map((q)=>ActionChip(label:Text(q),onPressed:()=>_applyQuery(q))).toList()),
             if(_recent.isNotEmpty)...[
               const SizedBox(height:18),Row(children:[const Expanded(child:Text('Recent searches',style:TextStyle(fontSize:17,fontWeight:FontWeight.w900))),TextButton(onPressed:()async{_recent.clear();final p=await SharedPreferences.getInstance();await p.remove(_recentKey);if(mounted)setState((){});},child:const Text('Clear'))]),
               Wrap(spacing:7,runSpacing:7,children:_recent.map((q)=>ActionChip(avatar:const Icon(Icons.history,size:18),label:Text(q),onPressed:()=>_applyQuery(q))).toList()),
