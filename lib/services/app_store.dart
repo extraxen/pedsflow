@@ -1,3 +1,7 @@
+﻿// PedsFlow - Proprietary Software
+// Copyright (c) 2026 Ahmed Saleh. All rights reserved.
+// See LICENSE in the repository root.
+// Third-party materials remain subject to their respective licenses.
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -501,3 +505,4 @@ class AppStore extends ChangeNotifier {
     );
   }
 }
+

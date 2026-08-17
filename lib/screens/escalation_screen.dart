@@ -1,3 +1,7 @@
+﻿// PedsFlow - Proprietary Software
+// Copyright (c) 2026 Ahmed Saleh. All rights reserved.
+// See LICENSE in the repository root.
+// Third-party materials remain subject to their respective licenses.
 import 'package:flutter/material.dart';
 
 class EscalationScreen extends StatelessWidget {
@@ -84,3 +88,4 @@ class EscalationScreen extends StatelessWidget {
     );
   }
 }
+

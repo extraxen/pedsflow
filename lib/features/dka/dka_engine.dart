@@ -1,3 +1,7 @@
+﻿// PedsFlow - Proprietary Software
+// Copyright (c) 2026 Ahmed Saleh. All rights reserved.
+// See LICENSE in the repository root.
+// Third-party materials remain subject to their respective licenses.
 import 'dart:math' as math;
 
 enum ClinicalCriterion { met, notMet, unknown }
@@ -133,7 +137,7 @@ class DkaResults {
       case DkaDiagnosis.notFullyMet:
         return 'DKA criteria not fully met';
       case DkaDiagnosis.triadMetGapUnavailable:
-        return 'Triad met — verify anion gap';
+        return 'Triad met â€” verify anion gap';
       case DkaDiagnosis.criteriaMet:
         return 'DKA biochemical criteria met';
     }
@@ -201,7 +205,7 @@ class DkaEngine {
     return CpsFluidRate(
       rateMlHour: math.min(weightKg * 4, 250).toDouble(),
       factorMlKgHour: 4,
-      band: '≥40 kg (maximum 250 mL/h)',
+      band: 'â‰¥40 kg (maximum 250 mL/h)',
     );
   }
 
@@ -358,3 +362,4 @@ class DkaEngine {
     );
   }
 }
+

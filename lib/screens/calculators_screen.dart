@@ -1,3 +1,7 @@
+﻿// PedsFlow - Proprietary Software
+// Copyright (c) 2026 Ahmed Saleh. All rights reserved.
+// See LICENSE in the repository root.
+// Third-party materials remain subject to their respective licenses.
 import '../features/growth/growth_suite_screen.dart';
 import '../features/neonatal/neonatal_hub_screen.dart';
 import '../features/endocrine/endocrine_hub_screen.dart';
@@ -55,7 +59,7 @@ class CalculatorsScreen extends StatelessWidget {
       ),
       _CalculatorItem(
         title: 'CPS neonatal bilirubin',
-        subtitle: 'Advanced phototherapy, exchange, ΔTSB, TcB and rebound support',
+        subtitle: 'Advanced phototherapy, exchange, Î”TSB, TcB and rebound support',
         icon: Icons.wb_sunny_outlined,
         screen: const BilirubinScreen(),
       ),
@@ -85,7 +89,7 @@ class CalculatorsScreen extends StatelessWidget {
       ),
       _CalculatorItem(
         title: 'Bolus volume',
-        subtitle: 'mL/kg × weight',
+        subtitle: 'mL/kg Ã— weight',
         icon: Icons.bloodtype_outlined,
         screen: const BolusCalculator(),
       ),
@@ -103,7 +107,7 @@ class CalculatorsScreen extends StatelessWidget {
       ),
       _CalculatorItem(
         title: 'Anion gap',
-        subtitle: 'Na − (Cl + HCO₃)',
+        subtitle: 'Na âˆ’ (Cl + HCOâ‚ƒ)',
         icon: Icons.calculate_outlined,
         screen: const AnionGapCalculator(),
       ),
@@ -145,7 +149,7 @@ class CalculatorsScreen extends StatelessWidget {
       ),
       _CalculatorItem(
         title: 'Bedside Schwartz eGFR',
-        subtitle: '0.413 × height / creatinine',
+        subtitle: '0.413 Ã— height / creatinine',
         icon: Icons.biotech_outlined,
         screen: const EgfrCalculator(),
       ),
@@ -157,31 +161,31 @@ class CalculatorsScreen extends StatelessWidget {
       ),
       _CalculatorItem(
         title: 'Fluid deficit',
-        subtitle: 'Weight × dehydration percentage',
+        subtitle: 'Weight Ã— dehydration percentage',
         icon: Icons.opacity_outlined,
         screen: const FluidDeficitCalculator(),
       ),
       _CalculatorItem(
         title: 'Sodium deficit',
-        subtitle: '(Target Na − measured Na) × TBW',
+        subtitle: '(Target Na âˆ’ measured Na) Ã— TBW',
         icon: Icons.science_outlined,
         screen: const SodiumDeficitCalculator(),
       ),
       _CalculatorItem(
         title: 'Free-water deficit',
-        subtitle: 'TBW × (Na/target − 1)',
+        subtitle: 'TBW Ã— (Na/target âˆ’ 1)',
         icon: Icons.water_outlined,
         screen: const FreeWaterDeficitCalculator(),
       ),
       _CalculatorItem(
         title: 'Mean arterial pressure',
-        subtitle: '(SBP + 2×DBP) / 3',
+        subtitle: '(SBP + 2Ã—DBP) / 3',
         icon: Icons.monitor_heart_outlined,
         screen: const MapCalculator(),
       ),
       _CalculatorItem(
         title: 'P/F ratio',
-        subtitle: 'PaO₂ / FiO₂',
+        subtitle: 'PaOâ‚‚ / FiOâ‚‚',
         icon: Icons.air_outlined,
         screen: const PfRatioCalculator(),
       ),
@@ -193,7 +197,7 @@ class CalculatorsScreen extends StatelessWidget {
       ),
       _CalculatorItem(
         title: 'BMI',
-        subtitle: 'kg / height²',
+        subtitle: 'kg / heightÂ²',
         icon: Icons.straighten_outlined,
         screen: const BmiCalculator(),
       ),
@@ -417,7 +421,7 @@ class _MaintenanceCalculatorState
         _ResultCard(
           title: 'Hourly rate',
           value: weight == null
-              ? '—'
+              ? 'â€”'
               : '${hourly.toStringAsFixed(1)} mL/h',
           note: '4-2-1 rule',
         ),
@@ -425,7 +429,7 @@ class _MaintenanceCalculatorState
         _ResultCard(
           title: 'Daily maintenance',
           value: weight == null
-              ? '—'
+              ? 'â€”'
               : '${daily.toStringAsFixed(0)} mL/day',
           note: '100-50-20 rule',
         ),
@@ -475,7 +479,7 @@ class _BolusCalculatorState extends State<BolusCalculator> {
         _ResultCard(
           title: 'Calculated volume',
           value: volume == null
-              ? '—'
+              ? 'â€”'
               : '${volume.toStringAsFixed(0)} mL',
         ),
       ],
@@ -559,14 +563,14 @@ class _MedicationDoseCalculatorState
         _ResultCard(
           title: 'Dose',
           value: dose == null
-              ? '—'
+              ? 'â€”'
               : '${dose.toStringAsFixed(2)} mg',
         ),
         const SizedBox(height: 12),
         _ResultCard(
           title: 'Volume',
           value: volume == null
-              ? '—'
+              ? 'â€”'
               : '${volume.toStringAsFixed(2)} mL',
         ),
       ],
@@ -619,7 +623,7 @@ class _CorrectedSodiumCalculatorState
         _ResultCard(
           title: 'Corrected sodium',
           value: corrected == null
-              ? '—'
+              ? 'â€”'
               : '${corrected.toStringAsFixed(1)} mmol/L',
         ),
       ],
@@ -684,7 +688,7 @@ class _AnionGapCalculatorState
         _ResultCard(
           title: 'Anion gap',
           value:
-              gap == null ? '—' : '${gap.toStringAsFixed(1)} mmol/L',
+              gap == null ? 'â€”' : '${gap.toStringAsFixed(1)} mmol/L',
         ),
       ],
     );
@@ -736,7 +740,7 @@ class _CorrectedCalciumCalculatorState
         _ResultCard(
           title: 'Corrected calcium',
           value: corrected == null
-              ? '—'
+              ? 'â€”'
               : '${corrected.toStringAsFixed(2)} mmol/L',
         ),
       ],
@@ -786,7 +790,7 @@ class _BsaCalculatorState extends State<BsaCalculator> {
         _ResultCard(
           title: 'BSA',
           value:
-              bsa == null ? '—' : '${bsa.toStringAsFixed(3)} m²',
+              bsa == null ? 'â€”' : '${bsa.toStringAsFixed(3)} mÂ²',
           note: 'Mosteller formula',
         ),
       ],
@@ -836,7 +840,7 @@ class _QtcCalculatorState extends State<QtcCalculator> {
         _ResultCard(
           title: 'QTc (Bazett)',
           value: qtc == null
-              ? '—'
+              ? 'â€”'
               : '${qtc.toStringAsFixed(0)} ms',
         ),
       ],
@@ -876,7 +880,7 @@ class _GirCalculatorState extends State<GirCalculator> {
         const SizedBox(height: 16),
         _ResultCard(
           title: 'GIR',
-          value: result == null ? '—' : '${result.toStringAsFixed(2)} mg/kg/min',
+          value: result == null ? 'â€”' : '${result.toStringAsFixed(2)} mg/kg/min',
           note: 'Arithmetic result only. Confirm glucose targets and escalation thresholds using the current neonatal/endocrine pathway.',
         ),
       ],
@@ -911,7 +915,7 @@ class _OsmolalityCalculatorState extends State<OsmolalityCalculator> {
         const SizedBox(height: 12),
         _NumberField(controller: urea, label: 'Urea', suffix: 'mmol/L', onChanged: () => setState(() {})),
         const SizedBox(height: 16),
-        _ResultCard(title: 'Calculated osmolality', value: result == null ? '—' : '${result.toStringAsFixed(1)} mOsm/kg'),
+        _ResultCard(title: 'Calculated osmolality', value: result == null ? 'â€”' : '${result.toStringAsFixed(1)} mOsm/kg'),
       ],
     );
   }
@@ -951,7 +955,7 @@ class _FenaCalculatorState extends State<FenaCalculator> {
         const SizedBox(height: 16),
         _ResultCard(
           title: 'FENa',
-          value: result == null ? '—' : '${result.toStringAsFixed(2)}%',
+          value: result == null ? 'â€”' : '${result.toStringAsFixed(2)}%',
           note: 'Interpret cautiously in neonates, CKD, glomerular disease and after diuretics.',
         ),
       ],
@@ -983,7 +987,7 @@ class _EgfrCalculatorState extends State<EgfrCalculator> {
         const SizedBox(height: 16),
         _ResultCard(
           title: 'Estimated GFR',
-          value: result == null ? '—' : '${result.toStringAsFixed(1)} mL/min/1.73m²',
+          value: result == null ? 'â€”' : '${result.toStringAsFixed(1)} mL/min/1.73mÂ²',
           note: 'Creatinine must be entered in mg/dL. Use the laboratory/local nephrology method when available.',
         ),
       ],
@@ -1011,11 +1015,11 @@ class _IdealBodyWeightCalculatorState extends State<IdealBodyWeightCalculator> {
       children: <Widget>[
         _NumberField(controller: height, label: 'Height', suffix: 'cm', onChanged: () => setState(() {})),
         const SizedBox(height: 12),
-        _NumberField(controller: medianBmi, label: 'Selected median BMI for age/sex', suffix: 'kg/m²', onChanged: () => setState(() {})),
+        _NumberField(controller: medianBmi, label: 'Selected median BMI for age/sex', suffix: 'kg/mÂ²', onChanged: () => setState(() {})),
         const SizedBox(height: 16),
         _ResultCard(
           title: 'Approximate IBW',
-          value: result == null ? '—' : '${result.toStringAsFixed(1)} kg',
+          value: result == null ? 'â€”' : '${result.toStringAsFixed(1)} kg',
           note: 'Use a validated age/sex growth reference rather than the default placeholder BMI before clinical dosing.',
         ),
       ],
@@ -1047,7 +1051,7 @@ class _FluidDeficitCalculatorState extends State<FluidDeficitCalculator> {
         const SizedBox(height: 16),
         _ResultCard(
           title: 'Estimated deficit',
-          value: result == null ? '—' : '${result.toStringAsFixed(0)} mL',
+          value: result == null ? 'â€”' : '${result.toStringAsFixed(0)} mL',
           note: 'Clinical dehydration estimates are imprecise. Replace according to syndrome, ongoing losses and reassessment.',
         ),
       ],
@@ -1087,7 +1091,7 @@ class _SodiumDeficitCalculatorState extends State<SodiumDeficitCalculator> {
         const SizedBox(height: 16),
         _ResultCard(
           title: 'Calculated sodium deficit',
-          value: result == null ? '—' : '${result.toStringAsFixed(1)} mmol',
+          value: result == null ? 'â€”' : '${result.toStringAsFixed(1)} mmol',
           note: 'Do not use this arithmetic result without a controlled correction-rate plan and serial sodium monitoring.',
         ),
       ],
@@ -1129,7 +1133,7 @@ class _FreeWaterDeficitCalculatorState extends State<FreeWaterDeficitCalculator>
         const SizedBox(height: 16),
         _ResultCard(
           title: 'Free-water deficit',
-          value: result == null ? '—' : '${result.toStringAsFixed(2)} L',
+          value: result == null ? 'â€”' : '${result.toStringAsFixed(2)} L',
           note: 'Plan correction over an appropriate timeframe with ongoing losses and serial sodium checks.',
         ),
       ],
@@ -1159,7 +1163,7 @@ class _MapCalculatorState extends State<MapCalculator> {
         const SizedBox(height: 12),
         _NumberField(controller: dbp, label: 'Diastolic BP', suffix: 'mmHg', onChanged: () => setState(() {})),
         const SizedBox(height: 16),
-        _ResultCard(title: 'MAP', value: result == null ? '—' : '${result.toStringAsFixed(1)} mmHg'),
+        _ResultCard(title: 'MAP', value: result == null ? 'â€”' : '${result.toStringAsFixed(1)} mmHg'),
       ],
     );
   }
@@ -1184,11 +1188,11 @@ class _PfRatioCalculatorState extends State<PfRatioCalculator> {
     return _CalculatorScaffold(
       title: 'P/F ratio',
       children: <Widget>[
-        _NumberField(controller: pao2, label: 'PaO₂', suffix: 'mmHg', onChanged: () => setState(() {})),
+        _NumberField(controller: pao2, label: 'PaOâ‚‚', suffix: 'mmHg', onChanged: () => setState(() {})),
         const SizedBox(height: 12),
-        _NumberField(controller: fio2, label: 'FiO₂', suffix: 'fraction or %', onChanged: () => setState(() {})),
+        _NumberField(controller: fio2, label: 'FiOâ‚‚', suffix: 'fraction or %', onChanged: () => setState(() {})),
         const SizedBox(height: 16),
-        _ResultCard(title: 'P/F ratio', value: result == null ? '—' : result.toStringAsFixed(0)),
+        _ResultCard(title: 'P/F ratio', value: result == null ? 'â€”' : result.toStringAsFixed(0)),
       ],
     );
   }
@@ -1225,7 +1229,7 @@ class _CorrectedGestationalAgeCalculatorState extends State<CorrectedGestational
         const SizedBox(height: 12),
         _NumberField(controller: ageDays, label: 'Chronological age', suffix: 'days', onChanged: () => setState(() {})),
         const SizedBox(height: 16),
-        _ResultCard(title: 'Current postmenstrual age', value: weeks == null ? '—' : '$weeks weeks + $days days'),
+        _ResultCard(title: 'Current postmenstrual age', value: weeks == null ? 'â€”' : '$weeks weeks + $days days'),
       ],
     );
   }
@@ -1255,7 +1259,7 @@ class _BmiCalculatorState extends State<BmiCalculator> {
         const SizedBox(height: 16),
         _ResultCard(
           title: 'BMI',
-          value: result == null ? '—' : '${result.toStringAsFixed(1)} kg/m²',
+          value: result == null ? 'â€”' : '${result.toStringAsFixed(1)} kg/mÂ²',
           note: 'Pediatric BMI requires age- and sex-specific percentile interpretation.',
         ),
       ],
@@ -1337,8 +1341,8 @@ class _HypernatremicDehydrationCalculatorState
 
   String get _clinicalRange {
     if (_clinicalScore <= 2) return '<5%';
-    if (_clinicalScore <= 6) return '5–9%';
-    return '≥10%';
+    if (_clinicalScore <= 6) return '5â€“9%';
+    return 'â‰¥10%';
   }
 
   double? get _selectedDehydrationPercent {
@@ -1621,20 +1625,20 @@ class _HypernatremicDehydrationCalculatorState
         _ResultCard(
           title: 'Initial estimated deficit',
           value: initialDeficit == null
-              ? '—'
+              ? 'â€”'
               : '${initialDeficit.toStringAsFixed(0)} mL',
           note: dehydrationPercent == null
               ? ''
               : 'Estimated dehydration: '
                   '${dehydrationPercent.toStringAsFixed(1)}%. '
                   'Derived premorbid weight: '
-                  '${_derivedPremorbidWeight?.toStringAsFixed(2) ?? '—'} kg.',
+                  '${_derivedPremorbidWeight?.toStringAsFixed(2) ?? 'â€”'} kg.',
         ),
         const SizedBox(height: 10),
         _ResultCard(
           title: 'Remaining estimated deficit',
           value: remainingDeficit == null
-              ? '—'
+              ? 'â€”'
               : '${remainingDeficit.toStringAsFixed(0)} mL',
           note:
               'Excludes undocumented fluid and subsequent measurable losses.',
@@ -1698,7 +1702,7 @@ class _HypernatremicDehydrationCalculatorState
         _ResultCard(
           title: 'Maintenance',
           value: maintenanceHour == null
-              ? '—'
+              ? 'â€”'
               : '${maintenanceHour.toStringAsFixed(1)} mL/hour',
           note: maintenanceDay == null
               ? ''
@@ -1709,14 +1713,14 @@ class _HypernatremicDehydrationCalculatorState
         _ResultCard(
           title: 'Deficit component',
           value: deficitHour == null
-              ? '—'
+              ? 'â€”'
               : '${deficitHour.toStringAsFixed(1)} mL/hour',
         ),
         const SizedBox(height: 10),
         _ResultCard(
           title: 'Calculated scheduled total',
           value: totalRate == null
-              ? '—'
+              ? 'â€”'
               : '${totalRate.toStringAsFixed(1)} mL/hour',
           note:
               'Subtract oral/NG intake and medication-carrier volumes from the '
@@ -1733,12 +1737,12 @@ class _HypernatremicDehydrationCalculatorState
         _ResultCard(
           title: 'What does this rate provide?',
           value: durationAtRate == null
-              ? '—'
-              : '≈ ${durationAtRate.toStringAsFixed(0)} hours',
+              ? 'â€”'
+              : 'â‰ˆ ${durationAtRate.toStringAsFixed(0)} hours',
           note: dailyAtRate == null
               ? ''
               : '${dailyAtRate.toStringAsFixed(0)} mL/day total; '
-                  '${towardDeficit?.toStringAsFixed(0) ?? '—'} mL/day remains '
+                  '${towardDeficit?.toStringAsFixed(0) ?? 'â€”'} mL/day remains '
                   'for deficit after calculated maintenance.',
         ),
         const SizedBox(height: 20),
@@ -1774,7 +1778,7 @@ class _HypernatremicDehydrationCalculatorState
         _ResultCard(
           title: 'Observed sodium change',
           value: observedRate == null
-              ? '—'
+              ? 'â€”'
               : '${observedRate.toStringAsFixed(2)} mmol/L/hour',
           note:
               'A negative result means sodium is falling. Review immediately if '
@@ -1842,17 +1846,17 @@ class _HypernatremicDehydrationCalculatorState
         _ResultCard(
           title: 'Electrolyte-free-water deficit',
           value: freeWaterDeficit == null
-              ? '—'
+              ? 'â€”'
               : '${freeWaterDeficit.toStringAsFixed(0)} mL',
           note:
-              'TBW × [(current Na ÷ target Na) − 1]. This is not the total '
+              'TBW Ã— [(current Na Ã· target Na) âˆ’ 1]. This is not the total '
               'volume deficit and must not be administered as a rapid D5W bolus.',
         ),
         const SizedBox(height: 10),
         _ResultCard(
           title: 'Estimated electrolyte-free-water delivery',
           value: freeWaterPerDay == null
-              ? '—'
+              ? 'â€”'
               : '${freeWaterPerDay.toStringAsFixed(0)} mL/day',
           note: freeWaterFraction == null
               ? ''
@@ -1862,9 +1866,9 @@ class _HypernatremicDehydrationCalculatorState
         ),
         const SizedBox(height: 10),
         _ResultCard(
-          title: 'Adrogué–Madias estimate',
+          title: 'AdroguÃ©â€“Madias estimate',
           value: adroguePerDay == null
-              ? '—'
+              ? 'â€”'
               : '${adroguePerDay.toStringAsFixed(1)} mmol/L/day',
           note: adroguePerL == null
               ? ''
@@ -1890,15 +1894,15 @@ class _HypernatremicDehydrationCalculatorState
         const _ClinicalWarningCard(
           title: 'Monitoring checklist',
           text:
-              '• Strict intake/output with urine, stool, emesis, oral/NG intake '
+              'â€¢ Strict intake/output with urine, stool, emesis, oral/NG intake '
               'and medication carriers recorded separately.\n'
-              '• Serial neurologic and perfusion assessments.\n'
-              '• Repeat sodium according to severity and local protocol; consider '
+              'â€¢ Serial neurologic and perfusion assessments.\n'
+              'â€¢ Repeat sodium according to severity and local protocol; consider '
               'earlier testing after a major rate change or unexpected trend.\n'
-              '• Recalculate after every new sodium and material change in net '
+              'â€¢ Recalculate after every new sodium and material change in net '
               'fluid balance.\n'
-              '• Escalate for seizure, altered mental status, shock, oliguria/'
-              'anuria, sodium ≥170 mmol/L, rising sodium or overly rapid decline.',
+              'â€¢ Escalate for seizure, altered mental status, shock, oliguria/'
+              'anuria, sodium â‰¥170 mmol/L, rising sodium or overly rapid decline.',
           danger: false,
         ),
         const SizedBox(height: 12),
@@ -2125,4 +2129,5 @@ class _SignDropdown extends StatelessWidget {
     );
   }
 }
+
 

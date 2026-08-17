@@ -1,3 +1,7 @@
+﻿// PedsFlow - Proprietary Software
+// Copyright (c) 2026 Ahmed Saleh. All rights reserved.
+// See LICENSE in the repository root.
+// Third-party materials remain subject to their respective licenses.
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -268,7 +272,7 @@ class _PlanScreenState extends State<PlanScreen>
                   ...plan.sourceLabels.map(
                     (String source) => Padding(
                       padding: const EdgeInsets.only(bottom: 6),
-                      child: Text('• $source'),
+                      child: Text('â€¢ $source'),
                     ),
                   ),
                 ],
@@ -637,3 +641,4 @@ class _LinkedClinicalText extends StatelessWidget {
     );
   }
 }
+

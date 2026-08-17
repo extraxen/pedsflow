@@ -1,0 +1,112 @@
+PedsFlow Proprietary License v1.0
+Copyright (c) 2026 Ahmed Saleh. All Rights Reserved.
+
+1. Ownership
+
+PedsFlow, including its original source code, application structure, user-interface design,
+original documentation, original clinical-content organization, original calculations,
+original workflows, original graphics and branding elements owned by Ahmed Saleh
+(collectively, the "PedsFlow Materials"), is proprietary software.
+
+Except for the limited permissions expressly stated in this License, all rights are reserved.
+
+2. Authorized Use
+
+Subject to this License, an end user may access and use an authorized compiled or hosted
+version of PedsFlow for personal, educational, professional, or clinical decision-support
+purposes.
+
+This limited permission does not transfer ownership of the PedsFlow Materials and does not
+grant any right to commercially exploit, redistribute, sublicense, sell, lease, white-label,
+rebrand, republish, or create a competing product or service from the PedsFlow Materials.
+
+3. Source Code Restrictions
+
+Except as expressly authorized in writing by Ahmed Saleh, you may not:
+
+(a) copy or redistribute the source code outside rights that are necessarily provided by the
+    hosting platform;
+(b) modify, adapt, translate, publish, sublicense, sell, or commercially exploit the source code;
+(c) use substantial portions of the source code, application architecture, clinical workflows,
+    original content structure, or user-interface implementation in another application,
+    website, service, repository, or commercial product;
+(d) remove, obscure, or alter copyright, proprietary, attribution, or licensing notices;
+(e) represent PedsFlow or a derivative product as your own work;
+(f) use the PedsFlow name, logo, icon, or other branding in a manner that suggests sponsorship,
+    endorsement, affiliation, or authorization without written permission.
+
+Where applicable law provides non-waivable rights, this section applies only to the maximum
+extent permitted by law.
+
+4. Public Repository / GitHub Rights
+
+If PedsFlow source code is made available through a public GitHub repository, this License does
+not restrict rights granted directly to GitHub or GitHub users by GitHub's applicable Terms of
+Service, including platform functionality that permits public content to be viewed and forked
+within GitHub.
+
+No additional permission to copy, redistribute, modify, commercialize, sublicense, or create
+derivative products is granted by this License merely because the repository is public.
+
+5. Commercial Licensing
+
+Commercial use, redistribution, incorporation into another commercial product, hosted-service
+deployment by a third party, institutional resale, white-label use, or other exploitation
+requires a separate written license from Ahmed Saleh.
+
+6. Third-Party Materials
+
+This License applies only to PedsFlow Materials owned by Ahmed Saleh.
+
+Open-source software, Flutter/Dart components, fonts, libraries, packages, datasets, clinical
+guidelines, publications, standards, reference tables, institutional protocols, trademarks,
+and other third-party materials remain subject to their respective copyright, license,
+attribution, and usage terms.
+
+Nothing in this License claims ownership of third-party material or overrides a third-party
+license.
+
+7. Clinical and Medical Disclaimer
+
+PedsFlow is a clinical decision-support and educational reference. It does not replace
+professional clinical judgment, institutional policy, pharmacist review, specialist
+consultation, product monographs, or current authoritative clinical guidance.
+
+Medication doses, concentrations, calculations, treatment thresholds, monitoring recommendations,
+and other clinical information must be independently verified before use in patient care.
+
+No physician-patient relationship or other professional relationship is created by this License
+or by access to PedsFlow.
+
+8. No Warranty
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, PEDSFLOW IS PROVIDED "AS IS" AND "AS AVAILABLE",
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING WARRANTIES OF
+ACCURACY, COMPLETENESS, MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE,
+NON-INFRINGEMENT, OR FITNESS FOR CLINICAL USE.
+
+9. Limitation of Liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE COPYRIGHT HOLDER SHALL NOT BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR OTHER DAMAGES ARISING
+FROM OR RELATED TO ACCESS TO, USE OF, INABILITY TO USE, OR RELIANCE ON PEDSFLOW, INCLUDING
+CLINICAL, PROFESSIONAL, COMMERCIAL, DATA, OR SOFTWARE-RELATED LOSS.
+
+10. Termination
+
+Any permission granted under this License automatically terminates if you materially violate
+its terms. Upon termination, you must cease any use that is not independently permitted by law
+or by a separate written agreement.
+
+11. Separate Written Agreements
+
+A separate written agreement signed by Ahmed Saleh may grant additional rights and, to the
+extent of a conflict, will control over this License for the rights expressly covered by that
+agreement.
+
+12. Reservation of Rights
+
+All rights not expressly granted are reserved.
+
+For commercial licensing, institutional licensing, redistribution permission, or other
+authorization, contact the copyright holder through an authorized PedsFlow project channel.

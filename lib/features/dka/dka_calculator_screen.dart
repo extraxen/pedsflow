@@ -1,3 +1,7 @@
+﻿// PedsFlow - Proprietary Software
+// Copyright (c) 2026 Ahmed Saleh. All rights reserved.
+// See LICENSE in the repository root.
+// Third-party materials remain subject to their respective licenses.
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -97,8 +101,8 @@ class _DkaCalculatorScreenState extends State<DkaCalculatorScreen> {
 
   DkaResults get _results => DkaEngine.calculate(_inputs);
 
-  String _one(double? value) => value == null ? '—' : value.toStringAsFixed(1);
-  String _zero(double? value) => value == null ? '—' : value.round().toString();
+  String _one(double? value) => value == null ? 'â€”' : value.toStringAsFixed(1);
+  String _zero(double? value) => value == null ? 'â€”' : value.round().toString();
 
   void _loadExample() {
     const values = <String, String>{
@@ -149,7 +153,7 @@ class _DkaCalculatorScreenState extends State<DkaCalculatorScreen> {
   Future<void> _copySummary() async {
     final result = _results;
     final summary = '''
-PEDIATRIC DKA CLINICAL SUPPORT — VERIFY INDEPENDENTLY
+PEDIATRIC DKA CLINICAL SUPPORT â€” VERIFY INDEPENDENTLY
 Weight: ${_one(_inputs.weightKg)} kg
 Assessment: ${result.diagnosisLabel}; ${result.severityLabel}
 Corrected Na: ${_one(result.correctedSodium)} mmol/L
@@ -157,8 +161,8 @@ Anion gap: ${_one(result.anionGap)} mmol/L
 Effective osmolality: ${_one(result.effectiveOsmolality)} mOsm/kg
 Initial isotonic bolus: ${_zero(result.initialBolusMl)} mL ($_bolusMlPerKg mL/kg)
 Ongoing CPS fluid: ${_one(result.cpsFluid.rateMlHour)} mL/h
-Insulin: ${result.holdInsulin ? 'HOLD — requires K >3.0' : '${_one(result.selectedInsulinUnitsHour)} units/h'}
-Two-bag: A ${_one(result.bagARateMlHour)} mL/h + D$_bagBConcentration B ${_one(result.bagBRateMlHour)} mL/h → D$_desiredDextrose
+Insulin: ${result.holdInsulin ? 'HOLD â€” requires K >3.0' : '${_one(result.selectedInsulinUnitsHour)} units/h'}
+Two-bag: A ${_one(result.bagARateMlHour)} mL/h + D$_bagBConcentration B ${_one(result.bagBRateMlHour)} mL/h â†’ D$_desiredDextrose
 Educational prototype; confirm with local order set, endocrinology, pharmacy, and critical care.
 ''';
     await Clipboard.setData(ClipboardData(text: summary));
@@ -181,7 +185,7 @@ Educational prototype; confirm with local order set, endocrinology, pharmacy, an
           children: [
             Text('Pediatric DKA', style: TextStyle(fontWeight: FontWeight.w800)),
             Text(
-              'PedsFlow · CPS/TREKK clinical support',
+              'PedsFlow Â· CPS/TREKK clinical support',
               style: TextStyle(fontSize: 11, fontWeight: FontWeight.w400),
             ),
           ],
@@ -209,7 +213,7 @@ Educational prototype; confirm with local order set, endocrinology, pharmacy, an
             color: const Color(0xFFF1E7D2),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: const Text(
-              'Educational support — not an order set. Do not enter identifiers. Verify every result.',
+              'Educational support â€” not an order set. Do not enter identifiers. Verify every result.',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 12, color: Color(0xFF664E29)),
             ),
@@ -460,7 +464,7 @@ Educational prototype; confirm with local order set, endocrinology, pharmacy, an
                 unit: 'mmol/L',
                 hint: 'For rate-of-fall alert',
               ),
-              _field('bohb', 'β-hydroxybutyrate', unit: 'mmol/L'),
+              _field('bohb', 'Î²-hydroxybutyrate', unit: 'mmol/L'),
               SizedBox(
                 width: 250,
                 child: DropdownButtonFormField<UrineKetones>(
@@ -520,12 +524,12 @@ Educational prototype; confirm with local order set, endocrinology, pharmacy, an
               runSpacing: 12,
               children: [
                 _criterionCard('Hyperglycemia', result.hyperglycemia, '>11 mmol/L', width),
-                _criterionCard('Ketosis', result.ketosis, 'β-OHB ≥3 or urine mod/large', width),
-                _criterionCard('Acidosis', result.acidosis, 'pH <7.3 or HCO₃ <18', width),
+                _criterionCard('Ketosis', result.ketosis, 'Î²-OHB â‰¥3 or urine mod/large', width),
+                _criterionCard('Acidosis', result.acidosis, 'pH <7.3 or HCOâ‚ƒ <18', width),
                 _criterionCard(
                   'Anion gap',
                   result.highAnionGap,
-                  '${_one(result.anionGap)} mmol/L · target >12',
+                  '${_one(result.anionGap)} mmol/L Â· target >12',
                   width,
                 ),
               ],
@@ -545,7 +549,7 @@ Educational prototype; confirm with local order set, endocrinology, pharmacy, an
           'Fluids, insulin and electrolytes',
           'CPS-aligned initial treatment',
           trailing: _pill(
-            result.holdInsulin ? 'Insulin hold' : 'Eligible after ≥1 h fluids',
+            result.holdInsulin ? 'Insulin hold' : 'Eligible after â‰¥1 h fluids',
             result.holdInsulin ? _red : _green,
           ),
         ),
@@ -569,8 +573,8 @@ Educational prototype; confirm with local order set, endocrinology, pharmacy, an
               const SizedBox(height: 14),
               _metricWrap([
                 _MetricData('Selected bolus', '${_zero(result.initialBolusMl)} mL',
-                    '$_bolusMlPerKg mL/kg · max 1000 mL'),
-                const _MetricData('Give over', '20–30 min', 'For all DKA patients'),
+                    '$_bolusMlPerKg mL/kg Â· max 1000 mL'),
+                const _MetricData('Give over', '20â€“30 min', 'For all DKA patients'),
                 const _MetricData(
                   'Shock pathway',
                   '10 mL/kg increments',
@@ -650,12 +654,12 @@ Educational prototype; confirm with local order set, endocrinology, pharmacy, an
               const SizedBox(height: 18),
               _metricWrap([
                 _MetricData(
-                  'Bag A · no dextrose',
+                  'Bag A Â· no dextrose',
                   '${_one(result.bagARateMlHour)} mL/h',
                   '${_one(result.bagAPercent)}% of total',
                 ),
                 _MetricData(
-                  'Bag B · D${_formatDex(_bagBConcentration)}',
+                  'Bag B Â· D${_formatDex(_bagBConcentration)}',
                   '${_one(result.bagBRateMlHour)} mL/h',
                   '${_one(result.bagBPercent)}% of total',
                 ),
@@ -669,8 +673,8 @@ Educational prototype; confirm with local order set, endocrinology, pharmacy, an
               const SizedBox(height: 12),
               _alert(
                 'When to add dextrose',
-                'Continue dextrose-free isotonic fluid until glucose is 15–17 mmol/L. '
-                    'Then add D5 and adjust to maintain glucose 7–11 mmol/L.',
+                'Continue dextrose-free isotonic fluid until glucose is 15â€“17 mmol/L. '
+                    'Then add D5 and adjust to maintain glucose 7â€“11 mmol/L.',
                 _teal,
                 Icons.info_outline,
               ),
@@ -693,7 +697,7 @@ Educational prototype; confirm with local order set, endocrinology, pharmacy, an
                     DropdownMenuItem(value: 0.1, child: Text('0.1 unit/kg/h')),
                     DropdownMenuItem(
                       value: 0.025,
-                      child: Text('0.025 unit/kg/h · special circumstance'),
+                      child: Text('0.025 unit/kg/h Â· special circumstance'),
                     ),
                   ],
                   onChanged: (value) => setState(() => _insulinFactor = value!),
@@ -703,18 +707,18 @@ Educational prototype; confirm with local order set, endocrinology, pharmacy, an
               _metricWrap([
                 _MetricData(
                   'Calculated range',
-                  '${_one(result.insulinLowUnitsHour)}–${_one(result.insulinHighUnitsHour)} U/h',
-                  '0.05–0.1 unit/kg/h',
+                  '${_one(result.insulinLowUnitsHour)}â€“${_one(result.insulinHighUnitsHour)} U/h',
+                  '0.05â€“0.1 unit/kg/h',
                 ),
                 _MetricData(
                   'Selected rate',
                   result.holdInsulin ? 'HOLD' : '${_one(result.selectedInsulinUnitsHour)} U/h',
-                  result.holdInsulin ? 'Requires K >3.0' : 'Separate pump · no IV bolus',
+                  result.holdInsulin ? 'Requires K >3.0' : 'Separate pump Â· no IV bolus',
                   tone: result.holdInsulin ? _red : _green,
                 ),
                 _MetricData(
                   'At 1 unit/mL',
-                  result.holdInsulin ? '—' : '${_one(result.selectedInsulinUnitsHour)} mL/h',
+                  result.holdInsulin ? 'â€”' : '${_one(result.selectedInsulinUnitsHour)} mL/h',
                   'Confirm local pump concentration',
                 ),
               ]),
@@ -727,7 +731,7 @@ Educational prototype; confirm with local order set, endocrinology, pharmacy, an
                 )
               else if (potassium <= 3)
                 _alert(
-                  'Hard stop — K ≤3.0 mmol/L',
+                  'Hard stop â€” K â‰¤3.0 mmol/L',
                   'Replace potassium before insulin. Use cardiac monitoring and urgent local/expert guidance.',
                   _red,
                   Icons.block,
@@ -762,7 +766,7 @@ Educational prototype; confirm with local order set, endocrinology, pharmacy, an
                 ),
             ],
           ),
-          note: 'Start only after ≥1 hour of fluids · never bolus',
+          note: 'Start only after â‰¥1 hour of fluids Â· never bolus',
         ),
       ],
     );
@@ -774,8 +778,8 @@ Educational prototype; confirm with local order set, endocrinology, pharmacy, an
       children: [
         _heading('Trajectory', 'Trend what changes management'),
         _metricWrap(const [
-          _MetricData('Hourly', 'Glucose', 'Neurologic status · vitals · fluid balance'),
-          _MetricData('At least q2h', 'Labs', 'Gas · electrolytes · anion gap · ketones'),
+          _MetricData('Hourly', 'Glucose', 'Neurologic status Â· vitals Â· fluid balance'),
+          _MetricData('At least q2h', 'Labs', 'Gas Â· electrolytes Â· anion gap Â· ketones'),
           _MetricData('As indicated', 'Cardiac monitor', 'Dangerous potassium/calcium derangement'),
         ]),
         const SizedBox(height: 16),
@@ -809,10 +813,10 @@ Educational prototype; confirm with local order set, endocrinology, pharmacy, an
                     DataColumn(label: Text('BG')),
                     DataColumn(label: Text('Na')),
                     DataColumn(label: Text('Cl')),
-                    DataColumn(label: Text('HCO₃')),
+                    DataColumn(label: Text('HCOâ‚ƒ')),
                     DataColumn(label: Text('pH')),
                     DataColumn(label: Text('K')),
-                    DataColumn(label: Text('β-OHB')),
+                    DataColumn(label: Text('Î²-OHB')),
                     DataColumn(label: Text('Corr Na')),
                     DataColumn(label: Text('AG')),
                     DataColumn(label: Text('')),
@@ -886,7 +890,7 @@ Educational prototype; confirm with local order set, endocrinology, pharmacy, an
                     numbered: true,
                     items: [
                       'Call paediatric critical care / resuscitation support',
-                      'Minimize movement; head midline and bed at 30°',
+                      'Minimize movement; head midline and bed at 30Â°',
                       'Use isotonic fluid; consider 75% rate if perfusion allows',
                       'Give osmolar therapy immediately',
                       'Avoid intubation if possible; maintain baseline hyperventilation if required',
@@ -903,18 +907,18 @@ Educational prototype; confirm with local order set, endocrinology, pharmacy, an
             _MetricData(
               '3% hypertonic saline',
               '${_one(result.hypertonicSaline3PercentMl)} mL',
-              '5 mL/kg over 10–15 min · max 250 mL',
+              '5 mL/kg over 10â€“15 min Â· max 250 mL',
               tone: _teal,
             ),
             _MetricData(
               'OR mannitol',
-              '${_one(result.mannitolLowG)}–${_one(result.mannitolHighG)} g',
-              '0.5–1 g/kg over 15–20 min · max 100 g',
+              '${_one(result.mannitolLowG)}â€“${_one(result.mannitolHighG)} g',
+              '0.5â€“1 g/kg over 15â€“20 min Â· max 100 g',
               tone: _orange,
             ),
             _MetricData(
               'Mannitol 20% volume',
-              '${_one(result.mannitol20PercentLowMl)}–${_one(result.mannitol20PercentHighMl)} mL',
+              '${_one(result.mannitol20PercentLowMl)}â€“${_one(result.mannitol20PercentHighMl)} mL',
               '20% = 0.2 g/mL',
             ),
           ]),
@@ -942,20 +946,20 @@ Educational prototype; confirm with local order set, endocrinology, pharmacy, an
             children: [
               _DefinitionRow(
                 'DKA',
-                'Glucose >11; β-OHB ≥3 and/or moderate/large ketonuria; pH <7.3 or measured HCO₃ <18; anion gap >12.',
+                'Glucose >11; Î²-OHB â‰¥3 and/or moderate/large ketonuria; pH <7.3 or measured HCOâ‚ƒ <18; anion gap >12.',
               ),
               _DefinitionRow(
                 'Corrected sodium',
-                'Measured Na + (glucose − 5) × 0.3.',
+                'Measured Na + (glucose âˆ’ 5) Ã— 0.3.',
               ),
-              _DefinitionRow('Anion gap', 'Measured Na − chloride − measured bicarbonate.'),
+              _DefinitionRow('Anion gap', 'Measured Na âˆ’ chloride âˆ’ measured bicarbonate.'),
               _DefinitionRow(
                 'Effective osmolality',
-                '2 × measured Na + glucose. Used as a hyperosmolar physiology screen.',
+                '2 Ã— measured Na + glucose. Used as a hyperosmolar physiology screen.',
               ),
               _DefinitionRow(
                 'Two-bag rates',
-                'Bag B fraction = desired dextrose ÷ Bag B concentration; Bag A fraction = 1 − Bag B fraction.',
+                'Bag B fraction = desired dextrose Ã· Bag B concentration; Bag A fraction = 1 âˆ’ Bag B fraction.',
               ),
             ],
           ),
@@ -976,7 +980,7 @@ Educational prototype; confirm with local order set, endocrinology, pharmacy, an
               ),
               SizedBox(height: 18),
               Text(
-                'TREKK: Bottom Line Recommendations — Diabetic Ketoacidosis.',
+                'TREKK: Bottom Line Recommendations â€” Diabetic Ketoacidosis.',
                 style: TextStyle(fontWeight: FontWeight.w700),
               ),
               SizedBox(height: 8),
@@ -1106,19 +1110,19 @@ Educational prototype; confirm with local order set, endocrinology, pharmacy, an
               ),
             const SizedBox(height: 16),
             _quickPlanRow('Initial bolus', '${_zero(result.initialBolusMl)} mL',
-                '$_bolusMlPerKg mL/kg isotonic over 20–30 min'),
+                '$_bolusMlPerKg mL/kg isotonic over 20â€“30 min'),
             _quickPlanRow('Ongoing fluid', '${_one(result.cpsFluid.rateMlHour)} mL/h',
                 'CPS weight-band rate'),
             _quickPlanRow(
-              'Insulin after ≥1 h',
+              'Insulin after â‰¥1 h',
               result.holdInsulin ? 'HOLD' : '${_one(result.selectedInsulinUnitsHour)} U/h',
-              result.holdInsulin ? 'Requires K >3.0' : 'Separate pump · no bolus',
+              result.holdInsulin ? 'Requires K >3.0' : 'Separate pump Â· no bolus',
               danger: result.holdInsulin,
             ),
             _quickPlanRow(
               'Two-bag split',
               '${_one(result.bagARateMlHour)} + ${_one(result.bagBRateMlHour)}',
-              'Bag A + D${_formatDex(_bagBConcentration)} B → D${_formatDex(_desiredDextrose)}',
+              'Bag A + D${_formatDex(_bagBConcentration)} B â†’ D${_formatDex(_desiredDextrose)}',
             ),
           ],
         ),
@@ -1488,7 +1492,7 @@ class _EmergencyList extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 7),
             child: Text(
-              '${numbered ? '${index + 1}.' : '•'} ${items[index]}',
+              '${numbered ? '${index + 1}.' : 'â€¢'} ${items[index]}',
               style: const TextStyle(color: Colors.white, fontSize: 12, height: 1.35),
             ),
           ),
@@ -1516,3 +1520,4 @@ class _DefinitionRow extends StatelessWidget {
     );
   }
 }
+

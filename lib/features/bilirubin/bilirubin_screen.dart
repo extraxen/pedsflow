@@ -1,3 +1,7 @@
+﻿// PedsFlow - Proprietary Software
+// Copyright (c) 2026 Ahmed Saleh. All rights reserved.
+// See LICENSE in the repository root.
+// Third-party materials remain subject to their respective licenses.
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -82,7 +86,7 @@ class _BilirubinScreenState extends State<BilirubinScreen> {
 
   String _format(double micromol) {
     if (_unit == BilirubinUnit.micromolPerL) {
-      return '${micromol.toStringAsFixed(0)} µmol/L';
+      return '${micromol.toStringAsFixed(0)} Âµmol/L';
     }
     return '${BilirubinEngine.toMgDl(micromol).toStringAsFixed(1)} mg/dL';
   }
@@ -123,7 +127,7 @@ class _BilirubinScreenState extends State<BilirubinScreen> {
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 decoration: const InputDecoration(
                   labelText: 'Postnatal age at measurement (hours)',
-                  helperText: 'Embedded threshold dataset: 12–336 hours',
+                  helperText: 'Embedded threshold dataset: 12â€“336 hours',
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -169,7 +173,7 @@ class _BilirubinScreenState extends State<BilirubinScreen> {
                       items: const <DropdownMenuItem<BilirubinUnit>>[
                         DropdownMenuItem<BilirubinUnit>(
                           value: BilirubinUnit.micromolPerL,
-                          child: Text('µmol/L'),
+                          child: Text('Âµmol/L'),
                         ),
                         DropdownMenuItem<BilirubinUnit>(
                           value: BilirubinUnit.mgPerDl,
@@ -188,8 +192,8 @@ class _BilirubinScreenState extends State<BilirubinScreen> {
                 controller: _direct,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 decoration: InputDecoration(
-                  labelText: 'Direct/conjugated bilirubin (${_unit == BilirubinUnit.micromolPerL ? 'µmol/L' : 'mg/dL'}) — optional',
-                  helperText: 'Persistent jaundice or direct bilirubin >17 µmol/L requires cholestasis assessment.',
+                  labelText: 'Direct/conjugated bilirubin (${_unit == BilirubinUnit.micromolPerL ? 'Âµmol/L' : 'mg/dL'}) â€” optional',
+                  helperText: 'Persistent jaundice or direct bilirubin >17 Âµmol/L requires cholestasis assessment.',
                   border: const OutlineInputBorder(),
                 ),
               ),
@@ -230,7 +234,7 @@ class _BilirubinScreenState extends State<BilirubinScreen> {
                       controller: _previousBilirubin,
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       decoration: InputDecoration(
-                        labelText: 'Previous bilirubin (${_unit == BilirubinUnit.micromolPerL ? 'µmol/L' : 'mg/dL'})',
+                        labelText: 'Previous bilirubin (${_unit == BilirubinUnit.micromolPerL ? 'Âµmol/L' : 'mg/dL'})',
                         border: const OutlineInputBorder(),
                       ),
                     ),
@@ -288,7 +292,7 @@ class _BilirubinScreenState extends State<BilirubinScreen> {
       child: const Padding(
         padding: EdgeInsets.all(14),
         child: Text(
-          'CPS-aligned decision support for newborns ≥35 weeks. Uses gestational-age-specific phototherapy and exchange thresholds, ΔTSB, TcB confirmation rules, rate of rise and pre-exchange escalation. Verify against the current CPS statement and local neonatal policy before clinical release.',
+          'CPS-aligned decision support for newborns â‰¥35 weeks. Uses gestational-age-specific phototherapy and exchange thresholds, Î”TSB, TcB confirmation rules, rate of rise and pre-exchange escalation. Verify against the current CPS statement and local neonatal policy before clinical release.',
         ),
       ),
     );
@@ -350,7 +354,7 @@ class _BilirubinScreenState extends State<BilirubinScreen> {
       case BilirubinZone.belowThreshold:
         return 'Below phototherapy threshold';
       case BilirubinZone.nearPhototherapy:
-        return 'Within 30 µmol/L of phototherapy threshold';
+        return 'Within 30 Âµmol/L of phototherapy threshold';
       case BilirubinZone.phototherapy:
         return 'Phototherapy indicated';
       case BilirubinZone.preExchange:
@@ -379,16 +383,16 @@ class _BilirubinScreenState extends State<BilirubinScreen> {
                 _metric('Age', '${result.ageHours.toStringAsFixed(1)} h'),
                 _metric('TSB/TcB', _format(result.bilirubinMicromol)),
                 _metric('Phototherapy', _format(result.phototherapyThreshold)),
-                _metric('ΔTSB', '${result.deltaTsb >= 0 ? '+' : ''}${result.deltaTsb.toStringAsFixed(0)} µmol/L'),
+                _metric('Î”TSB', '${result.deltaTsb >= 0 ? '+' : ''}${result.deltaTsb.toStringAsFixed(0)} Âµmol/L'),
                 _metric('Pre-exchange', _format(result.preExchangeThreshold)),
                 _metric('Exchange', _format(result.exchangeThreshold)),
                 if (result.rateOfRise != null)
-                  _metric('Rate of rise', '${result.rateOfRise!.toStringAsFixed(2)} µmol/L/h'),
+                  _metric('Rate of rise', '${result.rateOfRise!.toStringAsFixed(2)} Âµmol/L/h'),
               ],
             ),
             if (result.requiresSerumConfirmation) ...<Widget>[
               const SizedBox(height: 12),
-              const Text('⚠ TcB requires confirmatory serum TSB before disposition or treatment.', style: TextStyle(fontWeight: FontWeight.w800)),
+              const Text('âš  TcB requires confirmatory serum TSB before disposition or treatment.', style: TextStyle(fontWeight: FontWeight.w800)),
             ],
           ],
         ),
@@ -445,10 +449,10 @@ class _BilirubinScreenState extends State<BilirubinScreen> {
             const Wrap(
               spacing: 14,
               children: <Widget>[
-                Text('● Current'),
-                Text('— Phototherapy'),
-                Text('⋯ Pre-exchange'),
-                Text('— Exchange'),
+                Text('â— Current'),
+                Text('â€” Phototherapy'),
+                Text('â‹¯ Pre-exchange'),
+                Text('â€” Exchange'),
               ],
             ),
           ],
@@ -498,26 +502,26 @@ class _BilirubinScreenState extends State<BilirubinScreen> {
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _referenceGroup('TcB confirmation', <String>[
-            'Obtain TSB when TcB is within 50 µmol/L of the phototherapy threshold or TcB is >250 µmol/L.',
+            'Obtain TSB when TcB is within 50 Âµmol/L of the phototherapy threshold or TcB is >250 Âµmol/L.',
             'After phototherapy, TcB should only be used at least 18 hours after stopping treatment.',
           ]),
           _referenceGroup('Intensive phototherapy', <String>[
-            'Narrow-spectrum blue light approximately 460–490 nm; irradiance ≥30 µW/cm²/nm.',
+            'Narrow-spectrum blue light approximately 460â€“490 nm; irradiance â‰¥30 ÂµW/cmÂ²/nm.',
             'Maximize exposed skin and verify device positioning/irradiance.',
-            'Check TSB within 12–24 h; if rising or nonresponsive, reassess at least every 4–6 h and evaluate hemolysis or another cause.',
+            'Check TSB within 12â€“24 h; if rising or nonresponsive, reassess at least every 4â€“6 h and evaluate hemolysis or another cause.',
           ]),
           _referenceGroup('Stopping and rebound', <String>[
-            '≥38 weeks: stop when TSB is >30 µmol/L below the current phototherapy threshold.',
-            '35–37 weeks: stop when TSB is >60 µmol/L below the threshold.',
-            'Routine rebound testing: 12–24 h. High-risk/hemolysis: 6–12 h, then every 24 h until reassuring.',
+            'â‰¥38 weeks: stop when TSB is >30 Âµmol/L below the current phototherapy threshold.',
+            '35â€“37 weeks: stop when TSB is >60 Âµmol/L below the threshold.',
+            'Routine rebound testing: 12â€“24 h. High-risk/hemolysis: 6â€“12 h, then every 24 h until reassuring.',
           ]),
           _referenceGroup('Pre-exchange', <String>[
-            'Within 30 µmol/L below exchange threshold: intensive phototherapy, IV access/fluids as appropriate, neonatology, blood bank, transfer and TSB every 2–3 h.',
+            'Within 30 Âµmol/L below exchange threshold: intensive phototherapy, IV access/fluids as appropriate, neonatology, blood bank, transfer and TSB every 2â€“3 h.',
             'Signs of acute bilirubin encephalopathy require urgent exchange assessment regardless of the numeric threshold.',
           ]),
           _referenceGroup('Prolonged jaundice', <String>[
             'Jaundice persisting beyond 14 days warrants total/direct bilirubin and assessment for cholestasis, biliary atresia, infection, hypothyroidism and hemolysis.',
-            'Direct bilirubin >17 µmol/L is abnormal and requires evaluation.',
+            'Direct bilirubin >17 Âµmol/L is abnormal and requires evaluation.',
           ]),
         ],
       ),
@@ -624,3 +628,4 @@ class _BilirubinChartPainter extends CustomPainter {
       oldDelegate.priorAge != priorAge ||
       oldDelegate.priorValue != priorValue;
 }
+

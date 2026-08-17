@@ -1,3 +1,7 @@
+﻿// PedsFlow - Proprietary Software
+// Copyright (c) 2026 Ahmed Saleh. All rights reserved.
+// See LICENSE in the repository root.
+// Third-party materials remain subject to their respective licenses.
 import 'dart:math' as math;
 
 enum BilirubinUnit { micromolPerL, mgPerDl }
@@ -53,8 +57,8 @@ class BilirubinEngine {
     180, 192, 204, 216, 228, 240, 252, 264, 276, 288, 300, 312, 324, 336,
   ];
 
-  // Embedded AAP 2022 threshold table used by the CPS ≥35-week framework.
-  // Values are mg/dL and are converted internally to µmol/L.
+  // Embedded AAP 2022 threshold table used by the CPS â‰¥35-week framework.
+  // Values are mg/dL and are converted internally to Âµmol/L.
   static const Map<String, List<double>> _phototherapy = <String, List<double>>{
     '35_0': <double>[8.5,10.61,12.49,14.16,15.6,16.83,17.85,18.61,18.66,18.71,18.77,18.82,18.87,18.92,18.97,19.02,19.07,19.13,19.18,19.23,19.28,19.33,19.38,19.43,19.49,19.54,19.59,19.64],
     '36_0': <double>[9.03,11.16,13.07,14.76,16.23,17.49,18.53,19.32,19.38,19.43,19.49,19.54,19.59,19.64,19.69,19.74,19.79,19.85,19.9,19.95,20.0,20.05,20.1,20.15,20.21,20.26,20.31,20.36],
@@ -158,10 +162,10 @@ class BilirubinEngine {
     double? previousAgeHours,
   }) {
     if (gestationalWeeks < 35 || gestationalWeeks > 40) {
-      throw ArgumentError('Gestational age must be 35–40 completed weeks.');
+      throw ArgumentError('Gestational age must be 35â€“40 completed weeks.');
     }
     if (!ageHours.isFinite || ageHours < 12 || ageHours > 336) {
-      throw ArgumentError('Supported postnatal age is 12–336 hours.');
+      throw ArgumentError('Supported postnatal age is 12â€“336 hours.');
     }
     if (!bilirubin.isFinite || bilirubin < 0) {
       throw ArgumentError('Enter a valid bilirubin value.');
@@ -220,26 +224,26 @@ class BilirubinEngine {
       actions.addAll(<String>[
         'TSB is at or above the exchange-transfusion threshold. Activate the exchange pathway immediately.',
         'Start/continue intensive phototherapy, establish IV access, notify neonatology and the blood bank, and arrange NICU transfer.',
-        'Repeat serum bilirubin every 2–3 hours during escalation.',
+        'Repeat serum bilirubin every 2â€“3 hours during escalation.',
       ]);
     } else if (zone == BilirubinZone.preExchange) {
       actions.addAll(<String>[
-        'TSB is within 30 µmol/L of the exchange threshold: this is the CPS pre-exchange zone.',
+        'TSB is within 30 Âµmol/L of the exchange threshold: this is the CPS pre-exchange zone.',
         'Start/continue intensive phototherapy, consult neonatology immediately, establish IV access, notify blood bank and arrange transfer.',
-        'Repeat serum bilirubin every 2–3 hours and investigate hemolysis/sepsis as clinically indicated.',
+        'Repeat serum bilirubin every 2â€“3 hours and investigate hemolysis/sepsis as clinically indicated.',
       ]);
     } else if (zone == BilirubinZone.phototherapy) {
       actions.addAll(<String>[
         'Start intensive phototherapy and assess feeding, hydration, weight change and the cause of hyperbilirubinemia.',
-        'Measure serum bilirubin within 12–24 hours; use a shorter interval when close to exchange, rapidly rising or clinically unstable.',
+        'Measure serum bilirubin within 12â€“24 hours; use a shorter interval when close to exchange, rapidly rising or clinically unstable.',
       ]);
     } else if (zone == BilirubinZone.nearPhototherapy) {
       actions.addAll(<String>[
-        'Bilirubin is within 30 µmol/L below the phototherapy threshold.',
+        'Bilirubin is within 30 Âµmol/L below the phototherapy threshold.',
         'Delay discharge or ensure close, reliable reassessment; repeat bilirubin based on trajectory and clinical risk, and consider phototherapy.',
       ]);
     } else {
-      actions.add('Below the phototherapy threshold. Use ΔTSB, age, feeding, weight loss, trajectory and follow-up reliability to plan reassessment.');
+      actions.add('Below the phototherapy threshold. Use Î”TSB, age, feeding, weight loss, trajectory and follow-up reliability to plan reassessment.');
     }
 
     if (serumConfirmation) {
@@ -249,14 +253,14 @@ class BilirubinEngine {
       actions.add('Rate of rise suggests possible hemolysis; investigate urgently and use the lower-risk threshold pathway as appropriate.');
     }
     if (previousPhototherapy) {
-      cautions.add('ΔTSB discharge prediction is not validated after previous phototherapy; use the rebound pathway instead.');
+      cautions.add('Î”TSB discharge prediction is not validated after previous phototherapy; use the rebound pathway instead.');
     } else if (ageHours < 12 || ageHours > 120) {
-      cautions.add('The CPS ΔTSB discharge-follow-up framework is intended for 12–120 hours.');
+      cautions.add('The CPS Î”TSB discharge-follow-up framework is intended for 12â€“120 hours.');
     }
     if (measurementType == BilirubinMeasurementType.tcb) {
       cautions.add('TcB is a screening measurement and should not replace TSB when treatment is being considered or soon after phototherapy.');
     }
-    cautions.add('Thresholds support—but do not replace—clinical assessment, local policy and neonatal consultation.');
+    cautions.add('Thresholds supportâ€”but do not replaceâ€”clinical assessment, local policy and neonatal consultation.');
 
     return BilirubinAssessment(
       gestationalWeeks: gestationalWeeks,
@@ -276,3 +280,4 @@ class BilirubinEngine {
     );
   }
 }
+

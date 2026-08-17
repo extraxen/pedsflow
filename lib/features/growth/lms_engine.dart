@@ -1,3 +1,7 @@
+﻿// PedsFlow - Proprietary Software
+// Copyright (c) 2026 Ahmed Saleh. All rights reserved.
+// See LICENSE in the repository root.
+// Third-party materials remain subject to their respective licenses.
 import 'dart:math' as math;
 
 class LmsPoint {
@@ -27,3 +31,4 @@ class LmsEngine {
     return 100 * 0.5 * (1 + erf);
   }
 }
+

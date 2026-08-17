@@ -1,3 +1,7 @@
+﻿// PedsFlow - Proprietary Software
+// Copyright (c) 2026 Ahmed Saleh. All rights reserved.
+// See LICENSE in the repository root.
+// Third-party materials remain subject to their respective licenses.
 import '../features/growth/growth_suite_screen.dart';
 import '../features/neonatal/neonatal_hub_screen.dart';
 import '../features/endocrine/endocrine_hub_screen.dart';
@@ -177,7 +181,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 title: 'Electrolyte Replacement Engine',
                 subtitle: 'Potassium, sodium, magnesium, phosphate and calcium replacement safety',
-                meta: 'K • Na • Mg • PO₄ • Ca',
+                meta: 'K â€¢ Na â€¢ Mg â€¢ POâ‚„ â€¢ Ca',
                 onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ElectrolyteEngineScreen())),
               ),
               const SizedBox(height: 10),
@@ -395,13 +399,13 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      'PedsFlow v20.1.0',
+                      'PedsFlow v20.1.2',
                       style: TextStyle(fontWeight: FontWeight.w800),
                     ),
                     SizedBox(height: 3),
-                    Text('Implemented August 2, 2026'),
+                    Text('Implemented August 17, 2026'),
                     SizedBox(height: 3),
-                    Text('© 2026 Dr. Ahmed Saleh'),
+                    Text('Â© 2026 Dr. Ahmed Saleh'),
                   ],
                 ),
               ),
@@ -861,3 +865,5 @@ class _SectionHeading extends StatelessWidget {
     );
   }
 }
+
+

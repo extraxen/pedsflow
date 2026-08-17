@@ -1,3 +1,7 @@
+﻿// PedsFlow - Proprietary Software
+// Copyright (c) 2026 Ahmed Saleh. All rights reserved.
+// See LICENSE in the repository root.
+// Third-party materials remain subject to their respective licenses.
 import 'package:flutter/material.dart';
 
 import '../models/admission_plan.dart';
@@ -342,8 +346,8 @@ class _MedicationSummary extends StatelessWidget {
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    '$total medications · $withDoses with dose '
-                    'sections · $favourites favourites',
+                    '$total medications Â· $withDoses with dose '
+                    'sections Â· $favourites favourites',
                   ),
                 ],
               ),
@@ -510,7 +514,7 @@ class _MedicationListTile extends StatelessWidget {
           ),
         ),
         subtitle: Text(
-          '${medication.category} · '
+          '${medication.category} Â· '
           '${medication.doseSections.length} dose sections',
         ),
         trailing: IconButton(
@@ -896,7 +900,7 @@ class _DoseSectionCard extends StatelessWidget {
             if (historical) ...<Widget>[
               const SizedBox(height: 8),
               const Text(
-                'Historical local reference — verify against '
+                'Historical local reference â€” verify against '
                 'the current local protocol.',
                 style: TextStyle(
                   fontWeight: FontWeight.w800,
@@ -958,3 +962,4 @@ class _TextSection extends StatelessWidget {
     );
   }
 }
+

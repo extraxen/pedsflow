@@ -1,3 +1,7 @@
+﻿// PedsFlow - Proprietary Software
+// Copyright (c) 2026 Ahmed Saleh. All rights reserved.
+// See LICENSE in the repository root.
+// Third-party materials remain subject to their respective licenses.
 import 'package:flutter/material.dart';
 
 import '../models/admission_plan.dart';
@@ -124,7 +128,7 @@ class _PlansScreenState extends State<PlansScreen> {
                             Text(
                               '${widget.store.plans.map(
                                     (AdmissionPlan p) => p.category,
-                                  ).toSet().length} specialties · '
+                                  ).toSet().length} specialties Â· '
                               'search diagnoses, aliases and specialties',
                             ),
                           ],
@@ -203,3 +207,4 @@ class _PlansScreenState extends State<PlansScreen> {
     );
   }
 }
+

@@ -1,3 +1,7 @@
+﻿// PedsFlow - Proprietary Software
+// Copyright (c) 2026 Ahmed Saleh. All rights reserved.
+// See LICENSE in the repository root.
+// Third-party materials remain subject to their respective licenses.
 class MedicationMonograph {
   final int id;
   final String name;
@@ -116,3 +120,4 @@ class MedicationLinkedPlan {
     );
   }
 }
+

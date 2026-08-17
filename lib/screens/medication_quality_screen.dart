@@ -1,3 +1,7 @@
+﻿// PedsFlow - Proprietary Software
+// Copyright (c) 2026 Ahmed Saleh. All rights reserved.
+// See LICENSE in the repository root.
+// Third-party materials remain subject to their respective licenses.
 import 'package:flutter/material.dart';
 
 import '../models/medication_monograph.dart';
@@ -229,7 +233,7 @@ class MedicationQualityScreen extends StatelessWidget {
                 child: const Padding(
                   padding: EdgeInsets.all(16),
                   child: Text(
-                    'A medication is counted as “with doses” when '
+                    'A medication is counted as â€œwith dosesâ€ when '
                     'at least one structured dose section is present. '
                     'This does not mean its monograph is complete for '
                     'every indication, age group, route, renal status, '
@@ -372,7 +376,7 @@ class _MedicationQualityListScreen extends StatelessWidget {
                 ),
               ),
               subtitle: Text(
-                '${medication.category} · '
+                '${medication.category} Â· '
                 '${medication.doseSections.length} dose sections',
               ),
               trailing: const Icon(Icons.chevron_right),
@@ -400,3 +404,4 @@ class _MedicationQualityListScreen extends StatelessWidget {
     );
   }
 }
+
