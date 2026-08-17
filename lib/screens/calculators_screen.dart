@@ -1,3 +1,8 @@
+import '../features/growth/growth_suite_screen.dart';
+import '../features/neonatal/neonatal_hub_screen.dart';
+import '../features/endocrine/endocrine_hub_screen.dart';
+import '../features/electrolytes/electrolyte_engine_screen.dart';
+import '../features/electrolytes/hypokalemia_engine_screen.dart';
 import '../features/dka/dka_calculator_screen.dart';
 import '../features/bilirubin/bilirubin_screen.dart';
 import 'pediatric_reference_screen.dart';
@@ -12,6 +17,36 @@ class CalculatorsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<_CalculatorItem> calculators = <_CalculatorItem>[
+      _CalculatorItem(
+        title: 'Growth Suite',
+        subtitle: 'WHO/CDC/Fenton/INTERGROWTH workspace, corrected age, trajectories and velocity',
+        icon: Icons.show_chart,
+        screen: const GrowthSuiteScreen(),
+      ),
+      _CalculatorItem(
+        title: 'Neonatal Hub',
+        subtitle: 'Bilirubin, glucose, EOS, fluids/GIR, feeds, corrected GA and resuscitation',
+        icon: Icons.child_care_outlined,
+        screen: const NeonatalHubScreen(),
+      ),
+      _CalculatorItem(
+        title: 'Endocrine Hub',
+        subtitle: 'DKA, adrenal crisis, glucose, DI/SIADH, calcium, thyroid and insulin tools',
+        icon: Icons.hub_outlined,
+        screen: const EndocrineHubScreen(),
+      ),
+      _CalculatorItem(
+        title: 'Electrolyte Replacement Engine',
+        subtitle: 'K, Na, Mg, phosphate and calcium safety workflows',
+        icon: Icons.science_outlined,
+        screen: const ElectrolyteEngineScreen(),
+      ),
+      _CalculatorItem(
+        title: 'Hypokalemia replacement engine',
+        subtitle: 'Oral vs IV KCl, background-fluid potassium, concentration, fluid burden and monitoring',
+        icon: Icons.bolt_outlined,
+        screen: const HypokalemiaEngineScreen(),
+      ),
       _CalculatorItem(
         title: 'PCCU & critical care',
         subtitle: 'Ventilation, vasoactives, oxygenation, cardiac and monitoring tools',

@@ -1,0 +1,35 @@
+{
+  "version": "20.1.0",
+  "runtimeDependency": false,
+  "lmsFormula": "Z=(((X/M)^L)-1)/(L*S); when L=0, Z=ln(X/M)/S",
+  "references": [
+    {
+      "name": "WHO Child Growth Standards",
+      "ageRange": "birth to 2 years in current PedsFlow selection logic",
+      "measures": ["weight-for-age", "length-for-age", "weight-for-length", "head-circumference-for-age"],
+      "source": "CDC-hosted WHO LMS files / WHO Child Growth Standards",
+      "status": "import architecture present; full LMS table requires final data-bundle validation"
+    },
+    {
+      "name": "CDC 2000 Growth Charts",
+      "ageRange": "2 to 20 years",
+      "measures": ["weight-for-age", "stature-for-age", "BMI-for-age"],
+      "source": "CDC/NCHS LMS data files",
+      "status": "import architecture present; full LMS table requires final data-bundle validation"
+    },
+    {
+      "name": "Fenton preterm growth charts",
+      "ageRange": "preterm",
+      "measures": ["weight", "length", "head circumference"],
+      "source": "Fenton growth chart publications / licensed data",
+      "status": "not enabled for exact percentile calculation until redistribution/licensing is confirmed"
+    },
+    {
+      "name": "INTERGROWTH-21",
+      "ageRange": "preterm/newborn standard-specific",
+      "measures": ["weight", "length", "head circumference"],
+      "source": "INTERGROWTH-21 standards and tools",
+      "status": "not enabled for exact percentile calculation until imported tables are cross-validated"
+    }
+  ]
+}

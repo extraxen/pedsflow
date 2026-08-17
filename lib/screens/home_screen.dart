@@ -1,3 +1,8 @@
+import '../features/growth/growth_suite_screen.dart';
+import '../features/neonatal/neonatal_hub_screen.dart';
+import '../features/endocrine/endocrine_hub_screen.dart';
+import '../features/electrolytes/electrolyte_engine_screen.dart';
+import '../features/electrolytes/hypokalemia_engine_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../models/admission_plan.dart';
@@ -120,8 +125,79 @@ class HomeScreen extends StatelessWidget {
                 ),
                 title: 'Calculators',
                 subtitle: 'Fluids, doses, electrolytes, BSA and QTc',
-                meta: '22 tools',
+                meta: '23+ tools',
                 onTap: () => openTab(3),
+              ),
+              const SizedBox(height: 10),
+              _ClinicalToolRow(
+                illustration: const _IllustratedBadge(
+                  icon: Icons.show_chart,
+                  secondaryIcon: Icons.straighten_outlined,
+                  background: Color(0xFFE8F4F8),
+                  accent: Color(0xFF27677A),
+                ),
+                title: 'Growth Suite',
+                subtitle: 'Corrected age, longitudinal growth, BMI and velocity with WHO/CDC/Fenton/INTERGROWTH framework',
+                meta: 'Growth',
+                onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GrowthSuiteScreen())),
+              ),
+              const SizedBox(height: 10),
+              _ClinicalToolRow(
+                illustration: const _IllustratedBadge(
+                  icon: Icons.child_care_outlined,
+                  secondaryIcon: Icons.water_drop_outlined,
+                  background: Color(0xFFF2ECFA),
+                  accent: Color(0xFF6D4C8E),
+                ),
+                title: 'Neonatal Hub',
+                subtitle: 'Bilirubin, glucose, EOS, fluids/GIR, feeds, corrected GA and newborn resuscitation',
+                meta: 'Neonatal',
+                onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const NeonatalHubScreen())),
+              ),
+              const SizedBox(height: 10),
+              _ClinicalToolRow(
+                illustration: const _IllustratedBadge(
+                  icon: Icons.hub_outlined,
+                  secondaryIcon: Icons.water_drop_outlined,
+                  background: Color(0xFFE7F3EE),
+                  accent: Color(0xFF176B4D),
+                ),
+                title: 'Endocrine Hub',
+                subtitle: 'DKA, adrenal crisis, hypoglycemia, DI/SIADH, calcium, thyroid and insulin tools',
+                meta: 'Endocrine',
+                onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const EndocrineHubScreen())),
+              ),
+              const SizedBox(height: 10),
+              _ClinicalToolRow(
+                illustration: const _IllustratedBadge(
+                  icon: Icons.science_outlined,
+                  secondaryIcon: Icons.bolt_outlined,
+                  background: Color(0xFFFFF0D2),
+                  accent: Color(0xFF99610C),
+                ),
+                title: 'Electrolyte Replacement Engine',
+                subtitle: 'Potassium, sodium, magnesium, phosphate and calcium replacement safety',
+                meta: 'K • Na • Mg • PO₄ • Ca',
+                onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ElectrolyteEngineScreen())),
+              ),
+              const SizedBox(height: 10),
+              _ClinicalToolRow(
+                illustration: const _IllustratedBadge(
+                  icon: Icons.bolt_outlined,
+                  secondaryIcon: Icons.water_drop_outlined,
+                  background: Color(0xFFFFF0D2),
+                  accent: Color(0xFF99610C),
+                ),
+                title: 'Hypokalemia replacement engine',
+                subtitle: 'Oral/IV KCl, current-fluid potassium, infusion rate, fluid burden and monitoring',
+                meta: 'Electrolytes',
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (BuildContext context) => const HypokalemiaEngineScreen(),
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 10),
               _ClinicalToolRow(
@@ -319,7 +395,7 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      'PedsFlow v19.4.0',
+                      'PedsFlow v20.1.0',
                       style: TextStyle(fontWeight: FontWeight.w800),
                     ),
                     SizedBox(height: 3),
@@ -415,7 +491,7 @@ class _WelcomePanel extends StatelessWidget {
                   _MetricChip(text: '$plans plans'),
                   _MetricChip(text: '$medications medications'),
                   _MetricChip(text: '$medicationsWithDoses with doses'),
-                  _MetricChip(text: 'v19.4.0'),
+                  _MetricChip(text: 'v20.0.0'),
                 ],
               ),
             ],

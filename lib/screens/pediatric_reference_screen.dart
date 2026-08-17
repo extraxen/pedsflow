@@ -1,3 +1,4 @@
+import '../features/growth/growth_suite_screen.dart';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -21,9 +22,9 @@ class PediatricReferenceScreen extends StatelessWidget {
           const SizedBox(height: 10),
           _ReferenceTile(
             icon: Icons.show_chart,
-            title: 'WHO growth assessment',
-            subtitle: 'Weight, length/height, BMI, head circumference, z-scores and percentiles',
-            screen: const GrowthAssessmentScreen(),
+            title: 'Growth Suite',
+            subtitle: 'Corrected age, longitudinal trajectories, BMI, velocity and growth standards',
+            screen: const GrowthSuiteScreen(),
           ),
         ],
       ),

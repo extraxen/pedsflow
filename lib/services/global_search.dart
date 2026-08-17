@@ -71,6 +71,10 @@ class GlobalSearchIndex {
     'sickle cell crisis': 'vaso occlusive pain', 'aki': 'acute kidney injury',
     'ards': 'acute respiratory distress syndrome', 'hf': 'heart failure',
     'svt': 'supraventricular tachycardia', 'se': 'status epilepticus',
+    'po4': 'phosphate', 'mg': 'magnesium', 'hypomag': 'hypomagnesemia',
+    'low sodium': 'hyponatremia', 'low calcium': 'hypocalcemia',
+    'nrp': 'newborn resuscitation', 'eos': 'early onset sepsis', 'cga': 'corrected gestational age',
+    'adrenal crisis': 'adrenal crisis', 'siadh': 'siadh', 'di': 'diabetes insipidus',
   };
 
   static Future<GlobalSearchIndex> build(AppStore store) async {
@@ -139,7 +143,10 @@ class GlobalSearchIndex {
     final List<SearchHit> hits = <SearchHit>[];
 
     for (final SearchDocument doc in documents) {
-      if (kind != null && kind != 'all' && doc.kind != kind) continue;
+      if (kind != null && kind != 'all') {
+        final bool groupMatch = kind == 'electrolytes' && (doc.kind == 'electrolytes' || doc.kind == 'hypokalemia_engine');
+        if (!groupMatch && doc.kind != kind) continue;
+      }
       final String title = _normalize(doc.title);
       final String category = _normalize(doc.category);
       final String aliases = _normalize(doc.aliases.join(' '));
@@ -175,7 +182,7 @@ class GlobalSearchIndex {
   }
 
   static String _normalize(String value) {
-    String v = value.toLowerCase().trim().replaceAll(RegExp(r'[^a-z0-9+./-]+'), ' ').replaceAll(RegExp(r'\s+'), ' ');
+    String v = value.toLowerCase().replaceAll(RegExp(r'\b\d+(?:\.\d+)?\s*kg\b'), ' ').trim().replaceAll(RegExp(r'[^a-z0-9+./-]+'), ' ').replaceAll(RegExp(r'\s+'), ' ');
     if (_aliases.containsKey(v)) v = _aliases[v]!;
     return v.split(' ').map((t) => _aliases[t] ?? t).join(' ').trim();
   }

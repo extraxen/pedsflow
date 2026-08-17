@@ -2059,5 +2059,243 @@
     "target": "",
     "aliases": [],
     "body": "dka_engine.dart /calculators/pediatric-dka age weight glucose previousGlucose ph bicarbonate sodium chloride potassium bohb phosphate urea age weight glucose previousGlucose ph bicarbonate sodium chloride potassium bohb phosphate urea age weight 30 glucose 17 previousGlucose 23 ph 7.18 bicarbonate sodium 131 chloride 98 potassium 4.7 bohb 4.2 phosphate urea PEDIATRIC DKA CLINICAL SUPPORT — VERIFY INDEPENDENTLY\nWeight: ${_one(_inputs.weightKg)} kg\nAssessment: ${result.diagnosisLabel}; ${result.severityLabel}\nCorrected Na: ${_one(result.correctedSodium)} mmol/L\nAnion gap: ${_one(result.anionGap)} mmol/L\nEffective osmolality: ${_one(result.effectiveOsmolality)} mOsm/kg\nInitial isotonic bolus: ${_zero(result.initialBolusMl)} mL ($_bolusMlPerKg mL/kg)\nOngoing CPS fluid: ${_one(result.cpsFluid.rateMlHour)} mL/h\nInsulin: ${result.holdInsulin ? }\nTwo-bag: A ${_one(result.bagARateMlHour)} mL/h + D$_bagBConcentration B ${_one(result.bagBRateMlHour)} mL/h → D$_desiredDextrose\nEducational prototype; confirm with local order set, endocrinology, pharmacy, and critical care. DKA summary copied. Verify before use. Pediatric DKA PedsFlow · CPS/TREKK clinical support Example Clear Copy clinical summary Educational support — not an order set. Do not enter identifiers. Verify every result. Assess Treat Monitor Cerebral injury Guide ${index + 1}. ${labels[index]} ^\\d*\\.?\\d* Biochemical assessment Confirm the triad before treating as DKA Review inputs Patient age Age years weight Weight * kg Altered mental status Urgent cerebral injury assessment Glucose, ketones and acidosis glucose Current glucose * mmol/L previousGlucose Glucose 1 hour ago mmol/L For rate-of-fall alert bohb β-hydroxybutyrate mmol/L Urine ketones Not provided Negative / trace / small Moderate Large ph Venous pH bicarbonate Measured bicarbonate mmol/L Electrolytes and renal markers sodium Sodium mmol/L chloride Chloride mmol/L potassium Potassium * mmol/L phosphate Phosphate mmol/L urea Urea mmol/L Recent urine output Not confirmed Documented No urine output Hyperglycemia >11 mmol/L Ketosis β-OHB ≥3 or urine mod/large Acidosis pH <7.3 or HCO₃ <18 Anion gap ${_one(result.anionGap)} mmol/L · target >12 Fluids, insulin and electrolytes CPS-aligned initial treatment Insulin hold Eligible after ≥1 h fluids Initial isotonic fluid $dose mL/kg Selected bolus ${_zero(result.initialBolusMl)} mL $_bolusMlPerKg mL/kg · max 1000 mL Give over 20–30 min For all DKA patients Shock pathway 10 mL/kg increments Rapidly to max 40 mL/kg with intensivist 0.9% NaCl or balanced crystalloid Ongoing total IV fluid Total hourly rate ${_one(result.cpsFluid.rateMlHour)} mL/h ${_one(result.cpsFluid.factorMlKgHour)} mL/kg/h Weight band CPS Table 5 Temporary option Twice maintenance Generally safe until detailed calculation Assumed 10% deficit over 36 h Two-bag dextrose mixer Bag B concentration D12.5 (preferred) D10 Desired final dextrose No dextrose D${_formatDex(value)} Bag A · no dextrose ${_one(result.bagARateMlHour)} mL/h ${_one(result.bagAPercent)}% of total Bag B · D${_formatDex(_bagBConcentration)} ${_one(result.bagBRateMlHour)} mL/h ${_one(result.bagBPercent)}% of total Combined ${_one(result.cpsFluid.rateMlHour)} mL/h Effective D${_formatDex(_desiredDextrose)} When to add dextrose Continue dextrose-free isotonic fluid until glucose is 15–17 mmol/L. Then add D5 and adjust to maintain glucose 7–11 mmol/L. Both bags require identical electrolytes Insulin and potassium Selected insulin rate 0.05 unit/kg/h 0.1 unit/kg/h 0.025 unit/kg/h · special circumstance Calculated range ${_one(result.insulinLowUnitsHour)}–${_one(result.insulinHighUnitsHour)} U/h 0.05–0.1 unit/kg/h Selected rate HOLD ${_one(result.selectedInsulinUnitsHour)} U/h Requires K >3.0 Separate pump · no IV bolus At 1 unit/mL ${_one(result.selectedInsulinUnitsHour)} mL/h Confirm local pump concentration Potassium required Do not start insulin until potassium is known and greater than 3.0 mmol/L. Hard stop — K ≤3.0 mmol/L Replace potassium before insulin. Use cardiac monitoring and urgent local/expert guidance. Add potassium to fluids CPS recommends at least 40 mmol/L when K is <5 and recent urine output is documented. Confirm urine output first Potassium supplementation is indicated by the level, but recent urine output is not documented. Defer potassium initially Recheck frequently; add when K falls below 5 mmol/L and urine output is documented. Severe hypophosphatemia Consider replacement per local protocol and clinical context. Start only after ≥1 hour of fluids · never bolus Trajectory Trend what changes management Hourly Glucose Neurologic status · vitals · fluid balance At least q2h Labs Gas · electrolytes · anion gap · ketones As indicated Cardiac monitor Dangerous potassium/calcium derangement Biochemistry trend Add reading Clear trend Time BG Na Cl HCO₃ pH β-OHB Corr Na AG No readings yet. Add the first treatment snapshot. Resolution and transition checklist Clinically well and tolerating oral intake Ketosis/acidosis resolved by local criteria Subcutaneous insulin plan confirmed IV insulin overlap timed per local protocol Precipitating cause addressed Education and follow-up arranged Time-critical complication Suspected cerebral injury: treat now Do not wait for imaging Warning signs Altered consciousness after initial improvement New or worsening severe headache Vomiting or irritability Hypertension with unexplained bradycardia Respiratory depression or desaturation Cranial nerve palsy or urinary incontinence Immediate actions Call paediatric critical care / resuscitation support Minimize movement; head midline and bed at 30° Use isotonic fluid; consider 75% rate if perfusion allows Give osmolar therapy immediately Avoid intubation if possible; maintain baseline hyperventilation if required Immediate osmolar therapy 3% hypertonic saline ${_one(result.hypertonicSaline3PercentMl)} mL 5 mL/kg over 10–15 min · max 250 mL OR mannitol ${_one(result.mannitolLowG)}–${_one(result.mannitolHighG)} g 0.5–1 g/kg over 15–20 min · max 100 g Mannitol 20% volume ${_one(result.mannitol20PercentLowMl)}–${_one(result.mannitol20PercentHighMl)} mL 20% = 0.2 g/mL Current flag: altered mental status Continue surveillance Urgent bedside assessment, tertiary referral, and critical care involvement are required. Mental status is recorded as baseline. Continue frequent neurologic reassessment. Method and provenance Transparent calculations and limits Calculation definitions DKA Glucose >11; β-OHB ≥3 and/or moderate/large ketonuria; pH <7.3 or measured HCO₃ <18; anion gap >12. Corrected sodium Measured Na + (glucose − 5) × 0.3. Anion gap Measured Na − chloride − measured bicarbonate. Effective osmolality 2 × measured Na + glucose. Used as a hyperosmolar physiology screen. Two-bag rates Bag B fraction = desired dextrose ÷ Bag B concentration; Bag A fraction = 1 − Bag B fraction. Clinical sources Canadian Paediatric Society: Current recommendations for management of paediatric diabetic ketoacidosis. https://cps.ca/en/documents/position/current-recommendations-for-management-of-paediatric-diabetic-ketoacidosis TREKK: Bottom Line Recommendations — Diabetic Ketoacidosis. https://trekk.ca/resources/bottom-line-recommendations-diabetic-ketoacidosis Important limitation This educational module has not been validated or certified as a medical device. It does not replace bedside assessment, a local order set, endocrinology, pharmacy, or critical care. Special populations require expert guidance. Corrected Na ${_one(result.correctedSodium)} mmol/L Anion gap ${_one(result.anionGap)} mmol/L Effective osm ${_one(result.effectiveOsmolality)} mOsm/kg BG fall ${_one(result.glucoseFallPerHour)} mmol/L/h LIVE CARE BRIEF ${_one(_inputs.weightKg)} kg child Possible HHS / mixed physiology Glucose >33 and effective osmolality >320. Obtain urgent specialist guidance. Rapid glucose decline Falling >5 mmol/L/h. Review dextrose and insulin now. Altered mental status Urgent cerebral injury assessment and critical care involvement. Initial bolus ${_zero(result.initialBolusMl)} mL $_bolusMlPerKg mL/kg isotonic over 20–30 min Ongoing fluid ${_one(result.cpsFluid.rateMlHour)} mL/h CPS weight-band rate Insulin after ≥1 h HOLD ${_one(result.selectedInsulinUnitsHour)} U/h Requires K >3.0 Separate pump · no bolus Two-bag split ${_one(result.bagARateMlHour)} + ${_one(result.bagBRateMlHour)} Bag A + D${_formatDex(_bagBConcentration)} B → D${_formatDex(_desiredDextrose)} Unknown Met Not met ${_trendReadings.length} h time bg na cl hco3 ph bohb Remove reading time ${reading.id}-$field time Glucose falling >5 mmol/L/h Increase dextrose. If dextrose is maximized, review insulin reduction per CPS/local protocol. Corrected sodium changing >3 mmol/L/h Urgently reassess the patient, fluid plan, neurologic status, and local protocol. time bg na cl hco3 ph bohb time bg na cl hco3 ph bohb ${numbered ? } ${items[index]}"
+  },
+  {
+    "id": "engine:hypokalemia",
+    "title": "Hypokalemia replacement engine",
+    "category": "Electrolytes • Potassium replacement",
+    "kind": "hypokalemia_engine",
+    "target": "hypokalemia",
+    "aliases": [
+      "hypok",
+      "low potassium",
+      "K replacement",
+      "potassium chloride",
+      "KCl",
+      "oral KCl",
+      "IV KCl",
+      "potassium infusion"
+    ],
+    "body": "hypokalemia hypokalaemia low potassium potassium chloride KCl replacement oral enteral IV intravenous maintenance fluid potassium 20 mmol/L 40 mmol/L 60 mmol/L peripheral central line infusion rate mmol/kg/hr fluid burden urine output renal impairment ECG magnesium 1.33 mmol/mL oral solution 0.2 mmol/kg/hour ward 0.4 mmol/kg/hour critical care PCCU potassium monitoring replacement"
+  },
+  {
+    "id": "hub:growth",
+    "title": "Growth Suite",
+    "category": "Growth • WHO • CDC • Fenton • INTERGROWTH",
+    "kind": "growth",
+    "target": "",
+    "aliases": [
+      "growth chart",
+      "percentile",
+      "z score",
+      "corrected age",
+      "growth velocity",
+      "BMI trajectory",
+      "Fenton",
+      "INTERGROWTH",
+      "WHO growth",
+      "CDC growth"
+    ],
+    "body": "longitudinal growth weight height length head circumference BMI corrected age prematurity percentile z-score LMS trajectory weight velocity height velocity WHO CDC Fenton INTERGROWTH preterm"
+  },
+  {
+    "id": "hub:neonatal",
+    "title": "Neonatal Hub",
+    "category": "Neonatology",
+    "kind": "neonatal",
+    "target": "",
+    "aliases": [
+      "newborn",
+      "NICU",
+      "neonate"
+    ],
+    "body": "CPS bilirubin phototherapy neonatal hypoglycemia dextrose gel early onset sepsis EOS neonatal fluids GIR corrected gestational age feeding mL/kg/day neonatal medication newborn resuscitation NRP"
+  },
+  {
+    "id": "neo:hypoglycemia",
+    "title": "Neonatal hypoglycemia",
+    "category": "Neonatal Hub",
+    "kind": "neonatal",
+    "target": "hypoglycemia",
+    "aliases": [
+      "newborn low glucose",
+      "dextrose gel",
+      "D10 newborn"
+    ],
+    "body": "CPS low blood glucose 2.6 mmol/L 1.8 2.5 40% dextrose gel 0.5 mL/kg 200 mg/kg D10W 2 mL/kg GIR 5.5"
+  },
+  {
+    "id": "neo:eos",
+    "title": "EOS / neonatal sepsis assessment",
+    "category": "Neonatal Hub",
+    "kind": "neonatal",
+    "target": "eos",
+    "aliases": [
+      "EOS",
+      "early onset sepsis",
+      "GBS newborn",
+      "PROM sepsis"
+    ],
+    "body": "maternal GBS bacteriuria previous invasive GBS prolonged rupture membranes 18 hours maternal fever 38 intrapartum antibiotic prophylaxis ampicillin aminoglycoside blood culture"
+  },
+  {
+    "id": "neo:fluids",
+    "title": "Neonatal fluids & GIR",
+    "category": "Neonatal Hub",
+    "kind": "neonatal",
+    "target": "fluids",
+    "aliases": [
+      "GIR newborn",
+      "neonatal dextrose",
+      "mL/kg/day"
+    ],
+    "body": "glucose infusion rate dextrose percent mL hour weight total fluids mL/kg/day"
+  },
+  {
+    "id": "neo:feeds",
+    "title": "Neonatal feeding calculator",
+    "category": "Neonatal Hub",
+    "kind": "neonatal",
+    "target": "feeds",
+    "aliases": [
+      "feed volume",
+      "mL per feed",
+      "kcal kg day"
+    ],
+    "body": "mL/kg/day daily volume feeds per day kcal oz energy kcal/kg/day fortification"
+  },
+  {
+    "id": "neo:nrp",
+    "title": "Newborn resuscitation quick reference",
+    "category": "Neonatal Hub",
+    "kind": "neonatal",
+    "target": "resuscitation",
+    "aliases": [
+      "NRP",
+      "neonatal resuscitation",
+      "newborn CPR"
+    ],
+    "body": "2025 AHA AAP ventilation 30 60 per minute heart rate 100 60 chest compressions 3:1 epinephrine 0.01 0.03 mg/kg UVC IO oxygen"
+  },
+  {
+    "id": "hub:endocrine",
+    "title": "Endocrine Hub",
+    "category": "Endocrine",
+    "kind": "endocrine",
+    "target": "",
+    "aliases": [
+      "endo",
+      "endocrinology"
+    ],
+    "body": "DKA adrenal crisis hypoglycemia diabetes insipidus DI SIADH calcium thyroid storm severe hypothyroidism insulin calculator carb ratio correction factor"
+  },
+  {
+    "id": "endo:adrenal",
+    "title": "Adrenal crisis",
+    "category": "Endocrine Hub",
+    "kind": "endocrine",
+    "target": "adrenal",
+    "aliases": [
+      "stress dose hydrocortisone",
+      "adrenal insufficiency"
+    ],
+    "body": "hydrocortisone IV IM shock hypoglycemia hyponatremia hyperkalemia 25 mg 50 mg 100 mg q6h 50 75 mg/m2"
+  },
+  {
+    "id": "endo:di",
+    "title": "DI / SIADH",
+    "category": "Endocrine Hub",
+    "kind": "endocrine",
+    "target": "di-siadh",
+    "aliases": [
+      "diabetes insipidus",
+      "desmopressin",
+      "DDAVP",
+      "SIADH"
+    ],
+    "body": "polyuria hypernatremia dilute urine water access serum osmolality urine osmolality desmopressin hyponatremia fluid restriction"
+  },
+  {
+    "id": "endo:insulin",
+    "title": "Insulin calculators",
+    "category": "Endocrine Hub",
+    "kind": "endocrine",
+    "target": "insulin",
+    "aliases": [
+      "carb ratio",
+      "ICR",
+      "ISF",
+      "correction factor",
+      "TDD",
+      "basal insulin"
+    ],
+    "body": "500 rule 100 rule mmol/L total daily dose basal percentage carbohydrate dose correction factor target glucose insulin on board"
+  },
+  {
+    "id": "hub:electrolytes",
+    "title": "Electrolyte Replacement Engine",
+    "category": "Electrolytes",
+    "kind": "electrolytes",
+    "target": "",
+    "aliases": [
+      "electrolyte replacement",
+      "K Na Ca Mg phosphate"
+    ],
+    "body": "potassium KCl sodium calcium magnesium phosphate weight based route concentration infusion rate renal monitoring recheck safety limits"
+  },
+  {
+    "id": "elyte:magnesium",
+    "title": "Hypomagnesemia replacement",
+    "category": "Electrolytes",
+    "kind": "electrolytes",
+    "target": "magnesium",
+    "aliases": [
+      "low magnesium",
+      "hypomag",
+      "IV magnesium replacement"
+    ],
+    "body": "oral enteral 0.1 0.2 mmol/kg TID 0.4 0.8 mmol/kg IV magnesium 0.1 0.2 up to 0.4 mmol/kg max 8 mmol 2 4 hours renal impairment"
+  },
+  {
+    "id": "elyte:phosphate",
+    "title": "Hypophosphatemia replacement",
+    "category": "Electrolytes",
+    "kind": "electrolytes",
+    "target": "phosphate",
+    "aliases": [
+      "low phosphate",
+      "hypophos",
+      "PO4 replacement",
+      "IV phosphate"
+    ],
+    "body": "neonate 1 mmol/kg/day child 2 3 mmol/kg/day IV 0.36 mmol/kg peripheral 0.05 mmol/mL central 0.12 mmol/mL 6 hours 0.2 mmol/kg/h 10 mmol/h renal potassium sodium phosphate"
+  },
+  {
+    "id": "elyte:sodium",
+    "title": "Sodium correction safety",
+    "category": "Electrolytes",
+    "kind": "electrolytes",
+    "target": "sodium",
+    "aliases": [
+      "hyponatremia",
+      "low sodium",
+      "sodium deficit",
+      "Na correction"
+    ],
+    "body": "hyponatremia target correction 6 8 mmol/L 24 hours seizures hypertonic saline local protocol sodium deficit total body water"
+  },
+  {
+    "id": "elyte:calcium",
+    "title": "Calcium replacement safety",
+    "category": "Electrolytes",
+    "kind": "electrolytes",
+    "target": "calcium",
+    "aliases": [
+      "hypocalcemia",
+      "low calcium",
+      "calcium gluconate",
+      "calcium chloride"
+    ],
+    "body": "ionized calcium ECG QT magnesium phosphate central peripheral extravasation high alert local protocol"
   }
 ]
