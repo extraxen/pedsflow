@@ -1,4 +1,4 @@
-# Flutter/Dart
+# Flutter/Dart generated files
 .dart_tool/
 .packages
 .pub/
@@ -16,5 +16,6 @@ coverage/
 .DS_Store
 Thumbs.db
 
-# Generated local files
+# Local/generated
 *.log
+*.tmp

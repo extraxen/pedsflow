@@ -1,7 +1,0 @@
-PedsFlow v12.0.0 — Medication Completion Update
-
-- Completed dose sections for all 91 medication entries that previously displayed 0 dose sections.
-- Medication database now contains 386 entries with at least one dose section each.
-- Added pediatric dosing summaries, route separation, key monitoring, maximums where appropriate, and specialist-verification warnings.
-- High-risk, neonatal, antiretroviral, antifungal, biologic, and critical-care medications remain explicitly linked to local formulary/pharmacist/subspecialty verification.
-- This is a clinical-support reference, not a prescribing authority.

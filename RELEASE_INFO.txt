@@ -1,0 +1,7 @@
+PedsFlow clean full release
+Version: 20.2.0+2020
+Release date: August 17, 2026
+Files: 71
+
+This package intentionally excludes generated Flutter state and historical patch/install scripts.
+Run flutter pub get after extraction to regenerate local dependency state.

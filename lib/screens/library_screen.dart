@@ -1,4 +1,4 @@
-﻿// PedsFlow - Proprietary Software
+// PedsFlow - Proprietary Software
 // Copyright (c) 2026 Ahmed Saleh. All rights reserved.
 // See LICENSE in the repository root.
 // Third-party materials remain subject to their respective licenses.
@@ -148,7 +148,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 padding: EdgeInsets.all(32),
                 child: Text(
                   'No saved algorithms yet.\n\n'
-                  'Tap â€œAdd algorithmâ€ to choose a photo, '
+                  'Tap “Add algorithm” to choose a photo, '
                   'give it a title and category, and add notes.',
                   textAlign: TextAlign.center,
                 ),
@@ -284,4 +284,3 @@ class _AlgorithmDetailScreen extends StatelessWidget {
     );
   }
 }
-

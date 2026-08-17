@@ -1,6 +1,0 @@
-PedsFlow v18.0.0 — Night Float + PCCU Expansion
-Implemented: July 25, 2026
-
-Expanded PCCU into 14 clinical categories with more than 160 searchable topic and medication pages, four emergency shortcuts, copyable PCCU plans, and dedicated calculators for ventilation, vasoactive infusions, oxygenation, fluid balance, cardiac emergencies, QTc, GCS and airway sizing.
-
-All content is initial decision support and requires verification against current local PCCU protocols, pharmacy and senior guidance.

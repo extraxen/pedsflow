@@ -1,4 +1,4 @@
-﻿// PedsFlow - Proprietary Software
+// PedsFlow - Proprietary Software
 // Copyright (c) 2026 Ahmed Saleh. All rights reserved.
 // See LICENSE in the repository root.
 // Third-party materials remain subject to their respective licenses.
@@ -89,7 +89,7 @@ class GlobalSearchIndex {
 
     for (final AdmissionPlan plan in store.plans) {
       docs.add(SearchDocument(
-        id: 'plan:${plan.id}', title: plan.title, category: 'Admission plan â€¢ ${plan.category}',
+        id: 'plan:${plan.id}', title: plan.title, category: 'Admission plan • ${plan.category}',
         kind: 'plan', target: '', aliases: plan.aliases, objectId: plan.id,
         body: <String>[
           plan.summary, plan.guidance, plan.contentStatus, plan.lastUpdated,
@@ -102,7 +102,7 @@ class GlobalSearchIndex {
 
     for (final MedicationMonograph med in store.medications) {
       docs.add(SearchDocument(
-        id: 'med:${med.id}', title: med.name, category: 'Medication â€¢ ${med.category}',
+        id: 'med:${med.id}', title: med.name, category: 'Medication • ${med.category}',
         kind: 'medication', target: '', aliases: med.aliases, objectId: med.id,
         body: <String>[
           med.summary, med.doseStatus, med.administration, med.monitoring, med.warnings,
@@ -118,7 +118,7 @@ class GlobalSearchIndex {
     if (guide != null) {
       for (final AntibioticSyndrome s in guide.syndromes) {
         docs.add(SearchDocument(
-          id: 'abx:${s.title}', title: s.title, category: 'Antibiotics â€¢ ${s.category}', kind: 'antibiotic',
+          id: 'abx:${s.title}', title: s.title, category: 'Antibiotics • ${s.category}', kind: 'antibiotic',
           target: s.title, aliases: const [], body: <String>[...s.organisms, s.approach, ...s.linkedDrugs].join(' '),
         ));
       }
@@ -132,7 +132,7 @@ class GlobalSearchIndex {
 
     for (final AlgorithmItem algorithm in store.algorithms) {
       docs.add(SearchDocument(
-        id: 'algorithm:${algorithm.id}', title: algorithm.title, category: 'Algorithm â€¢ ${algorithm.category}',
+        id: 'algorithm:${algorithm.id}', title: algorithm.title, category: 'Algorithm • ${algorithm.category}',
         kind: 'algorithm', target: algorithm.id, aliases: const [], body: algorithm.notes,
       ));
     }
@@ -227,4 +227,3 @@ class GlobalSearchIndex {
 
   static int _min3(int a, int b, int c) => a < b ? (a < c ? a : c) : (b < c ? b : c);
 }
-

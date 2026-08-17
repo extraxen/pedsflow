@@ -1,8 +1,10 @@
-﻿// PedsFlow - Proprietary Software
+// PedsFlow - Proprietary Software
 // Copyright (c) 2026 Ahmed Saleh. All rights reserved.
 // See LICENSE in the repository root.
 // Third-party materials remain subject to their respective licenses.
 import 'package:flutter/material.dart';
+
+import '../app_metadata.dart';
 
 import '../services/app_store.dart';
 import 'medication_reference_screen.dart';
@@ -91,18 +93,17 @@ class MoreScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          const Card(
+          Card(
             child: ListTile(
-              leading: Icon(Icons.info_outline),
-              title: Text(
+              leading: const Icon(Icons.info_outline),
+              title: const Text(
                 'About PedsFlow',
-                style:
-                    TextStyle(fontWeight: FontWeight.w700),
+                style: TextStyle(fontWeight: FontWeight.w700),
               ),
               subtitle: Text(
-                'Educational reference. Local pathways, '
-                'formulary, pharmacist, and supervising '
-                'physician supersede.',
+                'Version $pedsFlowVersionLabel - $pedsFlowReleaseDate\n'
+                'Educational reference. Local pathways, formulary, pharmacist, '
+                'and supervising physician supersede.',
               ),
             ),
           ),
@@ -111,4 +112,3 @@ class MoreScreen extends StatelessWidget {
     );
   }
 }
-

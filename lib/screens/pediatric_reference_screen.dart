@@ -1,4 +1,4 @@
-﻿// PedsFlow - Proprietary Software
+// PedsFlow - Proprietary Software
 // Copyright (c) 2026 Ahmed Saleh. All rights reserved.
 // See LICENSE in the repository root.
 // Third-party materials remain subject to their respective licenses.
@@ -72,12 +72,12 @@ class _VitalSignsReferenceScreenState extends State<VitalSignsReferenceScreen> {
   final TextEditingController _dbp = TextEditingController(text: '60');
 
   static const List<_VitalBand> _bands = <_VitalBand>[
-    _VitalBand('Term newborn', '0â€“28 days', '100â€“180', '30â€“60', '60â€“80 / 30â€“45', '40â€“57', '<60 mmHg'),
-    _VitalBand('Infant', '1â€“12 months', '100â€“160', '30â€“50', '70â€“100 / 50â€“65', '57â€“77', '<70 mmHg'),
-    _VitalBand('Toddler', '1â€“2 years', '90â€“150', '24â€“40', '80â€“110 / 50â€“80', '60â€“90', '<70 + 2Ã—age'),
-    _VitalBand('Preschool', '3â€“5 years', '80â€“140', '22â€“34', '80â€“110 / 50â€“80', '60â€“90', '<70 + 2Ã—age'),
-    _VitalBand('School age', '6â€“11 years', '70â€“120', '18â€“30', '90â€“120 / 60â€“80', '70â€“93', '<70 + 2Ã—age (to 10 y); <90 thereafter'),
-    _VitalBand('Adolescent', '12â€“18 years', '60â€“100', '12â€“20', '100â€“130 / 65â€“85', '77â€“100', '<90 mmHg'),
+    _VitalBand('Term newborn', '0–28 days', '100–180', '30–60', '60–80 / 30–45', '40–57', '<60 mmHg'),
+    _VitalBand('Infant', '1–12 months', '100–160', '30–50', '70–100 / 50–65', '57–77', '<70 mmHg'),
+    _VitalBand('Toddler', '1–2 years', '90–150', '24–40', '80–110 / 50–80', '60–90', '<70 + 2×age'),
+    _VitalBand('Preschool', '3–5 years', '80–140', '22–34', '80–110 / 50–80', '60–90', '<70 + 2×age'),
+    _VitalBand('School age', '6–11 years', '70–120', '18–30', '90–120 / 60–80', '70–93', '<70 + 2×age (to 10 y); <90 thereafter'),
+    _VitalBand('Adolescent', '12–18 years', '60–100', '12–20', '100–130 / 65–85', '77–100', '<90 mmHg'),
   ];
 
   @override
@@ -165,7 +165,7 @@ class _VitalSignsReferenceScreenState extends State<VitalSignsReferenceScreen> {
                   if (map != null) _rangeRow('Calculated MAP', '${map.toStringAsFixed(1)} mmHg'),
                   if (hypotension != null) _rangeRow('PALS SBP hypotension threshold', '<${hypotension.toStringAsFixed(0)} mmHg'),
                   const SizedBox(height: 8),
-                  const Text('MAP = DBP + â…“(SBP âˆ’ DBP). A single universal â€œnormal MAPâ€ is not appropriate; targets vary with shock physiology, cardiac disease, renal disease, intracranial pressure and local PICU practice.'),
+                  const Text('MAP = DBP + ⅓(SBP − DBP). A single universal “normal MAP” is not appropriate; targets vary with shock physiology, cardiac disease, renal disease, intracranial pressure and local PICU practice.'),
                 ],
               ),
             ),
@@ -176,9 +176,9 @@ class _VitalSignsReferenceScreenState extends State<VitalSignsReferenceScreen> {
               title: Text('Blood-pressure interpretation', style: TextStyle(fontWeight: FontWeight.w800)),
               childrenPadding: EdgeInsets.fromLTRB(16, 0, 16, 16),
               children: <Widget>[
-                Text('For children 1â€“12 years, hypertension classification requires age-, sex- and height-specific percentiles. A quick typical range must not be used to diagnose hypertension.'),
+                Text('For children 1–12 years, hypertension classification requires age-, sex- and height-specific percentiles. A quick typical range must not be used to diagnose hypertension.'),
                 SizedBox(height: 8),
-                Text('For adolescents â‰¥13 years, fixed categories are commonly used: normal <120/<80; elevated 120â€“129 and <80; stage 1 130â€“139 or 80â€“89; stage 2 â‰¥140 or â‰¥90 mmHg. Confirm technique, cuff size and repeated measurements.'),
+                Text('For adolescents ≥13 years, fixed categories are commonly used: normal <120/<80; elevated 120–129 and <80; stage 1 130–139 or 80–89; stage 2 ≥140 or ≥90 mmHg. Confirm technique, cuff size and repeated measurements.'),
               ],
             ),
           ),
@@ -356,7 +356,7 @@ class _GrowthAssessmentScreenState extends State<GrowthAssessmentScreen> {
                     controller: _head,
                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     decoration: const InputDecoration(
-                      labelText: 'Head circumference (cm) â€” optional',
+                      labelText: 'Head circumference (cm) — optional',
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -392,7 +392,7 @@ class _GrowthAssessmentScreenState extends State<GrowthAssessmentScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '${_bmi!.toStringAsFixed(1)} kg/mÂ²',
+                      '${_bmi!.toStringAsFixed(1)} kg/m²',
                       style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                             fontWeight: FontWeight.w900,
                           ),
@@ -428,4 +428,3 @@ class _GrowthAssessmentScreenState extends State<GrowthAssessmentScreen> {
     );
   }
 }
-

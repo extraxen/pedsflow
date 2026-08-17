@@ -1,4 +1,4 @@
-﻿// PedsFlow - Proprietary Software
+// PedsFlow - Proprietary Software
 // Copyright (c) 2026 Ahmed Saleh. All rights reserved.
 // See LICENSE in the repository root.
 // Third-party materials remain subject to their respective licenses.
@@ -115,10 +115,10 @@ class _UniversalSearchScreenState extends State<UniversalSearchScreen> {
         padding:const EdgeInsets.fromLTRB(16,8,16,28),
         children:<Widget>[
           TextField(controller:_controller,autofocus:true,textInputAction:TextInputAction.search,autocorrect:false,enableSuggestions:false,onChanged:_onChanged,onSubmitted:(q)=>_remember(q),decoration:InputDecoration(
-            hintText:'Search anything â€” or type â€œketamine dose 25 kgâ€â€¦',prefixIcon:const Icon(Icons.search),
+            hintText:'Search anything — or type “ketamine dose 25 kg”…',prefixIcon:const Icon(Icons.search),
             suffixIcon:_query.isEmpty?null:IconButton(tooltip:'Clear',onPressed:(){_controller.clear();setState((){_query='';_hits=const[];});},icon:const Icon(Icons.clear)),
           )),
-          if(weight!=null) Padding(padding:const EdgeInsets.only(top:8),child:Card(color:Theme.of(context).colorScheme.primaryContainer,child:Padding(padding:const EdgeInsets.all(10),child:Row(children:[const Icon(Icons.scale_outlined),const SizedBox(width:8),Expanded(child:Text('Command parser detected ${weight.toStringAsFixed(weight%1==0?0:1)} kg â€¢ clinical query: â€œ$_semanticQueryâ€. Dose results still require opening the verified medication/pathway; PedsFlow will not infer a dose from free text.'))])))),
+          if(weight!=null) Padding(padding:const EdgeInsets.only(top:8),child:Card(color:Theme.of(context).colorScheme.primaryContainer,child:Padding(padding:const EdgeInsets.all(10),child:Row(children:[const Icon(Icons.scale_outlined),const SizedBox(width:8),Expanded(child:Text('Command parser detected ${weight.toStringAsFixed(weight%1==0?0:1)} kg • clinical query: “$_semanticQuery”. Dose results still require opening the verified medication/pathway; PedsFlow will not infer a dose from free text.'))])))),
           const SizedBox(height:10),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -171,8 +171,8 @@ class _UniversalSearchScreenState extends State<UniversalSearchScreen> {
     );
   }
 
-  Widget _bestMatch(BuildContext context,SearchHit hit){final d=hit.document;return Card(color:Theme.of(context).colorScheme.primaryContainer,child:ListTile(contentPadding:const EdgeInsets.all(12),leading:CircleAvatar(child:Icon(_iconFor(d.kind))),title:Text(d.title,style:const TextStyle(fontSize:18,fontWeight:FontWeight.w900)),subtitle:Text('${d.category} â€¢ matched ${hit.matchedOn}'),trailing:IconButton(tooltip:'Favorite',icon:Icon(_favoriteIds.contains(d.id)?Icons.star:Icons.star_border),onPressed:()=>_toggleFavorite(d)),onTap:(){_remember(_query);_open(context,d);}));}
-  Widget _resultTile(BuildContext context,SearchHit hit){final d=hit.document;return Card(child:ListTile(leading:CircleAvatar(child:Icon(_iconFor(d.kind))),title:Text(d.title,style:const TextStyle(fontWeight:FontWeight.w800)),subtitle:Text('${d.category}${hit.matchedOn=='content'?'':' â€¢ matched ${hit.matchedOn}'}',maxLines:2),trailing:IconButton(tooltip:'Favorite',icon:Icon(_favoriteIds.contains(d.id)?Icons.star:Icons.star_border),onPressed:()=>_toggleFavorite(d)),onTap:(){_remember(_query);_open(context,d);}));}
+  Widget _bestMatch(BuildContext context,SearchHit hit){final d=hit.document;return Card(color:Theme.of(context).colorScheme.primaryContainer,child:ListTile(contentPadding:const EdgeInsets.all(12),leading:CircleAvatar(child:Icon(_iconFor(d.kind))),title:Text(d.title,style:const TextStyle(fontSize:18,fontWeight:FontWeight.w900)),subtitle:Text('${d.category} • matched ${hit.matchedOn}'),trailing:IconButton(tooltip:'Favorite',icon:Icon(_favoriteIds.contains(d.id)?Icons.star:Icons.star_border),onPressed:()=>_toggleFavorite(d)),onTap:(){_remember(_query);_open(context,d);}));}
+  Widget _resultTile(BuildContext context,SearchHit hit){final d=hit.document;return Card(child:ListTile(leading:CircleAvatar(child:Icon(_iconFor(d.kind))),title:Text(d.title,style:const TextStyle(fontWeight:FontWeight.w800)),subtitle:Text('${d.category}${hit.matchedOn=='content'?'':' • matched ${hit.matchedOn}'}',maxLines:2),trailing:IconButton(tooltip:'Favorite',icon:Icon(_favoriteIds.contains(d.id)?Icons.star:Icons.star_border),onPressed:()=>_toggleFavorite(d)),onTap:(){_remember(_query);_open(context,d);}));}
 
   IconData _iconFor(String kind)=>switch(kind){
     'medication'=>Icons.medication_outlined,'plan'=>Icons.assignment_outlined,'pccu'=>Icons.monitor_heart_outlined,
@@ -205,4 +205,3 @@ class _UniversalSearchScreenState extends State<UniversalSearchScreen> {
     case'more':screen=MoreScreen(store:widget.store);break;
   }if(screen!=null)Navigator.of(context).push(MaterialPageRoute<void>(builder:(_)=>screen!));}
 }
-

@@ -1,4 +1,4 @@
-﻿// PedsFlow - Proprietary Software
+// PedsFlow - Proprietary Software
 // Copyright (c) 2026 Ahmed Saleh. All rights reserved.
 // See LICENSE in the repository root.
 // Third-party materials remain subject to their respective licenses.
@@ -128,7 +128,7 @@ class _PlansScreenState extends State<PlansScreen> {
                             Text(
                               '${widget.store.plans.map(
                                     (AdmissionPlan p) => p.category,
-                                  ).toSet().length} specialties Â· '
+                                  ).toSet().length} specialties · '
                               'search diagnoses, aliases and specialties',
                             ),
                           ],
@@ -207,4 +207,3 @@ class _PlansScreenState extends State<PlansScreen> {
     );
   }
 }
-

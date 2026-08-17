@@ -1,4 +1,4 @@
-﻿// PedsFlow - Proprietary Software
+// PedsFlow - Proprietary Software
 // Copyright (c) 2026 Ahmed Saleh. All rights reserved.
 // See LICENSE in the repository root.
 // Third-party materials remain subject to their respective licenses.
@@ -233,7 +233,7 @@ class MedicationQualityScreen extends StatelessWidget {
                 child: const Padding(
                   padding: EdgeInsets.all(16),
                   child: Text(
-                    'A medication is counted as â€œwith dosesâ€ when '
+                    'A medication is counted as “with doses” when '
                     'at least one structured dose section is present. '
                     'This does not mean its monograph is complete for '
                     'every indication, age group, route, renal status, '
@@ -376,7 +376,7 @@ class _MedicationQualityListScreen extends StatelessWidget {
                 ),
               ),
               subtitle: Text(
-                '${medication.category} Â· '
+                '${medication.category} · '
                 '${medication.doseSections.length} dose sections',
               ),
               trailing: const Icon(Icons.chevron_right),
@@ -404,4 +404,3 @@ class _MedicationQualityListScreen extends StatelessWidget {
     );
   }
 }
-

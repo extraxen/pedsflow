@@ -1,4 +1,4 @@
-﻿// PedsFlow - Proprietary Software
+// PedsFlow - Proprietary Software
 // Copyright (c) 2026 Ahmed Saleh. All rights reserved.
 // See LICENSE in the repository root.
 // Third-party materials remain subject to their respective licenses.
@@ -46,8 +46,8 @@ class _GrowthSuiteScreenState extends State<GrowthSuiteScreen> {
 
   String get _recommendedStandard {
     if (_gaWeeks < 37 && _correctedDays < 126) return 'Fenton / INTERGROWTH preterm';
-    if (_chronologicalDays < 730) return 'WHO 0â€“2 years';
-    return 'CDC 2â€“20 years';
+    if (_chronologicalDays < 730) return 'WHO 0–2 years';
+    return 'CDC 2–20 years';
   }
 
   double? get _bmi {
@@ -91,7 +91,7 @@ class _GrowthSuiteScreenState extends State<GrowthSuiteScreen> {
   String _dateText(DateTime d) => '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
 
   String _velocity(String metric) {
-    if (_points.length < 2) return 'Add â‰¥2 longitudinal points';
+    if (_points.length < 2) return 'Add ≥2 longitudinal points';
     final _GrowthPoint a = _points[_points.length - 2];
     final _GrowthPoint b = _points.last;
     final int days = b.date.difference(a.date).inDays;
@@ -186,15 +186,15 @@ class _GrowthSuiteScreenState extends State<GrowthSuiteScreen> {
               Expanded(child: _field(_head, 'Head circumference', 'cm')),
             ]),
             const SizedBox(height: 12),
-            if (bmi != null) _resultRow('BMI', '${bmi.toStringAsFixed(2)} kg/mÂ²'),
+            if (bmi != null) _resultRow('BMI', '${bmi.toStringAsFixed(2)} kg/m²'),
             FilledButton.icon(onPressed: _addPoint, icon: const Icon(Icons.add_chart), label: const Text('Add / update longitudinal point')),
           ]),
           const SizedBox(height: 12),
           _section(context, 'Percentile & Z-score engine', <Widget>[
             const Text('The LMS calculation engine is implemented without the previous growth_standards runtime package. Exact output is only enabled when the corresponding embedded reference table is present and provenance-validated.'),
             const SizedBox(height: 10),
-            _datasetRow('WHO 0â€“2 years', true, 'Official WHO/CDC LMS source architecture'),
-            _datasetRow('CDC 2â€“20 years', true, 'Official CDC LMS source architecture'),
+            _datasetRow('WHO 0–2 years', true, 'Official WHO/CDC LMS source architecture'),
+            _datasetRow('CDC 2–20 years', true, 'Official CDC LMS source architecture'),
             _datasetRow('Fenton preterm', false, 'Dataset redistribution/licence sign-off required'),
             _datasetRow('INTERGROWTH-21', false, 'Reference-table import validation required'),
             const SizedBox(height: 10),
@@ -217,7 +217,7 @@ class _GrowthSuiteScreenState extends State<GrowthSuiteScreen> {
                   if (p.weightKg != null) '${p.weightKg!.toStringAsFixed(2)} kg',
                   if (p.heightCm != null) '${p.heightCm!.toStringAsFixed(1)} cm',
                   if (p.bmi != null) 'BMI ${p.bmi!.toStringAsFixed(1)}',
-                ].join(' â€¢ ')),
+                ].join(' • ')),
                 trailing: IconButton(icon: const Icon(Icons.delete_outline), onPressed: () => setState(() => _points.remove(p))),
               )),
             ]),
@@ -326,4 +326,3 @@ class _TrajectoryPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _TrajectoryPainter oldDelegate) => oldDelegate.points != points || oldDelegate.metric != metric || oldDelegate.lineColor != lineColor;
 }
-
