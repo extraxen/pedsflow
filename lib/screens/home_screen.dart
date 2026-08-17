@@ -172,7 +172,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 title: 'PCCU',
                 subtitle: '14 PCCU categories, comprehensive pathways, medication pages and critical-care calculators',
-                meta: 'Full v18',
+                meta: '',
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute<void>(
@@ -191,7 +191,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 title: 'ED/PICU decision support',
                 subtitle: 'Electrolytes, EMR order sets, antibiotics and emergency algorithms',
-                meta: 'v13–v16',
+                meta: '',
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute<void>(
@@ -319,7 +319,7 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      'PedsFlow v19.2.0',
+                      'PedsFlow v19.3.0',
                       style: TextStyle(fontWeight: FontWeight.w800),
                     ),
                     SizedBox(height: 3),
@@ -639,21 +639,24 @@ class _ClinicalToolRow extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Text(
-                    meta,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w800,
-                      color: Theme.of(context).colorScheme.primary,
+              if (meta.isNotEmpty)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    Text(
+                      meta,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w800,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 7),
-                  const Icon(Icons.chevron_right_rounded),
-                ],
-              ),
+                    const SizedBox(height: 7),
+                    const Icon(Icons.chevron_right_rounded),
+                  ],
+                )
+              else
+                const Icon(Icons.chevron_right_rounded),
             ],
           ),
         ),
