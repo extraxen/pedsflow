@@ -1,6 +1,6 @@
 {
-  "datasetVersion": "7.0.0",
-  "generatedDate": "2026-07-15",
+  "datasetVersion": "8.0.0",
+  "generatedDate": "2026-08-17",
   "jurisdiction": "Ontario, Canada",
   "sources": [
     {
@@ -8,6 +8,12 @@
       "date": "2003-05-23",
       "type": "Historical local source",
       "coverage": "Emergency/PCCU medications and algorithms"
+    },
+    {
+      "title": "Children's Hospital of Western Ontario PCCU Dosing Guidelines",
+      "date": "2020",
+      "type": "Local PCCU dosing handbook (historical/local source)",
+      "coverage": "169 handbook drug entries reviewed; 147 existing medication monographs augmented, 20 new medication entries added, 2 legacy/ambiguous entries not added"
     },
     {
       "title": "IWK Pediatric Drug Dosing Guidelines",

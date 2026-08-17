@@ -1,9 +1,15 @@
 PedsFlow clean full release
-Version: 20.2.1+2021
+Version: 20.3.0+2030
 Release date: August 17, 2026
-Files: 71
 
-This package intentionally excludes generated Flutter state and historical patch/install scripts.
+Medication update:
+- Integrated the user-supplied Children's Hospital of Western Ontario / LHSC PCCU Dosing Handbook (2020) as a separately labeled local source.
+- Added local PCCU 2020 dose sections to 147 existing medication monographs.
+- Added 20 previously missing medication entries from the handbook.
+- Added PCCU resuscitation quick-dose sections for 9 emergency medications.
+- Preserved existing newer/current medication content rather than replacing it.
+- Ranitidine and the handbook's non-specific generic "Surfactant" entry were not added as new catalogue items pending current formulary/product-specific verification.
+- All handbook-derived sections are flagged for current verification because the handbook is a 2020 edition and explicitly recommends consulting current literature and pediatric pharmacists.
+
+This package excludes generated Flutter state and historical patch/install scripts.
 Run flutter pub get after extraction to regenerate local dependency state.
-
-Bugfix: Home-screen version badge now reads from central app metadata instead of a hard-coded value.

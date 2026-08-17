@@ -1,6 +1,6 @@
 {
-  "version": "10.0",
-  "lastBuilt": "2026-07-17",
+  "version": "20.3.0",
+  "lastBuilt": "2026-08-17",
   "jurisdiction": "Ontario / Canada",
   "disclaimer": "PedsFlow is an educational and clinical-support reference. Every plan must be reconciled with the current institutional pathway, specialist advice and patient-specific clinical context.",
   "sources": [
@@ -33,6 +33,11 @@
       "name": "Current LHSC/local institutional pathways",
       "type": "Local source of truth",
       "use": "Order sets, antibiogram, escalation, transfer and consultant-specific practice."
+    },
+    {
+      "name": "Children's Hospital of Western Ontario PCCU Dosing Handbook (2020)",
+      "type": "Local PCCU dosing reference supplied by the user",
+      "use": "Separately labeled local PCCU dose sections. Because the handbook is a 2020 edition and itself advises consultation of current literature and pediatric pharmacists, current formulary/order sets and pharmacist verification remain required."
     }
   ]
 }

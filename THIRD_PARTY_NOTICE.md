@@ -9,3 +9,14 @@ Clinical guidelines, publications, standards, reference tables, institutional pa
 PedsFlow's proprietary rights apply only to original PedsFlow source code, original user-interface implementation, original documentation, original organization/selection of material to the extent protected by law, original graphics/branding owned by the copyright holder, and other original PedsFlow material.
 
 Users must follow the terms, attribution requirements, and usage restrictions of each underlying third-party source.
+
+## Local clinical reference data
+
+Selected pediatric critical-care dosing facts are structured from the user-supplied
+**Children's Hospital of Western Ontario / London Health Sciences Centre, Dosing Guidelines
+for Drugs used in the Paediatric Critical Care Unit, 2020 edition**.
+
+The source remains a third-party institutional reference. PedsFlow does not claim ownership
+of the source publication. Handbook-derived entries are separately labeled and require
+verification against current institutional policy, pharmacy guidance, and current literature.
+
