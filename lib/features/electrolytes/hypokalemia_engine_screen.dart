@@ -88,6 +88,7 @@ class _HypokalemiaEngineScreenState extends State<HypokalemiaEngineScreen> {
     final double? currentK = _number(_currentK);
 
     final bool validWeight = weight != null && weight > 0;
+    final double weightKg = validWeight ? weight : 0;
     final PotassiumRateLimits? limits =
         validWeight ? PotassiumRateEngine.limits(weight) : null;
 
@@ -146,35 +147,35 @@ class _HypokalemiaEngineScreenState extends State<HypokalemiaEngineScreen> {
 
     final double totalDuringReplacement =
         backgroundDuringReplacement + replacementMmolPerHour;
-    final double totalDuringReplacementPerKg =
-        validWeight ? totalDuringReplacement / weight : 0;
-
     final double totalIfEverythingRuns =
         backgroundAllRunning + replacementMmolPerHour;
     final double totalIfMainPaused =
         (other?.mmolPerHour ?? 0) + replacementMmolPerHour;
 
-    final double ecgHeadroom = limits == null
+    final double remainingToEcgThreshold = limits == null
         ? 0
         : math.max(
             0,
-            limits.ecgThresholdMmolPerHour -
-                backgroundDuringReplacement,
+            limits.ecgThresholdMmolPerHour - totalDuringReplacement,
           ).toDouble();
-    final double allIvHeadroom = limits == null
+    final double remainingToAllIvMaximum = limits == null
         ? 0
         : math.max(
             0,
-            limits.allIvMaxMmolPerHour - backgroundDuringReplacement,
+            limits.allIvMaxMmolPerHour - totalDuringReplacement,
           ).toDouble();
-
-    final double maxReplacementWithBackground = limits == null
+    final double replacementProductMaximum = limits == null
         ? 0
-        : PotassiumRateEngine.maxReplacementRateWithBackground(
+        : PotassiumRateEngine.productMaxRateMmolPerHour(
             type: _replacementType,
             limits: limits,
-            backgroundMmolPerHour: backgroundDuringReplacement,
           );
+    final double remainingToProductMaximum = limits == null
+        ? 0
+        : math.max(
+            0,
+            replacementProductMaximum - replacementMmolPerHour,
+          ).toDouble();
 
     final double oralK = math.max(0, _number(_oralK) ?? 0).toDouble();
 
@@ -426,77 +427,91 @@ class _HypokalemiaEngineScreenState extends State<HypokalemiaEngineScreen> {
               ),
               const SizedBox(height: 18),
 
-              _sectionTitle(context, '4. Can these run together?'),
+              _sectionTitle(context, '4. Total IV potassium rate'),
               if (limits == null)
                 _warning(
                   context,
-                  'Enter a valid weight to calculate the combined IV rate limits.',
+                  'Enter a valid weight to calculate the combined IV potassium rate.',
                 )
               else ...<Widget>[
-                _bigRateCard(
+                _totalRateCard(
                   context,
-                  totalMmolPerHour: totalDuringReplacement,
-                  totalMmolPerKgHour: totalDuringReplacementPerKg,
-                  limits: limits,
+                  main: main,
+                  other: other,
+                  weight: weightKg,
                   replacementMmolPerHour: replacementMmolPerHour,
-                ),
-                const SizedBox(height: 10),
-                _resultCard(
-                  context,
-                  'What is contributing during the replacement?',
-                  <String>[
-                    _mainRunsDuringReplacement
-                        ? 'Main IV fluid: ${_fmt(main?.mmolPerHour ?? 0)} mmol/hr'
-                        : 'Main IV fluid: PAUSED',
-                    _otherRunsDuringReplacement
-                        ? 'TPN / other IV K: ${_fmt(other?.mmolPerHour ?? 0)} mmol/hr'
-                        : 'TPN / other IV K: PAUSED',
-                    'Intermittent replacement: '
-                        '${_fmt(replacementMmolPerHour)} mmol/hr',
-                    'TOTAL IV POTASSIUM: '
-                        '${_fmt(totalDuringReplacement)} mmol/hr = '
-                        '${_fmt(totalDuringReplacementPerKg)} mmol/kg/hr',
-                  ],
-                ),
-                const SizedBox(height: 10),
-                _resultCard(
-                  context,
-                  'Rate headroom with the selected background status',
-                  <String>[
-                    'Room before LHSC ECG-rate threshold: '
-                        '${_fmt(ecgHeadroom)} mmol/hr'
-                        ' (${_fmt(ecgHeadroom / weight!)} mmol/kg/hr)',
-                    'Room before ALL-IV potassium maximum: '
-                        '${_fmt(allIvHeadroom)} mmol/hr'
-                        ' (${_fmt(allIvHeadroom / weight)} mmol/kg/hr)',
-                    'Maximum intermittent replacement rate allowed by the '
-                        'listed product-specific + all-IV ceilings: '
-                        '${_fmt(maxReplacementWithBackground)} mmol/hr'
-                        ' (${_fmt(maxReplacementWithBackground / weight)} mmol/kg/hr)',
-                    'This is a mathematical ceiling from these PDAM limits, '
-                        'not a suggested replacement rate.',
-                  ],
-                ),
-                const SizedBox(height: 10),
-                _scenarioCard(
-                  context,
-                  title: 'If EVERYTHING continues',
-                  totalMmolPerHour: totalIfEverythingRuns,
-                  weight: weight,
+                  totalMmolPerHour: totalDuringReplacement,
                   limits: limits,
+                ),
+                if (_ecgChanges)
+                  _warning(
+                    context,
+                    'ECG changes selected: use continuous cardiac monitoring and '
+                    'senior/PCCU/pharmacy review regardless of whether the arithmetic '
+                    'rate is below the PDAM rate-triggered ECG threshold.',
+                  ),
+                const SizedBox(height: 12),
+                const Text(
+                  'Compare the main maintenance-fluid decision',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 16,
+                  ),
                 ),
                 const SizedBox(height: 8),
-                _scenarioCard(
+                LayoutBuilder(
+                  builder: (
+                    BuildContext context,
+                    BoxConstraints constraints,
+                  ) {
+                    final Widget keepCard = _scenarioCard(
+                      context,
+                      title: 'Keep main K-containing fluid running',
+                      totalMmolPerHour: totalIfEverythingRuns,
+                      weight: weightKg,
+                      limits: limits,
+                      replacementMmolPerHour: replacementMmolPerHour,
+                    );
+                    final Widget pauseCard = _scenarioCard(
+                      context,
+                      title: 'Pause main K-containing fluid',
+                      totalMmolPerHour: totalIfMainPaused,
+                      weight: weightKg,
+                      limits: limits,
+                      replacementMmolPerHour: replacementMmolPerHour,
+                    );
+
+                    if (constraints.maxWidth < 700) {
+                      return Column(
+                        children: <Widget>[
+                          keepCard,
+                          const SizedBox(height: 8),
+                          pauseCard,
+                        ],
+                      );
+                    }
+
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(child: keepCard),
+                        const SizedBox(width: 10),
+                        Expanded(child: pauseCard),
+                      ],
+                    );
+                  },
+                ),
+                const SizedBox(height: 10),
+                _policyExpansion(
                   context,
-                  title: 'If the MAIN potassium-containing fluid is paused',
-                  totalMmolPerHour: totalIfMainPaused,
-                  weight: weight,
-                  limits: limits,
+                  limits,
+                  totalMmolPerHour: totalDuringReplacement,
+                  replacementMmolPerHour: replacementMmolPerHour,
+                  remainingToEcgThreshold: remainingToEcgThreshold,
+                  remainingToAllIvMaximum: remainingToAllIvMaximum,
+                  remainingToProductMaximum: remainingToProductMaximum,
                 ),
               ],
-              const SizedBox(height: 18),
-
-              _policyExpansion(context, limits),
             ],
           ),
         ),
@@ -570,96 +585,175 @@ class _HypokalemiaEngineScreenState extends State<HypokalemiaEngineScreen> {
     return warnings;
   }
 
-  Widget _bigRateCard(
+  Widget _totalRateCard(
     BuildContext context, {
-    required double totalMmolPerHour,
-    required double totalMmolPerKgHour,
-    required PotassiumRateLimits limits,
+    required PotassiumSourceResult? main,
+    required PotassiumSourceResult? other,
+    required double weight,
     required double replacementMmolPerHour,
+    required double totalMmolPerHour,
+    required PotassiumRateLimits limits,
   }) {
+    final double totalPerKg = totalMmolPerHour / weight;
+    final double productMaximum =
+        PotassiumRateEngine.productMaxRateMmolPerHour(
+      type: _replacementType,
+      limits: limits,
+    );
+
     final bool aboveAllIv =
         totalMmolPerHour > limits.allIvMaxMmolPerHour + 0.0001;
     final bool aboveProduct =
-        replacementMmolPerHour >
-            PotassiumRateEngine.productMaxRateMmolPerHour(
-              type: _replacementType,
-              limits: limits,
-            ) +
-                0.0001;
-    final bool aboveEcg =
+        replacementMmolPerHour > productMaximum + 0.0001;
+    final bool aboveRateTriggeredEcg =
         totalMmolPerHour > limits.ecgThresholdMmolPerHour + 0.0001;
 
     final Color color = (aboveAllIv || aboveProduct)
         ? Theme.of(context).colorScheme.error
-        : aboveEcg
+        : aboveRateTriggeredEcg
             ? const Color(0xFFB25E00)
             : const Color(0xFF237447);
 
     final String status = (aboveAllIv || aboveProduct)
-        ? 'EXCEEDS A LISTED RATE MAXIMUM'
-        : aboveEcg
-            ? 'WITHIN MAXIMUMS, BUT ECG RATE THRESHOLD EXCEEDED'
-            : 'BELOW THE LISTED ECG RATE THRESHOLD';
+        ? 'A listed IV potassium rate maximum is exceeded'
+        : aboveRateTriggeredEcg
+            ? 'Within listed maximums • ECG rate threshold exceeded'
+            : 'Within listed IV potassium rate maximums';
 
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.10),
+        color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: color.withValues(alpha: 0.45)),
+        border: Border.all(color: color.withValues(alpha: 0.35)),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Text(
-            status,
+            'TOTAL IV POTASSIUM DURING REPLACEMENT',
             style: TextStyle(
               color: color,
               fontWeight: FontWeight.w900,
               fontSize: 15,
             ),
           ),
-          const SizedBox(height: 10),
-          Text(
-            '${_fmt(totalMmolPerKgHour)} mmol/kg/hr',
-            style: TextStyle(
-              color: color,
-              fontSize: 34,
-              height: 1,
-              fontWeight: FontWeight.w900,
+          const SizedBox(height: 14),
+          _rateRow(
+            'Main IV fluid',
+            _mainRunsDuringReplacement ? (main?.mmolPerHour ?? 0) : 0,
+            weight,
+            paused: !_mainRunsDuringReplacement,
+          ),
+          if ((other?.mmolPerHour ?? 0) > 0 || !_otherRunsDuringReplacement)
+            _rateRow(
+              'TPN / other IV K',
+              _otherRunsDuringReplacement ? (other?.mmolPerHour ?? 0) : 0,
+              weight,
+              paused: !_otherRunsDuringReplacement,
             ),
+          _rateRow(
+            _replacementType == PotassiumReplacementType.kcl
+                ? 'Intermittent KCl'
+                : 'Potassium phosphate',
+            replacementMmolPerHour,
+            weight,
           ),
-          const SizedBox(height: 4),
-          Text(
-            '${_fmt(totalMmolPerHour)} mmol/hr TOTAL IV potassium',
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            'ECG-rate threshold for this weight: '
-            '${_fmt(limits.ecgThresholdMmolPerHour)} mmol/hr '
-            '(${_fmt(limits.ecgThresholdMmolPerHour / (_number(_weight) ?? 1))} mmol/kg/hr).',
-          ),
-          Text(
-            'All-IV potassium maximum for this weight: '
-            '${_fmt(limits.allIvMaxMmolPerHour)} mmol/hr '
-            '(${_fmt(limits.allIvMaxMmolPerHour / (_number(_weight) ?? 1))} mmol/kg/hr).',
-          ),
-          if (aboveEcg && !aboveAllIv && !aboveProduct)
-            const Padding(
-              padding: EdgeInsets.only(top: 8),
-              child: Text(
-                'This does NOT mean the rate is prohibited by the PDAM; it means '
-                'the ECG monitoring threshold has been crossed. Local unit rules '
-                'may be more restrictive.',
-                style: TextStyle(
+          const Divider(height: 24),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  '${_fmt(totalPerKg)} mmol/kg/hr',
+                  style: TextStyle(
+                    color: color,
+                    fontSize: 31,
+                    height: 1,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+              Text(
+                '${_fmt(totalMmolPerHour)} mmol/hr',
+                style: const TextStyle(
+                  fontSize: 17,
                   fontWeight: FontWeight.w900,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Icon(
+                (aboveAllIv || aboveProduct)
+                    ? Icons.error_outline
+                    : aboveRateTriggeredEcg
+                        ? Icons.monitor_heart_outlined
+                        : Icons.check_circle_outline,
+                color: color,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  status,
+                  style: TextStyle(
+                    color: color,
+                    fontWeight: FontWeight.w900,
+                    height: 1.35,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          if (aboveRateTriggeredEcg &&
+              !aboveAllIv &&
+              !aboveProduct)
+            const Padding(
+              padding: EdgeInsets.only(top: 7),
+              child: Text(
+                'The rate-triggered ECG threshold is not the same as the '
+                'absolute potassium-rate maximum.',
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
                   height: 1.35,
                 ),
               ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _rateRow(
+    String label,
+    double mmolPerHour,
+    double weight, {
+    bool paused = false,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              label,
+              style: const TextStyle(fontWeight: FontWeight.w800),
+            ),
+          ),
+          if (paused)
+            const Text(
+              'PAUSED',
+              style: TextStyle(fontWeight: FontWeight.w900),
+            )
+          else
+            Text(
+              '${_fmt(mmolPerHour)} mmol/hr  •  '
+              '${_fmt(mmolPerHour / weight)} mmol/kg/hr',
+              textAlign: TextAlign.right,
+              style: const TextStyle(fontWeight: FontWeight.w700),
             ),
         ],
       ),
@@ -732,30 +826,67 @@ class _HypokalemiaEngineScreenState extends State<HypokalemiaEngineScreen> {
     required double totalMmolPerHour,
     required double weight,
     required PotassiumRateLimits limits,
+    required double replacementMmolPerHour,
   }) {
     final double perKg = totalMmolPerHour / weight;
-    final bool aboveMax =
-        totalMmolPerHour > limits.allIvMaxMmolPerHour + 0.0001;
-    final bool aboveEcg =
+    final double productMaximum =
+        PotassiumRateEngine.productMaxRateMmolPerHour(
+      type: _replacementType,
+      limits: limits,
+    );
+
+    final bool aboveMaximum =
+        totalMmolPerHour > limits.allIvMaxMmolPerHour + 0.0001 ||
+            replacementMmolPerHour > productMaximum + 0.0001;
+    final bool aboveRateTriggeredEcg =
         totalMmolPerHour > limits.ecgThresholdMmolPerHour + 0.0001;
 
+    final IconData icon = aboveMaximum
+        ? Icons.cancel_outlined
+        : aboveRateTriggeredEcg
+            ? Icons.monitor_heart_outlined
+            : Icons.check_circle_outline;
+
+    final String status = aboveMaximum
+        ? 'Exceeds a listed rate maximum'
+        : aboveRateTriggeredEcg
+            ? 'Within maximums • ECG rate threshold exceeded'
+            : 'Within listed rate maximums';
+
     return Card(
-      child: ListTile(
-        leading: Icon(
-          aboveMax
-              ? Icons.cancel_outlined
-              : aboveEcg
-                  ? Icons.monitor_heart_outlined
-                  : Icons.check_circle_outline,
-        ),
-        title: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.w900),
-        ),
-        subtitle: Text(
-          '${_fmt(totalMmolPerHour)} mmol/hr = '
-          '${_fmt(perKg)} mmol/kg/hr\n'
-          '${aboveMax ? 'Above all-IV maximum' : aboveEcg ? 'Above ECG-rate threshold, but below all-IV maximum' : 'Below ECG-rate threshold'}',
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Icon(icon),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    title,
+                    style: const TextStyle(fontWeight: FontWeight.w900),
+                  ),
+                  const SizedBox(height: 7),
+                  Text(
+                    '${_fmt(perKg)} mmol/kg/hr',
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  Text('${_fmt(totalMmolPerHour)} mmol/hr'),
+                  const SizedBox(height: 5),
+                  Text(
+                    status,
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -763,61 +894,83 @@ class _HypokalemiaEngineScreenState extends State<HypokalemiaEngineScreen> {
 
   Widget _policyExpansion(
     BuildContext context,
-    PotassiumRateLimits? limits,
-  ) {
+    PotassiumRateLimits? limits, {
+    required double totalMmolPerHour,
+    required double replacementMmolPerHour,
+    required double remainingToEcgThreshold,
+    required double remainingToAllIvMaximum,
+    required double remainingToProductMaximum,
+  }) {
     return Card(
       child: ExpansionTile(
-        leading: const Icon(Icons.policy_outlined),
+        leading: const Icon(Icons.tune_outlined),
         title: const Text(
-          '2026 LHSC potassium rules used',
+          'Advanced LHSC rate limits & monitoring',
           style: TextStyle(fontWeight: FontWeight.w900),
         ),
         subtitle: const Text(
-          'Open only when you need the limits and monitoring details.',
+          'Open only if you need the detailed thresholds.',
         ),
         childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         children: <Widget>[
-          if (limits != null)
+          if (limits != null) ...<Widget>[
             _resultCard(
               context,
-              'Patient-specific rate thresholds',
+              'Current-plan headroom',
               <String>[
-                'KCl / total-K ECG threshold: >'
+                totalMmolPerHour <= limits.ecgThresholdMmolPerHour
+                    ? 'Remaining before rate-triggered ECG threshold: '
+                        '${_fmt(remainingToEcgThreshold)} mmol/hr'
+                    : 'Rate-triggered ECG threshold is already exceeded.',
+                totalMmolPerHour <= limits.allIvMaxMmolPerHour
+                    ? 'Remaining before ALL-IV potassium maximum: '
+                        '${_fmt(remainingToAllIvMaximum)} mmol/hr'
+                    : 'ALL-IV potassium maximum is exceeded.',
+                replacementMmolPerHour <=
+                        PotassiumRateEngine.productMaxRateMmolPerHour(
+                          type: _replacementType,
+                          limits: limits,
+                        )
+                    ? 'Remaining before selected replacement-product maximum: '
+                        '${_fmt(remainingToProductMaximum)} mmol/hr'
+                    : 'Selected replacement-product maximum is exceeded.',
+              ],
+            ),
+            const SizedBox(height: 8),
+            _resultCard(
+              context,
+              'Patient-specific LHSC thresholds',
+              <String>[
+                'Rate-triggered ECG threshold: >'
                     '${_fmt(limits.ecgThresholdMmolPerHour)} mmol/hr '
                     '(>0.3 mmol/kg/hr or >15 mmol/hr, whichever is less).',
-                'KCl intermittent maximum: '
+                'Intermittent KCl maximum: '
                     '${_fmt(limits.kclIntermittentMaxMmolPerHour)} mmol/hr '
                     '(0.5 mmol/kg/hr or 20 mmol/hr, whichever is less).',
                 'ALL IV potassium maximum: '
                     '${_fmt(limits.allIvMaxMmolPerHour)} mmol/hr '
                     '(1 mmol/kg/hr or 40 mmol/hr, whichever is less).',
-                'Potassium-phosphate maximum: '
+                'Potassium-phosphate product maximum: '
                     '${_fmt(limits.potassiumPhosphateMaxMmolPerHour)} mmol K/hr '
                     '(0.19 mmol potassium/kg/hr).',
               ],
             ),
+          ],
           const SizedBox(height: 8),
           const Text(
-            'Concentrations - intermittent infusions:\n'
-            '• KCl peripheral: 0.1 mmol/mL maximum.\n'
-            '• KCl central: 0.4 mmol/mL maximum.\n'
-            '• Potassium phosphate peripheral: 0.088 mmol potassium/mL maximum.\n'
-            '• Potassium phosphate central: 0.44 mmol potassium/mL maximum.\n\n'
-            'Continuous KCl background fluid:\n'
-            '• Peripheral: 40 mmol/1000 mL; PCCU and ED-to-PCCU may use up to '
-            '60 mmol/L according to the monograph.\n'
-            '• Central: 80 mmol/1000 mL (pharmacy prepared).\n\n'
-            'Monitoring:\n'
-            '• Count potassium from all IV sources, including potassium phosphate and TPN.\n'
-            '• KCl intermittent rates above the patient-specific ECG threshold require '
-            'continuous ECG monitoring.\n'
-            '• Potassium-phosphate rates at or below 0.19 mmol K/kg/hr may be given '
-            'without ECG monitoring based on rate alone; clinical indications for '
-            'monitoring still take precedence.\n'
-            '• After intermittent KCl, repeat potassium is usually ordered within '
-            '3-4 hours after completion.\n'
-            '• After intermittent potassium phosphate, repeat potassium and phosphate '
-            'are usually ordered within 3-4 hours after completion.\n'
+            'Intermittent concentration limits:\n'
+            '• KCl peripheral: 0.1 mmol/mL.\n'
+            '• KCl central: 0.4 mmol/mL.\n'
+            '• Potassium phosphate peripheral: 0.088 mmol potassium/mL.\n'
+            '• Potassium phosphate central: 0.44 mmol potassium/mL.\n\n'
+            'Monitoring reminders:\n'
+            '• Count potassium from every IV source, including potassium phosphate and TPN.\n'
+            '• Clinical indications for cardiac monitoring (for example ECG changes) '
+            'take precedence over a reassuring arithmetic rate.\n'
+            '• After intermittent KCl, potassium is usually repeated within 3–4 hours '
+            'after completion according to the LHSC monograph.\n'
+            '• After intermittent potassium phosphate, potassium and phosphate are '
+            'usually repeated within 3–4 hours after completion.\n'
             '• IV direct potassium administration is prohibited.',
             style: TextStyle(height: 1.45),
           ),
@@ -826,10 +979,7 @@ class _HypokalemiaEngineScreenState extends State<HypokalemiaEngineScreen> {
             'Sources: LHSC Potassium Chloride Parenteral Drug Administration '
             'Monograph, revised July 21, 2026; LHSC Potassium Phosphate '
             'Parenteral Drug Administration Monograph, revised July 21, 2026.',
-            style: TextStyle(
-              fontWeight: FontWeight.w800,
-              height: 1.35,
-            ),
+            style: TextStyle(fontWeight: FontWeight.w800, height: 1.35),
           ),
         ],
       ),

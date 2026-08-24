@@ -1,5 +1,5 @@
 PedsFlow targeted clinical update
-Version: 20.4.0+2040
+Version: 20.4.1+2041
 Release date: August 23, 2026
 
 Simplified potassium-rate checker:
@@ -24,3 +24,13 @@ Clinical source basis:
 Important:
 - This calculator is arithmetic/decision support, not an automatic prescribing system.
 - Local order sets, pharmacy guidance, clinical monitoring, renal function and patient-specific factors remain authoritative.
+
+UI refinement v20.4.1:
+- Simplified section 4 to one primary Total IV Potassium Rate card.
+- Main fluid + optional second IV source + intermittent replacement are shown as a simple sum.
+- Primary status now distinguishes listed rate maximums from the rate-triggered ECG threshold.
+- ECG changes selected in Patient context generate a separate monitoring warning regardless of arithmetic rate.
+- Replaced repetitive scenario blocks with two concise cards: keep main K-containing fluid vs pause it.
+- Moved thresholds/headroom into one collapsed Advanced LHSC rate limits & monitoring section.
+- Corrected headroom so "remaining" is calculated from the CURRENT TOTAL planned IV potassium rate.
+- No potassium dosing formulas or LHSC rate limits changed.
