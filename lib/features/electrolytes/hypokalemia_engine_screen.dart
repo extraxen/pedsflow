@@ -1,11 +1,12 @@
 // PedsFlow - Proprietary Software
 // Copyright (c) 2026 Ahmed Saleh. All rights reserved.
 // See LICENSE in the repository root.
-// Third-party materials remain subject to their respective licenses.
 
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+
+import 'potassium_rate_engine.dart';
 
 class HypokalemiaEngineScreen extends StatefulWidget {
   const HypokalemiaEngineScreen({super.key});
@@ -16,87 +17,54 @@ class HypokalemiaEngineScreen extends StatefulWidget {
 }
 
 class _HypokalemiaEngineScreenState extends State<HypokalemiaEngineScreen> {
-  final TextEditingController _age = TextEditingController(text: '8');
   final TextEditingController _weight = TextEditingController(text: '20');
-  final TextEditingController _currentK = TextEditingController(text: '2.5');
-  final TextEditingController _targetK = TextEditingController(text: '3.5');
-  final TextEditingController _magnesium = TextEditingController();
+  final TextEditingController _currentK = TextEditingController(text: '2.6');
 
-  final TextEditingController _baseFluidRate =
-      TextEditingController(text: '50');
-  final TextEditingController _customIntrinsicK =
-      TextEditingController(text: '0');
-  final TextEditingController _customAddedK =
-      TextEditingController(text: '20');
-  final TextEditingController _bagVolume = TextEditingController(text: '1000');
-  final TextEditingController _bagTotalAddedK =
-      TextEditingController(text: '20');
+  final TextEditingController _mainK = TextEditingController(text: '40');
+  final TextEditingController _mainVolume =
+      TextEditingController(text: '1000');
+  final TextEditingController _mainRate = TextEditingController(text: '50');
 
-  final TextEditingController _oralDosePerKg =
-      TextEditingController(text: '1');
-  final TextEditingController _oralConcentration =
-      TextEditingController(text: '1.33');
+  final TextEditingController _otherK = TextEditingController(text: '0');
+  final TextEditingController _otherVolume =
+      TextEditingController(text: '1000');
+  final TextEditingController _otherRate = TextEditingController(text: '0');
 
-  final TextEditingController _ivRatePerKg =
-      TextEditingController(text: '0.2');
-  final TextEditingController _ivDuration = TextEditingController(text: '3');
-  final TextEditingController _ivConcentration =
-      TextEditingController(text: '40');
+  final TextEditingController _oralK = TextEditingController(text: '0');
 
-  final TextEditingController _followUpK = TextEditingController();
-  final TextEditingController _followUpHours = TextEditingController(text: '2');
+  final TextEditingController _replacementDose =
+      TextEditingController(text: '10');
+  final TextEditingController _replacementDuration =
+      TextEditingController(text: '4');
+  final TextEditingController _replacementVolume =
+      TextEditingController(text: '100');
 
-  String _fluidType = 'D5 + 0.9% NaCl (D5NS)';
-  String _addedKChoice = '20';
-  String _oralDoseChoice = '1';
-  String _ivPreset = 'ward';
-  String _ivConcentrationChoice = '40';
-  String _access = 'peripheral';
-  int _forecastHours = 4;
+  PotassiumReplacementType _replacementType =
+      PotassiumReplacementType.kcl;
+  PotassiumPhosphateOrderBasis _phosphateBasis =
+      PotassiumPhosphateOrderBasis.potassium;
+  IvAccess _access = IvAccess.peripheral;
 
-  bool _addOral = true;
-  bool _addIv = true;
-  bool _continueBaseFluidDuringIv = true;
+  bool _mainRunsDuringReplacement = true;
+  bool _otherRunsDuringReplacement = true;
   bool _ecgChanges = false;
-  bool _symptomatic = false;
-  bool _adequateUrineOutput = true;
-  bool _renalImpairment = false;
-
-  static const List<String> _fluidOptions = <String>[
-    '0.9% NaCl',
-    'D5W',
-    'D10W',
-    'D5 + 0.9% NaCl (D5NS)',
-    'D10 + 0.9% NaCl (D10NS)',
-    'D5 + 0.45% NaCl',
-    'D10 + 0.45% NaCl',
-    "Hartmann's / Lactated Ringer's",
-    "D5 Hartmann's / Lactated Ringer's",
-    'Plasma-Lyte 148',
-    'D5 Plasma-Lyte 148',
-    'Custom fluid',
-  ];
+  bool _renalConcern = false;
 
   @override
   void dispose() {
     for (final TextEditingController controller in <TextEditingController>[
-      _age,
       _weight,
       _currentK,
-      _targetK,
-      _magnesium,
-      _baseFluidRate,
-      _customIntrinsicK,
-      _customAddedK,
-      _bagVolume,
-      _bagTotalAddedK,
-      _oralDosePerKg,
-      _oralConcentration,
-      _ivRatePerKg,
-      _ivDuration,
-      _ivConcentration,
-      _followUpK,
-      _followUpHours,
+      _mainK,
+      _mainVolume,
+      _mainRate,
+      _otherK,
+      _otherVolume,
+      _otherRate,
+      _oralK,
+      _replacementDose,
+      _replacementDuration,
+      _replacementVolume,
     ]) {
       controller.dispose();
     }
@@ -109,684 +77,760 @@ class _HypokalemiaEngineScreenState extends State<HypokalemiaEngineScreen> {
     return value;
   }
 
-  double _intrinsicPotassiumForFluid(String fluid) {
-    switch (fluid) {
-      case "Hartmann's / Lactated Ringer's":
-      case "D5 Hartmann's / Lactated Ringer's":
-      case 'Plasma-Lyte 148':
-      case 'D5 Plasma-Lyte 148':
-        return 5;
-      case 'Custom fluid':
-        return _number(_customIntrinsicK) ?? 0;
-      default:
-        return 0;
-    }
-  }
-
-  double _addedKConcentration() {
-    switch (_addedKChoice) {
-      case '20':
-        return 20;
-      case '40':
-        return 40;
-      case 'custom':
-        return math.max(0, _number(_customAddedK) ?? 0).toDouble();
-      case 'bag':
-        final double? total = _number(_bagTotalAddedK);
-        final double? volume = _number(_bagVolume);
-        if (total == null || volume == null || volume <= 0) return 0;
-        return math.max(0, total * 1000 / volume).toDouble();
-      default:
-        return 0;
-    }
-  }
-
-  double _selectedOralDosePerKg() {
-    if (_oralDoseChoice == 'custom') {
-      return math.max(0, _number(_oralDosePerKg) ?? 0).toDouble();
-    }
-    return double.tryParse(_oralDoseChoice) ?? 1;
-  }
-
-  double _selectedIvConcentration() {
-    if (_ivConcentrationChoice == 'custom') {
-      return math.max(0, _number(_ivConcentration) ?? 0).toDouble();
-    }
-    return double.tryParse(_ivConcentrationChoice) ?? 40;
-  }
-
-  void _applyIvPreset(String preset) {
-    setState(() {
-      _ivPreset = preset;
-      if (preset == 'ward') {
-        _ivRatePerKg.text = '0.2';
-        _ivDuration.text = '3';
-        _access = 'peripheral';
-        _ivConcentrationChoice = '40';
-      } else if (preset == 'critical') {
-        _ivRatePerKg.text = '0.4';
-        _ivDuration.text = '1';
-        _access = 'central';
-        _ivConcentrationChoice = '80';
-      }
-    });
-  }
-
-  String _severity(double potassium) {
-    if (potassium < 2.0) return 'Critical';
-    if (potassium < 2.5) return 'Severe';
-    if (potassium < 3.0) return 'Moderate';
-    if (potassium < 3.5) return 'Mild';
-    return 'Not hypokalemic by this reference range';
-  }
-
-  Color _severityColor(BuildContext context, double potassium) {
-    if (potassium < 2.5) return Theme.of(context).colorScheme.error;
-    if (potassium < 3.0) return const Color(0xFFB25E00);
-    if (potassium < 3.5) return const Color(0xFF866400);
-    return Theme.of(context).colorScheme.primary;
-  }
-
-  double _maintenanceRate(double weight) {
-    if (weight <= 10) return 4 * weight;
-    if (weight <= 20) return 40 + 2 * (weight - 10);
-    return 60 + (weight - 20);
-  }
-
-  _IvResponseEstimate? _ivResponseEstimate(double dosePerKg) {
-    if (dosePerKg >= 0.32 && dosePerKg <= 0.47) {
-      return const _IvResponseEstimate(
-        comparatorDose: '0.4 mmol/kg over 1 hour',
-        typicalRise: 0.38,
-        spread: 'mean +0.38 mmol/L; SD +/-0.36',
-        sourceLabel: '2024 pediatric ICU cohort',
-      );
-    }
-    if (dosePerKg > 0.47 && dosePerKg <= 0.75) {
-      return const _IvResponseEstimate(
-        comparatorDose: '0.5 mmol/kg IV',
-        typicalRise: 0.5,
-        spread: 'median +0.5 mmol/L; IQR +0.2 to +0.8',
-        sourceLabel: '2023 non-cardiac pediatric cohort',
-      );
-    }
-    if (dosePerKg > 0.75 && dosePerKg <= 1.15) {
-      return const _IvResponseEstimate(
-        comparatorDose: '1 mmol/kg IV',
-        typicalRise: 0.8,
-        spread: 'median +0.8 mmol/L; IQR +0.5 to +1.2',
-        sourceLabel: '2023 non-cardiac pediatric cohort',
-      );
-    }
-    return null;
+  String _fmt(double value, {int decimals = 3}) {
+    if (value.abs() >= 10) return value.toStringAsFixed(2);
+    return value.toStringAsFixed(decimals);
   }
 
   @override
   Widget build(BuildContext context) {
-    final double? age = _number(_age);
     final double? weight = _number(_weight);
     final double? currentK = _number(_currentK);
-    final double? targetK = _number(_targetK);
-    final double? baseRate = _number(_baseFluidRate);
 
-    final double intrinsicK = _intrinsicPotassiumForFluid(_fluidType);
-    final double addedK = _addedKConcentration();
-    final double totalBaseKConcentration = intrinsicK + addedK;
+    final bool validWeight = weight != null && weight > 0;
+    final PotassiumRateLimits? limits =
+        validWeight ? PotassiumRateEngine.limits(weight) : null;
 
-    final double? baseKPerHour = baseRate != null && baseRate >= 0
-        ? totalBaseKConcentration * baseRate / 1000
-        : null;
-    final double? baseKPerKgHour =
-        weight != null && weight > 0 && baseKPerHour != null
-            ? baseKPerHour / weight
-            : null;
-    final double? baseKOverForecast = baseKPerHour != null
-        ? baseKPerHour * _forecastHours
-        : null;
-    final double? baseKPerDay =
-        baseKPerHour != null ? baseKPerHour * 24 : null;
-
-    final double oralDosePerKg = _selectedOralDosePerKg();
-    final double? oralCalculatedMmol =
-        _addOral && weight != null && weight > 0
-            ? weight * oralDosePerKg
-            : null;
-    final double? oralMmol = oralCalculatedMmol == null
-        ? null
-        : math.min(oralCalculatedMmol, 20.0).toDouble();
-    final double? oralConcentration = _number(_oralConcentration);
-    final double? oralVolume = oralMmol != null &&
-            oralConcentration != null &&
-            oralConcentration > 0
-        ? oralMmol / oralConcentration
+    final PotassiumSourceResult? main = validWeight
+        ? PotassiumRateEngine.sourceFromBag(
+            weightKg: weight,
+            potassiumMmolInBag: _number(_mainK) ?? 0,
+            bagVolumeMl: _number(_mainVolume) ?? 0,
+            rateMlPerHour: _number(_mainRate) ?? 0,
+          )
         : null;
 
-    final double? ivRatePerKg = _addIv ? _number(_ivRatePerKg) : null;
-    final double? ivDuration = _addIv ? _number(_ivDuration) : null;
-    final double ivConcentration = _selectedIvConcentration();
-    final double maxIvMmolPerHour = _ivPreset == 'ward' ? 10 : 20;
-
-    double? ivMmolPerHour;
-    double? ivTotalMmol;
-    double? ivDosePerKg;
-    double? ivCarrierRate;
-    if (_addIv &&
-        weight != null &&
-        weight > 0 &&
-        ivRatePerKg != null &&
-        ivRatePerKg >= 0 &&
-        ivDuration != null &&
-        ivDuration > 0) {
-      ivMmolPerHour =
-          math.min(weight * ivRatePerKg, maxIvMmolPerHour).toDouble();
-      ivTotalMmol = ivMmolPerHour * ivDuration;
-      ivDosePerKg = ivTotalMmol / weight;
-      if (ivConcentration > 0) {
-        ivCarrierRate = ivMmolPerHour / ivConcentration * 1000;
-      }
-    }
-
-    final double backgroundDuringIv =
-        _continueBaseFluidDuringIv ? (baseKPerHour ?? 0) : 0;
-    final double? totalIvMmolPerHourDuringCorrection = ivMmolPerHour == null
-        ? null
-        : ivMmolPerHour + backgroundDuringIv;
-    final double? totalIvMmolPerKgHourDuringCorrection =
-        totalIvMmolPerHourDuringCorrection != null &&
-                weight != null &&
-                weight > 0
-            ? totalIvMmolPerHourDuringCorrection / weight
-            : null;
-
-    final double ivMmolWithinForecast = ivMmolPerHour != null &&
-            ivDuration != null &&
-            ivDuration > 0
-        ? ivMmolPerHour *
-            math.min(ivDuration, _forecastHours.toDouble()).toDouble()
-        : 0;
-    final double combinedForecastMmol =
-        (baseKOverForecast ?? 0) + (oralMmol ?? 0) + ivMmolWithinForecast;
-    final double? combinedForecastPerKg = weight != null && weight > 0
-        ? combinedForecastMmol / weight
+    final PotassiumSourceResult? other = validWeight
+        ? PotassiumRateEngine.sourceFromBag(
+            weightKg: weight,
+            potassiumMmolInBag: _number(_otherK) ?? 0,
+            bagVolumeMl: _number(_otherVolume) ?? 0,
+            rateMlPerHour: _number(_otherRate) ?? 0,
+          )
         : null;
 
-    final double baseFirstHour = baseKPerHour ?? 0;
-    final double ivFirstHour = ivMmolPerHour != null && ivDuration != null
-        ? ivMmolPerHour * math.min(ivDuration, 1.0).toDouble()
-        : 0;
-    final double firstHourPlannedMmol =
-        baseFirstHour + (oralMmol ?? 0) + ivFirstHour;
-    final double? firstHourPerKg = weight != null && weight > 0
-        ? firstHourPlannedMmol / weight
-        : null;
+    final double orderedReplacement = _number(_replacementDose) ?? 0;
+    final double replacementDuration = _number(_replacementDuration) ?? 0;
+    final double replacementVolume = _number(_replacementVolume) ?? 0;
 
-    final double? maintenanceRate =
-        weight != null && weight > 0 ? _maintenanceRate(weight) : null;
-    final _IvResponseEstimate? responseEstimate =
-        ivDosePerKg == null ? null : _ivResponseEstimate(ivDosePerKg);
+    final double replacementK =
+        PotassiumRateEngine.replacementPotassiumMmol(
+      type: _replacementType,
+      orderedMmol: orderedReplacement,
+      phosphateBasis: _phosphateBasis,
+    );
+    final double replacementPhosphate =
+        PotassiumRateEngine.replacementPhosphateMmol(
+      type: _replacementType,
+      orderedMmol: orderedReplacement,
+      phosphateBasis: _phosphateBasis,
+    );
 
-    final double? followUpK = _number(_followUpK);
-    final double? followUpHours = _number(_followUpHours);
+    final double replacementMmolPerHour =
+        replacementDuration > 0 ? replacementK / replacementDuration : 0;
+    final double replacementMmolPerKgHour =
+        validWeight ? replacementMmolPerHour / weight : 0;
+
+    final double replacementConcentration =
+        PotassiumRateEngine.intermittentConcentrationMmolPerMl(
+      potassiumMmol: replacementK,
+      finalVolumeMl: replacementVolume,
+    );
+
+    final double backgroundAllRunning =
+        (main?.mmolPerHour ?? 0) + (other?.mmolPerHour ?? 0);
+
+    final double backgroundDuringReplacement =
+        (_mainRunsDuringReplacement ? (main?.mmolPerHour ?? 0) : 0) +
+            (_otherRunsDuringReplacement ? (other?.mmolPerHour ?? 0) : 0);
+
+    final double totalDuringReplacement =
+        backgroundDuringReplacement + replacementMmolPerHour;
+    final double totalDuringReplacementPerKg =
+        validWeight ? totalDuringReplacement / weight : 0;
+
+    final double totalIfEverythingRuns =
+        backgroundAllRunning + replacementMmolPerHour;
+    final double totalIfMainPaused =
+        (other?.mmolPerHour ?? 0) + replacementMmolPerHour;
+
+    final double ecgHeadroom = limits == null
+        ? 0
+        : math.max(
+            0,
+            limits.ecgThresholdMmolPerHour -
+                backgroundDuringReplacement,
+          ).toDouble();
+    final double allIvHeadroom = limits == null
+        ? 0
+        : math.max(
+            0,
+            limits.allIvMaxMmolPerHour - backgroundDuringReplacement,
+          ).toDouble();
+
+    final double maxReplacementWithBackground = limits == null
+        ? 0
+        : PotassiumRateEngine.maxReplacementRateWithBackground(
+            type: _replacementType,
+            limits: limits,
+            backgroundMmolPerHour: backgroundDuringReplacement,
+          );
+
+    final double oralK = math.max(0, _number(_oralK) ?? 0).toDouble();
 
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Hypokalemia: Build My K Plan',
+          'Potassium Rate Checker',
           style: TextStyle(fontWeight: FontWeight.w900),
         ),
+        actions: <Widget>[
+          IconButton(
+            tooltip: 'Reset',
+            onPressed: _reset,
+            icon: const Icon(Icons.restart_alt_rounded),
+          ),
+        ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 10, 16, 32),
-        children: <Widget>[
-          _highAlertBanner(context),
-          const SizedBox(height: 14),
-          _sectionTitle(context, '1. Patient'),
-          _responsiveFields(<Widget>[
-            _field(_age, 'Age', 'years'),
-            _field(_weight, 'Weight', 'kg'),
-            _field(_currentK, 'Current K', 'mmol/L'),
-            _field(_targetK, 'Target K', 'mmol/L'),
-            _field(_magnesium, 'Magnesium', 'optional'),
-          ]),
-          if (currentK != null) ...<Widget>[
-            const SizedBox(height: 10),
-            _severityCard(context, currentK, targetK),
-          ],
-          const SizedBox(height: 4),
-          SwitchListTile.adaptive(
-            contentPadding: EdgeInsets.zero,
-            value: _symptomatic,
-            onChanged: (bool value) => setState(() => _symptomatic = value),
-            title: const Text('Symptoms attributable to hypokalemia'),
-          ),
-          SwitchListTile.adaptive(
-            contentPadding: EdgeInsets.zero,
-            value: _ecgChanges,
-            onChanged: (bool value) => setState(() => _ecgChanges = value),
-            title: const Text('ECG changes / arrhythmia concern'),
-          ),
-          SwitchListTile.adaptive(
-            contentPadding: EdgeInsets.zero,
-            value: _adequateUrineOutput,
-            onChanged: (bool value) =>
-                setState(() => _adequateUrineOutput = value),
-            title: const Text('Adequate urine output / passing urine'),
-          ),
-          SwitchListTile.adaptive(
-            contentPadding: EdgeInsets.zero,
-            value: _renalImpairment,
-            onChanged: (bool value) =>
-                setState(() => _renalImpairment = value),
-            title: const Text('AKI / oliguria / rising creatinine'),
-          ),
-          if (!_adequateUrineOutput || _renalImpairment)
-            _warning(
-              context,
-              'HIGH RISK: potassium can accumulate when renal excretion is impaired. Do not rely on the routine calculator without senior/PCCU/nephrology/pharmacy review.',
-            ),
-          if (currentK != null && currentK < 2.0)
-            _warning(
-              context,
-              'K <2.0 mmol/L: critical hypokalemia; specialist/PCCU-level management and monitored replacement are recommended.',
-            ),
-          const SizedBox(height: 18),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 940),
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 32),
+            children: <Widget>[
+              _highAlertBanner(context),
+              const SizedBox(height: 14),
 
-          _sectionTitle(context, '2. Base IV fluid + potassium additive'),
-          DropdownButtonFormField<String>(
-            initialValue: _fluidType,
-            decoration: const InputDecoration(
-              labelText: 'Carrier fluid',
-              border: OutlineInputBorder(),
-            ),
-            items: _fluidOptions
-                .map(
-                  (String fluid) => DropdownMenuItem<String>(
-                    value: fluid,
-                    child: Text(fluid),
-                  ),
-                )
-                .toList(),
-            onChanged: (String? value) {
-              if (value == null) return;
-              setState(() => _fluidType = value);
-            },
-          ),
-          const SizedBox(height: 10),
-          if (_fluidType == 'Custom fluid')
-            _field(
-              _customIntrinsicK,
-              'Intrinsic K already in custom fluid',
-              'mmol/L',
-            )
-          else if (intrinsicK > 0)
-            _infoLine(
-              context,
-              'This balanced crystalloid is modeled as approximately ${intrinsicK.toStringAsFixed(0)} mmol/L intrinsic potassium. Verify the exact local product formulation.',
-            ),
-          const SizedBox(height: 10),
-          _responsiveFields(<Widget>[
-            _field(_baseFluidRate, 'Fluid rate', 'mL/hr'),
-            DropdownButtonFormField<String>(
-              initialValue: _addedKChoice,
-              decoration: const InputDecoration(
-                labelText: 'Added KCl',
-                border: OutlineInputBorder(),
+              _sectionTitle(context, '1. Patient'),
+              _responsiveFields(<Widget>[
+                _field(_weight, 'Weight', 'kg'),
+                _field(_currentK, 'Current potassium', 'mmol/L'),
+              ]),
+              SwitchListTile.adaptive(
+                contentPadding: EdgeInsets.zero,
+                value: _ecgChanges,
+                onChanged: (bool value) =>
+                    setState(() => _ecgChanges = value),
+                title: const Text('ECG changes / arrhythmia concern'),
               ),
-              items: const <DropdownMenuItem<String>>[
-                DropdownMenuItem(value: '0', child: Text('None')),
-                DropdownMenuItem(value: '20', child: Text('20 mmol/L')),
-                DropdownMenuItem(value: '40', child: Text('40 mmol/L')),
-                DropdownMenuItem(value: 'custom', child: Text('Custom mmol/L')),
-                DropdownMenuItem(value: 'bag', child: Text('Total mmol in bag')),
-              ],
-              onChanged: (String? value) {
-                if (value == null) return;
-                setState(() => _addedKChoice = value);
-              },
-            ),
-            if (_addedKChoice == 'custom')
-              _field(_customAddedK, 'Custom added KCl', 'mmol/L'),
-            if (_addedKChoice == 'bag')
-              _field(_bagTotalAddedK, 'KCl added to bag', 'mmol'),
-            if (_addedKChoice == 'bag')
-              _field(_bagVolume, 'Bag volume', 'mL'),
-          ]),
-          const SizedBox(height: 10),
-          if (_addedKChoice == 'bag')
-            _infoLine(
-              context,
-              'Bag entry is converted automatically to ${addedK.toStringAsFixed(1)} mmol/L added KCl.',
-            ),
-          if (targetK != null && currentK != null)
-            _infoLine(
-              context,
-              'Selected target K ${targetK.toStringAsFixed(1)} mmol/L is shown for context. PedsFlow does not calculate a replacement dose from the ${(targetK - currentK).toStringAsFixed(1)} mmol/L serum gap because serum K is not a direct measure of total-body potassium deficit.',
-            ),
-          const SizedBox(height: 10),
-          _resultCard(
-            context,
-            'Base-fluid potassium delivery',
-            <String>[
-              'Carrier: $_fluidType',
-              'Intrinsic K: ${intrinsicK.toStringAsFixed(1)} mmol/L',
-              'Added KCl: ${addedK.toStringAsFixed(1)} mmol/L',
-              'Total K concentration: ${totalBaseKConcentration.toStringAsFixed(1)} mmol/L',
-              if (baseKPerHour != null)
-                'Exact K delivery: ${baseKPerHour.toStringAsFixed(2)} mmol/hr',
-              if (baseKPerKgHour != null)
-                '${baseKPerKgHour.toStringAsFixed(3)} mmol/kg/hr',
-              if (baseKOverForecast != null)
-                '${baseKOverForecast.toStringAsFixed(1)} mmol over $_forecastHours hr',
-              if (baseKPerDay != null)
-                '${baseKPerDay.toStringAsFixed(1)} mmol over 24 hr',
-              if (maintenanceRate != null && baseRate != null)
-                'Selected fluid rate ${baseRate.toStringAsFixed(0)} mL/hr; 4-2-1 maintenance reference ${maintenanceRate.toStringAsFixed(0)} mL/hr',
-            ],
-          ),
-          const SizedBox(height: 8),
-          _infoLine(
-            context,
-            'PedsFlow shows exact potassium delivery from the maintenance/base fluid. It does not convert this exposure into a guaranteed serum-K rise.',
-          ),
-          const SizedBox(height: 18),
-
-          _sectionTitle(context, '3. Optional oral / enteral KCl'),
-          SwitchListTile.adaptive(
-            contentPadding: EdgeInsets.zero,
-            value: _addOral,
-            onChanged: (bool value) => setState(() => _addOral = value),
-            title: const Text('Add oral / enteral KCl'),
-          ),
-          if (_addOral) ...<Widget>[
-            _responsiveFields(<Widget>[
-              DropdownButtonFormField<String>(
-                initialValue: _oralDoseChoice,
-                decoration: const InputDecoration(
-                  labelText: 'Dose',
-                  border: OutlineInputBorder(),
+              SwitchListTile.adaptive(
+                contentPadding: EdgeInsets.zero,
+                value: _renalConcern,
+                onChanged: (bool value) =>
+                    setState(() => _renalConcern = value),
+                title: const Text(
+                  'AKI / oliguria / severe renal impairment concern',
                 ),
-                items: const <DropdownMenuItem<String>>[
-                  DropdownMenuItem(value: '1', child: Text('1 mmol/kg')),
-                  DropdownMenuItem(value: '2', child: Text('2 mmol/kg')),
-                  DropdownMenuItem(value: 'custom', child: Text('Custom')),
-                ],
-                onChanged: (String? value) {
-                  if (value == null) return;
-                  setState(() => _oralDoseChoice = value);
-                },
               ),
-              if (_oralDoseChoice == 'custom')
-                _field(_oralDosePerKg, 'Custom oral dose', 'mmol/kg'),
-              _field(
-                _oralConcentration,
-                'Oral KCl concentration',
-                'mmol/mL',
+              if (!validWeight)
+                _warning(context, 'Enter a valid measured weight.'),
+              if (_ecgChanges)
+                _warning(
+                  context,
+                  'ECG changes make this a high-risk replacement situation. '
+                  'Use continuous cardiac monitoring and senior/PCCU/pharmacy review '
+                  'regardless of the arithmetic rate category.',
+                ),
+              if (_renalConcern)
+                _warning(
+                  context,
+                  'Renal impairment can cause potassium accumulation. '
+                  'Do not use the calculated headroom as permission to replace '
+                  'without individualized review.',
+                ),
+              if (currentK != null && currentK < 2.5)
+                _warning(
+                  context,
+                  'Severe hypokalemia: prioritize monitored replacement and '
+                  'frequent reassessment according to the active local plan.',
+                ),
+              const SizedBox(height: 18),
+
+              _sectionTitle(context, '2. What potassium is already running?'),
+              _sourceCard(
+                context: context,
+                title: 'Main IV fluid',
+                subtitle:
+                    'Example: 40 mmol KCl in a 1000 mL bag running at 50 mL/hr.',
+                potassiumController: _mainK,
+                volumeController: _mainVolume,
+                rateController: _mainRate,
+                result: main,
+                runsDuringReplacement: _mainRunsDuringReplacement,
+                onRunsChanged: (bool value) =>
+                    setState(() => _mainRunsDuringReplacement = value),
               ),
-            ]),
-            const SizedBox(height: 10),
-            if (oralMmol != null)
+              const SizedBox(height: 10),
+              _sourceCard(
+                context: context,
+                title: 'TPN / second potassium-containing IV source',
+                subtitle:
+                    'Leave at 0 if there is no second IV potassium source.',
+                potassiumController: _otherK,
+                volumeController: _otherVolume,
+                rateController: _otherRate,
+                result: other,
+                runsDuringReplacement: _otherRunsDuringReplacement,
+                onRunsChanged: (bool value) =>
+                    setState(() => _otherRunsDuringReplacement = value),
+              ),
+              const SizedBox(height: 10),
               _resultCard(
                 context,
-                'Oral KCl contribution',
+                'Background IV potassium',
                 <String>[
-                  'Selected dose: ${oralDosePerKg.toStringAsFixed(2)} mmol/kg',
-                  if (oralCalculatedMmol != null && oralCalculatedMmol > 20)
-                    'Calculated ${oralCalculatedMmol.toStringAsFixed(1)} mmol -> capped at 20 mmol by the selected pediatric acute reference',
-                  'Administered dose: ${oralMmol.toStringAsFixed(1)} mmol',
-                  if (oralVolume != null)
-                    'Volume at ${oralConcentration!.toStringAsFixed(2)} mmol/mL: ${oralVolume.toStringAsFixed(1)} mL',
-                  'Immediate-release oral potassium: expected serum effect after approximately 2 hours; exact serum rise is not reliably predictable.',
+                  'Main fluid: ${_fmt(main?.mmolPerHour ?? 0)} mmol/hr'
+                      '${validWeight ? ' (${_fmt(main?.mmolPerKgHour ?? 0)} mmol/kg/hr)' : ''}',
+                  'Other IV source: ${_fmt(other?.mmolPerHour ?? 0)} mmol/hr'
+                      '${validWeight ? ' (${_fmt(other?.mmolPerKgHour ?? 0)} mmol/kg/hr)' : ''}',
+                  'ALL background IV K if both are running: '
+                      '${_fmt(backgroundAllRunning)} mmol/hr'
+                      '${validWeight ? ' (${_fmt(backgroundAllRunning / weight)} mmol/kg/hr)' : ''}',
                 ],
               ),
-            if (oralDosePerKg > 2.0)
-              _warning(
-                context,
-                'The selected oral dose is above the cited acute 1-2 mmol/kg/dose reference. Verify with local pharmacy/senior guidance.',
+              const SizedBox(height: 10),
+              _field(
+                _oralK,
+                'Oral / enteral potassium already given (optional)',
+                'mmol',
               ),
-            if (currentK != null && (currentK < 2.5 || _ecgChanges))
-              _warning(
-                context,
-                'Initial K <2.5 mmol/L or ECG changes are cited reasons to consider IV replacement rather than relying only on enteral replacement.',
-              ),
-          ],
-          const SizedBox(height: 18),
+              if (oralK > 0)
+                _info(
+                  context,
+                  '${_fmt(oralK, decimals: 2)} mmol oral/enteral potassium is '
+                  'tracked separately and is NOT included in the IV mmol/kg/hr rate ceiling.',
+                ),
+              const SizedBox(height: 18),
 
-          _sectionTitle(context, '4. Optional separate IV KCl correction'),
-          SwitchListTile.adaptive(
-            contentPadding: EdgeInsets.zero,
-            value: _addIv,
-            onChanged: (bool value) => setState(() => _addIv = value),
-            title: const Text('Add acute IV KCl correction'),
-          ),
-          if (_addIv) ...<Widget>[
-            SegmentedButton<String>(
-              segments: const <ButtonSegment<String>>[
-                ButtonSegment<String>(
-                  value: 'ward',
-                  label: Text('Ward reference'),
+              _sectionTitle(context, '3. What do you want to add IV?'),
+              SegmentedButton<PotassiumReplacementType>(
+                segments: const <ButtonSegment<PotassiumReplacementType>>[
+                  ButtonSegment(
+                    value: PotassiumReplacementType.kcl,
+                    label: Text('KCl'),
+                    icon: Icon(Icons.water_drop_outlined),
+                  ),
+                  ButtonSegment(
+                    value: PotassiumReplacementType.potassiumPhosphate,
+                    label: Text('Potassium phosphate'),
+                    icon: Icon(Icons.science_outlined),
+                  ),
+                ],
+                selected: <PotassiumReplacementType>{_replacementType},
+                onSelectionChanged:
+                    (Set<PotassiumReplacementType> selection) {
+                  setState(() => _replacementType = selection.first);
+                },
+              ),
+              if (_replacementType ==
+                  PotassiumReplacementType.potassiumPhosphate) ...<Widget>[
+                const SizedBox(height: 10),
+                SegmentedButton<PotassiumPhosphateOrderBasis>(
+                  segments:
+                      const <ButtonSegment<PotassiumPhosphateOrderBasis>>[
+                    ButtonSegment(
+                      value: PotassiumPhosphateOrderBasis.potassium,
+                      label: Text('Order is POTASSIUM mmol'),
+                    ),
+                    ButtonSegment(
+                      value: PotassiumPhosphateOrderBasis.phosphate,
+                      label: Text('Order is PHOSPHATE mmol'),
+                    ),
+                  ],
+                  selected: <PotassiumPhosphateOrderBasis>{
+                    _phosphateBasis,
+                  },
+                  onSelectionChanged:
+                      (Set<PotassiumPhosphateOrderBasis> selection) {
+                    setState(() => _phosphateBasis = selection.first);
+                  },
                 ),
-                ButtonSegment<String>(
-                  value: 'critical',
-                  label: Text('Critical care'),
-                ),
-                ButtonSegment<String>(
-                  value: 'custom',
-                  label: Text('Custom'),
+                const SizedBox(height: 7),
+                _info(
+                  context,
+                  'LHSC pediatric potassium-phosphate doses are normally ordered '
+                  'by POTASSIUM content. The alternate option is included so the '
+                  'calculator can safely interpret an order written by phosphate content.',
                 ),
               ],
-              selected: <String>{_ivPreset},
-              onSelectionChanged: (Set<String> value) {
-                final String preset = value.first;
-                if (preset == 'custom') {
-                  setState(() => _ivPreset = preset);
-                } else {
-                  _applyIvPreset(preset);
-                }
-              },
-            ),
-            const SizedBox(height: 10),
-            _presetExplanation(context),
-            const SizedBox(height: 10),
-            _responsiveFields(<Widget>[
-              _field(_ivRatePerKg, 'IV K rate', 'mmol/kg/hr'),
-              _field(_ivDuration, 'Duration', 'hours'),
-              DropdownButtonFormField<String>(
+              const SizedBox(height: 10),
+              _responsiveFields(<Widget>[
+                _field(
+                  _replacementDose,
+                  _replacementType == PotassiumReplacementType.kcl
+                      ? 'KCl dose'
+                      : _phosphateBasis ==
+                              PotassiumPhosphateOrderBasis.potassium
+                          ? 'Potassium dose (as phosphate)'
+                          : 'Phosphate dose (as potassium)',
+                  'mmol',
+                ),
+                _field(
+                  _replacementDuration,
+                  'Infusion duration',
+                  'hours',
+                ),
+                _field(
+                  _replacementVolume,
+                  'Final infusion volume',
+                  'mL',
+                ),
+              ]),
+              DropdownButtonFormField<IvAccess>(
                 initialValue: _access,
                 decoration: const InputDecoration(
                   labelText: 'IV access',
                   border: OutlineInputBorder(),
                 ),
-                items: const <DropdownMenuItem<String>>[
+                items: const <DropdownMenuItem<IvAccess>>[
                   DropdownMenuItem(
-                    value: 'peripheral',
+                    value: IvAccess.peripheral,
                     child: Text('Peripheral IV'),
                   ),
                   DropdownMenuItem(
-                    value: 'central',
+                    value: IvAccess.central,
                     child: Text('Central IV'),
                   ),
                 ],
-                onChanged: (String? value) {
+                onChanged: (IvAccess? value) {
                   if (value == null) return;
                   setState(() => _access = value);
                 },
               ),
-              DropdownButtonFormField<String>(
-                initialValue: _ivConcentrationChoice,
-                decoration: const InputDecoration(
-                  labelText: 'Final IV K concentration',
-                  border: OutlineInputBorder(),
-                ),
-                items: const <DropdownMenuItem<String>>[
-                  DropdownMenuItem(value: '40', child: Text('40 mmol/L')),
-                  DropdownMenuItem(value: '60', child: Text('60 mmol/L')),
-                  DropdownMenuItem(value: '80', child: Text('80 mmol/L')),
-                  DropdownMenuItem(value: 'custom', child: Text('Custom')),
-                ],
-                onChanged: (String? value) {
-                  if (value == null) return;
-                  setState(() => _ivConcentrationChoice = value);
-                },
-              ),
-              if (_ivConcentrationChoice == 'custom')
-                _field(
-                  _ivConcentration,
-                  'Custom final concentration',
-                  'mmol/L',
-                ),
-            ]),
-            const SizedBox(height: 6),
-            SwitchListTile.adaptive(
-              contentPadding: EdgeInsets.zero,
-              value: _continueBaseFluidDuringIv,
-              onChanged: (bool value) =>
-                  setState(() => _continueBaseFluidDuringIv = value),
-              title: const Text(
-                'Continue potassium-containing base fluid during IV correction',
-              ),
-              subtitle: const Text(
-                'Turn this off if the potassium-containing maintenance/base fluid will be paused during acute replacement.',
-              ),
-            ),
-            if (ivMmolPerHour != null && ivTotalMmol != null)
+              const SizedBox(height: 10),
               _resultCard(
                 context,
-                'Separate IV KCl contribution',
+                _replacementType == PotassiumReplacementType.kcl
+                    ? 'Intermittent KCl'
+                    : 'Intermittent potassium phosphate',
                 <String>[
-                  'K infusion: ${ivMmolPerHour.toStringAsFixed(2)} mmol/hr',
-                  if (weight != null && weight > 0)
-                    '${(ivMmolPerHour / weight).toStringAsFixed(3)} mmol/kg/hr',
-                  'Duration: ${ivDuration!.toStringAsFixed(1)} hr',
-                  'Total IV KCl: ${ivTotalMmol.toStringAsFixed(1)} mmol',
-                  if (ivDosePerKg != null)
-                    'Total IV dose: ${ivDosePerKg.toStringAsFixed(2)} mmol/kg',
-                  'Final concentration: ${ivConcentration.toStringAsFixed(0)} mmol/L',
-                  if (ivCarrierRate != null)
-                    'Required IV carrier rate: ${ivCarrierRate.toStringAsFixed(1)} mL/hr',
+                  if (_replacementType ==
+                      PotassiumReplacementType.potassiumPhosphate)
+                    'Potassium content: ${_fmt(replacementK, decimals: 2)} mmol',
+                  if (_replacementType ==
+                      PotassiumReplacementType.potassiumPhosphate)
+                    'Phosphate content: ${_fmt(replacementPhosphate, decimals: 2)} mmol',
+                  'Potassium delivery: ${_fmt(replacementMmolPerHour)} mmol/hr',
+                  if (validWeight)
+                    '${_fmt(replacementMmolPerKgHour)} mmol/kg/hr',
+                  'Potassium concentration: '
+                      '${_fmt(replacementConcentration, decimals: 3)} mmol/mL',
                 ],
               ),
-            if (_access == 'peripheral' && ivConcentration > 40)
-              _warning(
-                context,
-                'Peripheral concentration above the usual 40 mmol/L reference requires senior/local-protocol review; concentrations >60 mmol/L require central access in the cited guideline.',
+              ..._replacementWarnings(
+                context: context,
+                limits: limits,
+                replacementMmolPerHour: replacementMmolPerHour,
+                replacementMmolPerKgHour: replacementMmolPerKgHour,
+                concentrationMmolPerMl: replacementConcentration,
               ),
-            if (ivConcentration > 60 && _access != 'central')
-              _warning(
-                context,
-                'Selected concentration >60 mmol/L: central access is required by the cited reference.',
-              ),
-            if (totalIvMmolPerKgHourDuringCorrection != null)
-              _combinedIvRateWarning(
-                context,
-                totalIvMmolPerKgHourDuringCorrection,
-              ),
-          ],
-          const SizedBox(height: 18),
+              const SizedBox(height: 18),
 
-          _sectionTitle(context, '5. Combined potassium plan'),
-          _forecastSelector(),
-          const SizedBox(height: 10),
-          _resultCard(
-            context,
-            'Planned potassium administered in the first hour',
-            <String>[
-              'Base fluid: ${baseFirstHour.toStringAsFixed(1)} mmol',
-              if (_addOral && oralMmol != null)
-                'Oral KCl dose: ${oralMmol.toStringAsFixed(1)} mmol',
-              if (_addIv && ivFirstHour > 0)
-                'Separate IV KCl delivered: ${ivFirstHour.toStringAsFixed(1)} mmol',
-              'TOTAL planned K: ${firstHourPlannedMmol.toStringAsFixed(1)} mmol',
-              if (firstHourPerKg != null)
-                '${firstHourPerKg.toStringAsFixed(2)} mmol/kg',
-            ],
-          ),
-          const SizedBox(height: 10),
-          _resultCard(
-            context,
-            'Exact potassium exposure over $_forecastHours hours',
-            <String>[
-              if (baseKOverForecast != null)
-                'Base fluid: ${baseKOverForecast.toStringAsFixed(1)} mmol',
-              if (_addOral && oralMmol != null)
-                'One oral KCl dose: ${oralMmol.toStringAsFixed(1)} mmol',
-              if (_addIv && ivMmolWithinForecast > 0)
-                'Separate IV KCl: ${ivMmolWithinForecast.toStringAsFixed(1)} mmol',
-              'TOTAL potassium exposure: ${combinedForecastMmol.toStringAsFixed(1)} mmol',
-              if (combinedForecastPerKg != null)
-                '${combinedForecastPerKg.toStringAsFixed(2)} mmol/kg over $_forecastHours hr',
-            ],
-          ),
-          const SizedBox(height: 10),
-          if (totalIvMmolPerHourDuringCorrection != null)
-            _resultCard(
-              context,
-              'During the separate IV correction',
-              <String>[
-                'Separate IV KCl: ${ivMmolPerHour!.toStringAsFixed(2)} mmol/hr',
-                if (_continueBaseFluidDuringIv && baseKPerHour != null)
-                  'Background IV-fluid K: ${baseKPerHour.toStringAsFixed(2)} mmol/hr',
-                if (!_continueBaseFluidDuringIv)
-                  'Background potassium-containing fluid: paused',
-                'TOTAL IV potassium delivery: ${totalIvMmolPerHourDuringCorrection.toStringAsFixed(2)} mmol/hr',
-                if (totalIvMmolPerKgHourDuringCorrection != null)
-                  '${totalIvMmolPerKgHourDuringCorrection.toStringAsFixed(3)} mmol/kg/hr',
+              _sectionTitle(context, '4. Can these run together?'),
+              if (limits == null)
+                _warning(
+                  context,
+                  'Enter a valid weight to calculate the combined IV rate limits.',
+                )
+              else ...<Widget>[
+                _bigRateCard(
+                  context,
+                  totalMmolPerHour: totalDuringReplacement,
+                  totalMmolPerKgHour: totalDuringReplacementPerKg,
+                  limits: limits,
+                  replacementMmolPerHour: replacementMmolPerHour,
+                ),
+                const SizedBox(height: 10),
+                _resultCard(
+                  context,
+                  'What is contributing during the replacement?',
+                  <String>[
+                    _mainRunsDuringReplacement
+                        ? 'Main IV fluid: ${_fmt(main?.mmolPerHour ?? 0)} mmol/hr'
+                        : 'Main IV fluid: PAUSED',
+                    _otherRunsDuringReplacement
+                        ? 'TPN / other IV K: ${_fmt(other?.mmolPerHour ?? 0)} mmol/hr'
+                        : 'TPN / other IV K: PAUSED',
+                    'Intermittent replacement: '
+                        '${_fmt(replacementMmolPerHour)} mmol/hr',
+                    'TOTAL IV POTASSIUM: '
+                        '${_fmt(totalDuringReplacement)} mmol/hr = '
+                        '${_fmt(totalDuringReplacementPerKg)} mmol/kg/hr',
+                  ],
+                ),
+                const SizedBox(height: 10),
+                _resultCard(
+                  context,
+                  'Rate headroom with the selected background status',
+                  <String>[
+                    'Room before LHSC ECG-rate threshold: '
+                        '${_fmt(ecgHeadroom)} mmol/hr'
+                        ' (${_fmt(ecgHeadroom / weight!)} mmol/kg/hr)',
+                    'Room before ALL-IV potassium maximum: '
+                        '${_fmt(allIvHeadroom)} mmol/hr'
+                        ' (${_fmt(allIvHeadroom / weight)} mmol/kg/hr)',
+                    'Maximum intermittent replacement rate allowed by the '
+                        'listed product-specific + all-IV ceilings: '
+                        '${_fmt(maxReplacementWithBackground)} mmol/hr'
+                        ' (${_fmt(maxReplacementWithBackground / weight)} mmol/kg/hr)',
+                    'This is a mathematical ceiling from these PDAM limits, '
+                        'not a suggested replacement rate.',
+                  ],
+                ),
+                const SizedBox(height: 10),
+                _scenarioCard(
+                  context,
+                  title: 'If EVERYTHING continues',
+                  totalMmolPerHour: totalIfEverythingRuns,
+                  weight: weight,
+                  limits: limits,
+                ),
+                const SizedBox(height: 8),
+                _scenarioCard(
+                  context,
+                  title: 'If the MAIN potassium-containing fluid is paused',
+                  totalMmolPerHour: totalIfMainPaused,
+                  weight: weight,
+                  limits: limits,
+                ),
               ],
-            ),
-          const SizedBox(height: 18),
+              const SizedBox(height: 18),
 
-          _sectionTitle(context, '6. Evidence-based IV response comparator'),
-          if (responseEstimate != null)
-            _responseEstimateCard(context, responseEstimate)
-          else if (_addIv)
-            _infoLine(
-              context,
-              'The selected IV regimen does not closely match a pediatric published comparator dose built into PedsFlow, so a numerical serum-K response estimate is intentionally not shown.',
-            ),
-          if (_addOral)
-            _infoLine(
-              context,
-              'Oral KCl: exact mmol and mL are shown, but a fixed serum-K rise is not assigned because pediatric oral dose-to-serum response is too variable for a universal conversion.',
-            ),
-          if (baseKPerHour != null && baseKPerHour > 0)
-            _infoLine(
-              context,
-              'Potassium in the base IV fluid: exact mmol exposure is shown, but a separate serum-K rise is not forecast because ongoing losses, renal handling, acid-base status, insulin/beta-agonists and magnesium can materially change the response.',
-            ),
+              _policyExpansion(context, limits),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _replacementWarnings({
+    required BuildContext context,
+    required PotassiumRateLimits? limits,
+    required double replacementMmolPerHour,
+    required double replacementMmolPerKgHour,
+    required double concentrationMmolPerMl,
+  }) {
+    if (limits == null) return <Widget>[];
+
+    final List<Widget> warnings = <Widget>[];
+
+    if (_replacementType == PotassiumReplacementType.kcl) {
+      if (replacementMmolPerHour >
+          limits.kclIntermittentMaxMmolPerHour + 0.0001) {
+        warnings.add(
           _warning(
             context,
-            'Do not add the published IV comparator to an assumed oral or maintenance-fluid rise. The patient response must be measured with repeat potassium testing.',
+            'KCl intermittent RATE exceeds the LHSC pediatric maximum of '
+            '${_fmt(limits.kclIntermittentMaxMmolPerHour)} mmol/hr '
+            '(${_fmt(limits.kclIntermittentMaxMmolPerHour / (_number(_weight) ?? 1))} mmol/kg/hr for this weight).',
           ),
-          const SizedBox(height: 18),
+        );
+      }
 
-          _sectionTitle(context, '7. Monitoring / repeat potassium'),
-          _monitoringCard(context, currentK),
-          const SizedBox(height: 18),
+      final double concentrationMax =
+          _access == IvAccess.peripheral ? 0.1 : 0.4;
+      if (concentrationMmolPerMl > concentrationMax + 0.0001) {
+        warnings.add(
+          _warning(
+            context,
+            'KCl intermittent concentration exceeds the listed '
+            '${_access == IvAccess.peripheral ? 'peripheral' : 'central'} '
+            'maximum of ${concentrationMax.toStringAsFixed(1)} mmol/mL.',
+          ),
+        );
+      }
+    } else {
+      if (replacementMmolPerHour >
+          limits.potassiumPhosphateMaxMmolPerHour + 0.0001) {
+        warnings.add(
+          _warning(
+            context,
+            'Potassium-phosphate RATE exceeds the LHSC pediatric maximum '
+            'of 0.19 mmol potassium/kg/hr. Selected rate is '
+            '${_fmt(replacementMmolPerKgHour)} mmol potassium/kg/hr.',
+          ),
+        );
+      }
 
-          _sectionTitle(context, '8. Actual response tracker'),
-          _responsiveFields(<Widget>[
-            _field(_followUpK, 'Follow-up K', 'mmol/L'),
-            _field(_followUpHours, 'Time after plan', 'hours'),
-          ]),
-          if (followUpK != null && currentK != null) ...<Widget>[
-            const SizedBox(height: 10),
-            _resultCard(
-              context,
-              'Observed patient response',
-              <String>[
-                'Before: ${currentK.toStringAsFixed(2)} mmol/L',
-                'After: ${followUpK.toStringAsFixed(2)} mmol/L',
-                'Observed delta K: ${(followUpK - currentK).toStringAsFixed(2)} mmol/L',
-                if (followUpHours != null)
-                  'Elapsed time: ${followUpHours.toStringAsFixed(1)} hr',
-                if (targetK != null)
-                  followUpK >= targetK
-                      ? 'Selected target reached / exceeded'
-                      : 'Still ${(targetK - followUpK).toStringAsFixed(2)} mmol/L below selected target',
-              ],
+      final double concentrationMax =
+          _access == IvAccess.peripheral ? 0.088 : 0.44;
+      if (concentrationMmolPerMl > concentrationMax + 0.0001) {
+        warnings.add(
+          _warning(
+            context,
+            'Potassium-phosphate intermittent concentration exceeds the listed '
+            '${_access == IvAccess.peripheral ? 'peripheral' : 'central'} '
+            'maximum of ${concentrationMax.toStringAsFixed(3)} mmol potassium/mL.',
+          ),
+        );
+      }
+    }
+
+    return warnings;
+  }
+
+  Widget _bigRateCard(
+    BuildContext context, {
+    required double totalMmolPerHour,
+    required double totalMmolPerKgHour,
+    required PotassiumRateLimits limits,
+    required double replacementMmolPerHour,
+  }) {
+    final bool aboveAllIv =
+        totalMmolPerHour > limits.allIvMaxMmolPerHour + 0.0001;
+    final bool aboveProduct =
+        replacementMmolPerHour >
+            PotassiumRateEngine.productMaxRateMmolPerHour(
+              type: _replacementType,
+              limits: limits,
+            ) +
+                0.0001;
+    final bool aboveEcg =
+        totalMmolPerHour > limits.ecgThresholdMmolPerHour + 0.0001;
+
+    final Color color = (aboveAllIv || aboveProduct)
+        ? Theme.of(context).colorScheme.error
+        : aboveEcg
+            ? const Color(0xFFB25E00)
+            : const Color(0xFF237447);
+
+    final String status = (aboveAllIv || aboveProduct)
+        ? 'EXCEEDS A LISTED RATE MAXIMUM'
+        : aboveEcg
+            ? 'WITHIN MAXIMUMS, BUT ECG RATE THRESHOLD EXCEEDED'
+            : 'BELOW THE LISTED ECG RATE THRESHOLD';
+
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: color.withValues(alpha: 0.45)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            status,
+            style: TextStyle(
+              color: color,
+              fontWeight: FontWeight.w900,
+              fontSize: 15,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            '${_fmt(totalMmolPerKgHour)} mmol/kg/hr',
+            style: TextStyle(
+              color: color,
+              fontSize: 34,
+              height: 1,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '${_fmt(totalMmolPerHour)} mmol/hr TOTAL IV potassium',
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'ECG-rate threshold for this weight: '
+            '${_fmt(limits.ecgThresholdMmolPerHour)} mmol/hr '
+            '(${_fmt(limits.ecgThresholdMmolPerHour / (_number(_weight) ?? 1))} mmol/kg/hr).',
+          ),
+          Text(
+            'All-IV potassium maximum for this weight: '
+            '${_fmt(limits.allIvMaxMmolPerHour)} mmol/hr '
+            '(${_fmt(limits.allIvMaxMmolPerHour / (_number(_weight) ?? 1))} mmol/kg/hr).',
+          ),
+          if (aboveEcg && !aboveAllIv && !aboveProduct)
+            const Padding(
+              padding: EdgeInsets.only(top: 8),
+              child: Text(
+                'This does NOT mean the rate is prohibited by the PDAM; it means '
+                'the ECG monitoring threshold has been crossed. Local unit rules '
+                'may be more restrictive.',
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  height: 1.35,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _sourceCard({
+    required BuildContext context,
+    required String title,
+    required String subtitle,
+    required TextEditingController potassiumController,
+    required TextEditingController volumeController,
+    required TextEditingController rateController,
+    required PotassiumSourceResult? result,
+    required bool runsDuringReplacement,
+    required ValueChanged<bool> onRunsChanged,
+  }) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.w900,
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(height: 3),
+            Text(subtitle),
+            const SizedBox(height: 12),
+            _responsiveFields(<Widget>[
+              _field(potassiumController, 'K in bag', 'mmol'),
+              _field(volumeController, 'Bag volume', 'mL'),
+              _field(rateController, 'Current rate', 'mL/hr'),
+            ]),
+            if (result != null)
+              _resultCard(
+                context,
+                'Exact delivery',
+                <String>[
+                  'Concentration: '
+                      '${_fmt(result.concentrationMmolPerL, decimals: 2)} mmol/L',
+                  'Potassium: ${_fmt(result.mmolPerHour)} mmol/hr',
+                  '${_fmt(result.mmolPerKgHour)} mmol/kg/hr',
+                ],
+              ),
+            SwitchListTile.adaptive(
+              contentPadding: EdgeInsets.zero,
+              value: runsDuringReplacement,
+              onChanged: onRunsChanged,
+              title: const Text('Continues during intermittent replacement'),
+              subtitle: Text(
+                runsDuringReplacement
+                    ? 'Included in the combined IV potassium rate.'
+                    : 'Excluded from the combined rate while paused.',
+              ),
             ),
           ],
-          const SizedBox(height: 12),
-          _referencesCard(context, age),
+        ),
+      ),
+    );
+  }
+
+  Widget _scenarioCard(
+    BuildContext context, {
+    required String title,
+    required double totalMmolPerHour,
+    required double weight,
+    required PotassiumRateLimits limits,
+  }) {
+    final double perKg = totalMmolPerHour / weight;
+    final bool aboveMax =
+        totalMmolPerHour > limits.allIvMaxMmolPerHour + 0.0001;
+    final bool aboveEcg =
+        totalMmolPerHour > limits.ecgThresholdMmolPerHour + 0.0001;
+
+    return Card(
+      child: ListTile(
+        leading: Icon(
+          aboveMax
+              ? Icons.cancel_outlined
+              : aboveEcg
+                  ? Icons.monitor_heart_outlined
+                  : Icons.check_circle_outline,
+        ),
+        title: Text(
+          title,
+          style: const TextStyle(fontWeight: FontWeight.w900),
+        ),
+        subtitle: Text(
+          '${_fmt(totalMmolPerHour)} mmol/hr = '
+          '${_fmt(perKg)} mmol/kg/hr\n'
+          '${aboveMax ? 'Above all-IV maximum' : aboveEcg ? 'Above ECG-rate threshold, but below all-IV maximum' : 'Below ECG-rate threshold'}',
+        ),
+      ),
+    );
+  }
+
+  Widget _policyExpansion(
+    BuildContext context,
+    PotassiumRateLimits? limits,
+  ) {
+    return Card(
+      child: ExpansionTile(
+        leading: const Icon(Icons.policy_outlined),
+        title: const Text(
+          '2026 LHSC potassium rules used',
+          style: TextStyle(fontWeight: FontWeight.w900),
+        ),
+        subtitle: const Text(
+          'Open only when you need the limits and monitoring details.',
+        ),
+        childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        children: <Widget>[
+          if (limits != null)
+            _resultCard(
+              context,
+              'Patient-specific rate thresholds',
+              <String>[
+                'KCl / total-K ECG threshold: >'
+                    '${_fmt(limits.ecgThresholdMmolPerHour)} mmol/hr '
+                    '(>0.3 mmol/kg/hr or >15 mmol/hr, whichever is less).',
+                'KCl intermittent maximum: '
+                    '${_fmt(limits.kclIntermittentMaxMmolPerHour)} mmol/hr '
+                    '(0.5 mmol/kg/hr or 20 mmol/hr, whichever is less).',
+                'ALL IV potassium maximum: '
+                    '${_fmt(limits.allIvMaxMmolPerHour)} mmol/hr '
+                    '(1 mmol/kg/hr or 40 mmol/hr, whichever is less).',
+                'Potassium-phosphate maximum: '
+                    '${_fmt(limits.potassiumPhosphateMaxMmolPerHour)} mmol K/hr '
+                    '(0.19 mmol potassium/kg/hr).',
+              ],
+            ),
+          const SizedBox(height: 8),
+          const Text(
+            'Concentrations - intermittent infusions:\n'
+            '• KCl peripheral: 0.1 mmol/mL maximum.\n'
+            '• KCl central: 0.4 mmol/mL maximum.\n'
+            '• Potassium phosphate peripheral: 0.088 mmol potassium/mL maximum.\n'
+            '• Potassium phosphate central: 0.44 mmol potassium/mL maximum.\n\n'
+            'Continuous KCl background fluid:\n'
+            '• Peripheral: 40 mmol/1000 mL; PCCU and ED-to-PCCU may use up to '
+            '60 mmol/L according to the monograph.\n'
+            '• Central: 80 mmol/1000 mL (pharmacy prepared).\n\n'
+            'Monitoring:\n'
+            '• Count potassium from all IV sources, including potassium phosphate and TPN.\n'
+            '• KCl intermittent rates above the patient-specific ECG threshold require '
+            'continuous ECG monitoring.\n'
+            '• Potassium-phosphate rates at or below 0.19 mmol K/kg/hr may be given '
+            'without ECG monitoring based on rate alone; clinical indications for '
+            'monitoring still take precedence.\n'
+            '• After intermittent KCl, repeat potassium is usually ordered within '
+            '3-4 hours after completion.\n'
+            '• After intermittent potassium phosphate, repeat potassium and phosphate '
+            'are usually ordered within 3-4 hours after completion.\n'
+            '• IV direct potassium administration is prohibited.',
+            style: TextStyle(height: 1.45),
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            'Sources: LHSC Potassium Chloride Parenteral Drug Administration '
+            'Monograph, revised July 21, 2026; LHSC Potassium Phosphate '
+            'Parenteral Drug Administration Monograph, revised July 21, 2026.',
+            style: TextStyle(
+              fontWeight: FontWeight.w800,
+              height: 1.35,
+            ),
+          ),
         ],
       ),
     );
@@ -794,206 +838,29 @@ class _HypokalemiaEngineScreenState extends State<HypokalemiaEngineScreen> {
 
   Widget _highAlertBanner(BuildContext context) {
     return Card(
-      color: Theme.of(context).colorScheme.errorContainer.withValues(alpha: 0.48),
+      color: Theme.of(context)
+          .colorScheme
+          .errorContainer
+          .withValues(alpha: 0.52),
       child: const Padding(
         padding: EdgeInsets.all(14),
         child: Text(
-          'Potassium chloride is a high-alert medication. Verify the measured weight and potassium, confirm urine output and renal function, review magnesium, include every potassium source, and independently verify the final concentration/rate against local pharmacy and PCCU policy.',
-          style: TextStyle(fontWeight: FontWeight.w700, height: 1.35),
-        ),
-      ),
-    );
-  }
-
-  Widget _severityCard(
-    BuildContext context,
-    double currentK,
-    double? targetK,
-  ) {
-    final Color color = _severityColor(context, currentK);
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.10),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: color.withValues(alpha: 0.35)),
-      ),
-      child: Row(
-        children: <Widget>[
-          Icon(Icons.monitor_heart_outlined, color: color),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              '${_severity(currentK)} hypokalemia - K ${currentK.toStringAsFixed(1)} mmol/L',
-              style: TextStyle(fontWeight: FontWeight.w900, color: color),
-            ),
+          'HIGH ALERT: This screen answers one question - how much potassium '
+          'is entering the patient per hour from ALL IV sources? Verify every '
+          'source independently with the active LHSC order set, Pharmacy and PCCU policy.',
+          style: TextStyle(
+            fontWeight: FontWeight.w900,
+            height: 1.4,
           ),
-          if (targetK != null)
-            Text(
-              'Target ${targetK.toStringAsFixed(1)}',
-              style: const TextStyle(fontWeight: FontWeight.w800),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _presetExplanation(BuildContext context) {
-    String text;
-    if (_ivPreset == 'ward') {
-      text =
-          'Ward reference: 0.2 mmol/kg/hr for 3 hours, max 10 mmol/hr. Repeat K 1 hour after completion before further replacement.';
-    } else if (_ivPreset == 'critical') {
-      text =
-          'Critical-care reference: 0.4 mmol/kg/hr for 1-2 hours, max 20 mmol/hr, continuous ECG. Repeat K 1 hour after starting and 1 hour after completion.';
-    } else {
-      text =
-          'Custom mode: PedsFlow calculates exact delivery but does not validate a custom regimen as appropriate. Compare with local protocol and senior/pharmacy guidance.';
-    }
-    return _infoLine(context, text);
-  }
-
-  Widget _responseEstimateCard(
-    BuildContext context,
-    _IvResponseEstimate estimate,
-  ) {
-    return Card(
-      color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.42),
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Text(
-              'Published pediatric IV comparator',
-              style: TextStyle(fontWeight: FontWeight.w900),
-            ),
-            const SizedBox(height: 7),
-            Text('Nearest comparator: ${estimate.comparatorDose}'),
-            Text('Typical observed rise: +${estimate.typicalRise.toStringAsFixed(2)} mmol/L'),
-            Text('Observed response: ${estimate.spread}'),
-            Text('Study: ${estimate.sourceLabel}'),
-            const SizedBox(height: 7),
-            const Text(
-              'This is an observed research response, not a guaranteed prediction and not a dosing recommendation. Individual patients may rise much more, much less, or even fall because of ongoing losses and redistribution.',
-              style: TextStyle(fontWeight: FontWeight.w700, height: 1.35),
-            ),
-          ],
         ),
       ),
-    );
-  }
-
-  Widget _monitoringCard(BuildContext context, double? currentK) {
-    final List<String> lines = <String>[
-      'Confirm urine output, creatinine/renal function and magnesium before/while replacing potassium.',
-      'Count all potassium sources: base IV fluids, PN, enteral/oral supplements and separate IV KCl.',
-      'Use an infusion pump/smart library for IV KCl; never IV push and never flush after a KCl infusion.',
-      'Monitor fluid balance, IV site and signs of hyperkalemia.',
-    ];
-
-    if (_addIv && _ivPreset == 'ward') {
-      lines.add('Ward reference: repeat serum K 1 hour after replacement completion.');
-    } else if (_addIv && _ivPreset == 'critical') {
-      lines.add('Critical care: repeat serum K 1 hour after infusion starts and 1 hour after completion; continuous ECG monitoring.');
-    } else if (_addIv) {
-      lines.add('Custom IV regimen: define a repeat-K interval before administration using local protocol and patient acuity.');
-    }
-
-    if (_addOral) {
-      lines.add('Immediate-release oral mixture/effervescent KCl has an expected serum effect after about 2 hours; recheck timing should follow clinical context before repeating a dose.');
-    }
-
-    if ((currentK != null && currentK < 3.0) || _ecgChanges || _addIv) {
-      lines.add('Cardiac monitoring is indicated for K <3.0 mmol/L and for children receiving IV potassium replacement in the cited guideline.');
-    }
-
-    return _resultCard(context, 'Monitoring plan', lines);
-  }
-
-  Widget _referencesCard(BuildContext context, double? age) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Text(
-              'Clinical references built into this screen',
-              style: TextStyle(fontWeight: FontWeight.w900),
-            ),
-            const SizedBox(height: 7),
-            const Text(
-              'Royal Children\'s Hospital Melbourne Hypokalaemia CPG (last updated October 2024): oral/enteral preference, acute oral 1-2 mmol/kg/dose max 20 mmol, ward IV 0.2 mmol/kg/hr x3 hr max 10 mmol/hr, critical-care IV 0.4 mmol/kg/hr x1-2 hr max 20 mmol/hr, access/concentration and repeat-K guidance.',
-              style: TextStyle(height: 1.35),
-            ),
-            const SizedBox(height: 6),
-            const Text(
-              'RCH Intravenous fluids CPG (last updated January 2026): premixed maintenance fluids, potassium 20 mmol/L options, and fluid composition reference.',
-              style: TextStyle(height: 1.35),
-            ),
-            const SizedBox(height: 6),
-            const Text(
-              'Pediatric observational studies are used only for IV response comparators: 0.4 mmol/kg over 1 hour mean delta K +0.38 mmol/L (SD +/-0.36); 0.5 mmol/kg median +0.5 mmol/L (IQR +0.2 to +0.8); 1 mmol/kg median +0.8 mmol/L (IQR +0.5 to +1.2).',
-              style: TextStyle(height: 1.35),
-            ),
-            if (age != null && age < 1) ...<Widget>[
-              const SizedBox(height: 8),
-              Text(
-                'Age entered: ${age.toStringAsFixed(1)} years. Neonates and young infants may require local NICU-specific potassium and fluid policies; this general pediatric screen does not replace them.',
-                style: const TextStyle(fontWeight: FontWeight.w700),
-              ),
-            ],
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _combinedIvRateWarning(
-    BuildContext context,
-    double totalMmolPerKgHour,
-  ) {
-    final double referenceRate = _ivPreset == 'ward' ? 0.2 : 0.4;
-    if (_ivPreset == 'custom') {
-      return _infoLine(
-        context,
-        'Combined IV potassium delivery is ${totalMmolPerKgHour.toStringAsFixed(3)} mmol/kg/hr. Custom mode does not assign this a safe/unsafe label; verify against local policy.',
-      );
-    }
-    if (totalMmolPerKgHour > referenceRate + 0.0001) {
-      return _warning(
-        context,
-        'TOTAL IV K RATE ALERT: base-fluid potassium + separate IV KCl = ${totalMmolPerKgHour.toStringAsFixed(3)} mmol/kg/hr, above the selected ${referenceRate.toStringAsFixed(1)} mmol/kg/hr reference. Pause/recalculate potassium-containing background fluids and independently verify the order.',
-      );
-    }
-    return _infoLine(
-      context,
-      'Combined IV potassium delivery is ${totalMmolPerKgHour.toStringAsFixed(3)} mmol/kg/hr, including the selected background fluid status.',
-    );
-  }
-
-  Widget _forecastSelector() {
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: <int>[1, 2, 4, 6, 12, 24]
-          .map(
-            (int hours) => ChoiceChip(
-              label: Text('$hours hr'),
-              selected: _forecastHours == hours,
-              onSelected: (_) => setState(() => _forecastHours = hours),
-            ),
-          )
-          .toList(),
     );
   }
 
   Widget _responsiveFields(List<Widget> children) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        final bool wide = constraints.maxWidth >= 700;
-        if (!wide) {
+        if (constraints.maxWidth < 700) {
           return Column(
             children: children
                 .map(
@@ -1005,6 +872,7 @@ class _HypokalemiaEngineScreenState extends State<HypokalemiaEngineScreen> {
                 .toList(),
           );
         }
+
         return Wrap(
           spacing: 10,
           runSpacing: 10,
@@ -1028,7 +896,8 @@ class _HypokalemiaEngineScreenState extends State<HypokalemiaEngineScreen> {
   ) {
     return TextField(
       controller: controller,
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      keyboardType:
+          const TextInputType.numberWithOptions(decimal: true),
       onChanged: (_) => setState(() {}),
       decoration: InputDecoration(
         labelText: label,
@@ -1057,11 +926,14 @@ class _HypokalemiaEngineScreenState extends State<HypokalemiaEngineScreen> {
   ) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.all(13),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(title, style: const TextStyle(fontWeight: FontWeight.w900)),
+            Text(
+              title,
+              style: const TextStyle(fontWeight: FontWeight.w900),
+            ),
             const SizedBox(height: 7),
             ...lines.map(
               (String line) => Padding(
@@ -1077,22 +949,31 @@ class _HypokalemiaEngineScreenState extends State<HypokalemiaEngineScreen> {
 
   Widget _warning(BuildContext context, String text) {
     return Container(
+      width: double.infinity,
       margin: const EdgeInsets.only(top: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.errorContainer.withValues(alpha: 0.5),
+        color: Theme.of(context)
+            .colorScheme
+            .errorContainer
+            .withValues(alpha: 0.55),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Icon(Icons.warning_amber_rounded,
-              color: Theme.of(context).colorScheme.error),
+          Icon(
+            Icons.warning_amber_rounded,
+            color: Theme.of(context).colorScheme.error,
+          ),
           const SizedBox(width: 9),
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(fontWeight: FontWeight.w700, height: 1.35),
+              style: const TextStyle(
+                fontWeight: FontWeight.w800,
+                height: 1.35,
+              ),
             ),
           ),
         ],
@@ -1100,7 +981,7 @@ class _HypokalemiaEngineScreenState extends State<HypokalemiaEngineScreen> {
     );
   }
 
-  Widget _infoLine(BuildContext context, String text) {
+  Widget _info(BuildContext context, String text) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(top: 6),
@@ -1112,18 +993,29 @@ class _HypokalemiaEngineScreenState extends State<HypokalemiaEngineScreen> {
       child: Text(text, style: const TextStyle(height: 1.35)),
     );
   }
-}
 
-class _IvResponseEstimate {
-  final String comparatorDose;
-  final double typicalRise;
-  final String spread;
-  final String sourceLabel;
+  void _reset() {
+    _weight.text = '20';
+    _currentK.text = '2.6';
+    _mainK.text = '40';
+    _mainVolume.text = '1000';
+    _mainRate.text = '50';
+    _otherK.text = '0';
+    _otherVolume.text = '1000';
+    _otherRate.text = '0';
+    _oralK.text = '0';
+    _replacementDose.text = '10';
+    _replacementDuration.text = '4';
+    _replacementVolume.text = '100';
 
-  const _IvResponseEstimate({
-    required this.comparatorDose,
-    required this.typicalRise,
-    required this.spread,
-    required this.sourceLabel,
-  });
+    setState(() {
+      _replacementType = PotassiumReplacementType.kcl;
+      _phosphateBasis = PotassiumPhosphateOrderBasis.potassium;
+      _access = IvAccess.peripheral;
+      _mainRunsDuringReplacement = true;
+      _otherRunsDuringReplacement = true;
+      _ecgChanges = false;
+      _renalConcern = false;
+    });
+  }
 }

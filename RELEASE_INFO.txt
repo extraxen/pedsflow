@@ -1,32 +1,26 @@
-PedsFlow clean full release
-Version: 20.3.3+2033
-Release date: August 17, 2026
+PedsFlow targeted clinical update
+Version: 20.4.0+2040
+Release date: August 23, 2026
 
-Medication update:
-- Integrated the user-supplied Children's Hospital of Western Ontario / LHSC PCCU Dosing Handbook (2020) as a separately labeled local source.
-- Added local PCCU 2020 dose sections to 147 existing medication monographs.
-- Added 20 previously missing medication entries from the handbook.
-- Added PCCU resuscitation quick-dose sections for 9 emergency medications.
-- Preserved existing newer/current medication content rather than replacing it.
-- Ranitidine and the handbook's non-specific generic "Surfactant" entry were not added as new catalogue items pending current formulary/product-specific verification.
-- All handbook-derived sections are flagged for current verification because the handbook is a 2020 edition and explicitly recommends consulting current literature and pediatric pharmacists.
+Simplified potassium-rate checker:
+- Replaces the complex stackable hypokalemia builder with a four-step bedside workflow.
+- Calculates exact potassium delivery from potassium-containing maintenance/base IV fluids.
+- Adds an optional TPN/second IV potassium source.
+- Supports intermittent KCl and potassium phosphate.
+- Potassium phosphate can be entered by potassium content or phosphate content.
+- Shows total IV potassium in mmol/hr and mmol/kg/hr.
+- Shows whether each background IV source continues or is paused during replacement.
+- Provides scenario comparison for continuing all IV potassium vs pausing the main potassium-containing fluid.
+- Separates the KCl ECG-monitoring threshold from the KCl intermittent maximum and the all-IV potassium maximum.
+- Applies the pediatric LHSC potassium-phosphate maximum of 0.19 mmol potassium/kg/hr.
+- Checks intermittent peripheral/central potassium concentrations.
+- Oral/enteral potassium is explicitly excluded from the IV rate ceiling.
+- Adds unit tests for exact-rate arithmetic and patient-specific policy thresholds.
 
-This package excludes generated Flutter state and historical patch/install scripts.
-Run flutter pub get after extraction to regenerate local dependency state.
+Clinical source basis:
+- LHSC Potassium Chloride Parenteral Drug Administration Monograph, revised July 21, 2026.
+- LHSC Potassium Phosphate Parenteral Drug Administration Monograph, revised July 21, 2026.
 
-Search tuning:
-- Universalized the Home search label.
-- Surfaced medication searches and common drug aliases.
-- No medication-dose data changed in this patch.
-
-Live search tuning:
-- Home search now returns up to 5 live ranked suggestions as the user types.
-- Medication results surface the best matching dose/indication section as a preview.
-- Home results open the matching medication/plan/tool directly; 'See all' opens full Search with the query preserved.
-- Search normalization no longer treats the dosing unit 'mg' as an alias for magnesium.
-- Medication dose content itself is unchanged.
-
-Home live-search interaction fix:
-- Fixed suggestion rows disappearing before onTap completed when the search field lost focus.
-- Direct taps now open live results.
-- No clinical or medication content changed.
+Important:
+- This calculator is arithmetic/decision support, not an automatic prescribing system.
+- Local order sets, pharmacy guidance, clinical monitoring, renal function and patient-specific factors remain authoritative.
