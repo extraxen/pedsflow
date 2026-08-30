@@ -59,3 +59,11 @@ Navigation cleanup v20.5.1:
 - Removed the standalone Hypokalemia Home shortcut because potassium remains available through the Electrolyte Replacement Engine / calculator pathways.
 - No underlying PCCU, hypokalemia, or integrated-clinical-support source files were deleted.
 - Updated Neonatal Hub Home description to highlight the Specific Patient Feeding Plan.
+
+CTU hierarchy cleanup (v20.5.1):
+- Replaced Plans bottom navigation with CTU.
+- CTU contains Admission Plans and Growth Suite.
+- Home uses one CTU shortcut.
+- Electrolyte Replacement Engine remains under Calculators.
+- Removed duplicate Home shortcuts for Growth, Electrolytes, Hypokalemia, PCCU, and ED/PICU Decision Support.
+- No underlying clinical feature files were deleted.

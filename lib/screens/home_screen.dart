@@ -5,10 +5,8 @@
 import 'dart:async';
 
 import '../app_metadata.dart';
-import '../features/growth/growth_suite_screen.dart';
 import '../features/neonatal/neonatal_hub_screen.dart';
 import '../features/endocrine/endocrine_hub_screen.dart';
-import '../features/electrolytes/electrolyte_engine_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../models/admission_plan.dart';
@@ -88,14 +86,14 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 12),
               _ClinicalToolRow(
                 illustration: const _IllustratedBadge(
-                  icon: Icons.assignment_outlined,
-                  secondaryIcon: Icons.check_rounded,
+                  icon: Icons.local_hospital_outlined,
+                  secondaryIcon: Icons.assignment_turned_in_outlined,
                   background: Color(0xFFDDF3F1),
                   accent: Color(0xFF08756F),
                 ),
-                title: 'Admission plans',
-                subtitle: 'Browse ${store.plans.length} diagnosis-specific plans',
-                meta: '${store.plans.length} plans',
+                title: 'CTU',
+                subtitle: 'Admission plans and Growth Suite',
+                meta: 'Ward tools',
                 onTap: () => openTab(1),
               ),
               const SizedBox(height: 10),
@@ -127,19 +125,6 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 10),
               _ClinicalToolRow(
                 illustration: const _IllustratedBadge(
-                  icon: Icons.show_chart,
-                  secondaryIcon: Icons.straighten_outlined,
-                  background: Color(0xFFE8F4F8),
-                  accent: Color(0xFF27677A),
-                ),
-                title: 'Growth Suite',
-                subtitle: 'Corrected age, longitudinal growth, BMI and velocity with WHO/CDC/Fenton/INTERGROWTH framework',
-                meta: 'Growth',
-                onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const GrowthSuiteScreen())),
-              ),
-              const SizedBox(height: 10),
-              _ClinicalToolRow(
-                illustration: const _IllustratedBadge(
                   icon: Icons.child_care_outlined,
                   secondaryIcon: Icons.water_drop_outlined,
                   background: Color(0xFFF2ECFA),
@@ -163,20 +148,6 @@ class HomeScreen extends StatelessWidget {
                 meta: 'Endocrine',
                 onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const EndocrineHubScreen())),
               ),
-              const SizedBox(height: 10),
-              _ClinicalToolRow(
-                illustration: const _IllustratedBadge(
-                  icon: Icons.science_outlined,
-                  secondaryIcon: Icons.bolt_outlined,
-                  background: Color(0xFFFFF0D2),
-                  accent: Color(0xFF99610C),
-                ),
-                title: 'Electrolyte Replacement Engine',
-                subtitle: 'Potassium, sodium, magnesium, phosphate and calcium replacement safety',
-                meta: 'K ΓÇó Na ΓÇó Mg ΓÇó POΓéä ΓÇó Ca',
-                onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ElectrolyteEngineScreen())),
-              ),
-
               const SizedBox(height: 10),
               _ClinicalToolRow(
                 illustration: const _IllustratedBadge(
@@ -216,8 +187,6 @@ class HomeScreen extends StatelessWidget {
                   );
                 },
               ),
-
-
               const SizedBox(height: 10),
               _ClinicalToolRow(
                 illustration: const _IllustratedBadge(
@@ -1063,4 +1032,3 @@ class _SectionHeading extends StatelessWidget {
     );
   }
 }
-

@@ -1,4 +1,4 @@
-// PedsFlow - Proprietary Software
+﻿// PedsFlow - Proprietary Software
 // Copyright (c) 2026 Ahmed Saleh. All rights reserved.
 // See LICENSE in the repository root.
 // Third-party materials remain subject to their respective licenses.
@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 
 import '../services/app_store.dart';
 import 'calculators_screen.dart';
+import 'ctu_screen.dart';
 import 'home_screen.dart';
 import 'library_screen.dart';
 import 'pccu_screen.dart';
 import 'medications_screen.dart';
-import 'plans_screen.dart';
 
 class AppShell extends StatefulWidget {
   final AppStore store;
@@ -38,7 +38,7 @@ class _AppShellState extends State<AppShell> {
           });
         },
       ),
-      PlansScreen(store: widget.store),
+      CtuScreen(store: widget.store),
       MedicationsScreen(store: widget.store),
       const CalculatorsScreen(),
       const PccuScreen(),
@@ -64,9 +64,9 @@ class _AppShellState extends State<AppShell> {
             label: 'Home',
           ),
           NavigationDestination(
-            icon: Icon(Icons.assignment_outlined),
-            selectedIcon: Icon(Icons.assignment),
-            label: 'Plans',
+            icon: Icon(Icons.local_hospital_outlined),
+            selectedIcon: Icon(Icons.local_hospital),
+            label: 'CTU',
           ),
           NavigationDestination(
             icon: Icon(Icons.medication_outlined),
