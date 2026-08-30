@@ -91,3 +91,9 @@ Birth-to-18 Growth Suite (v20.5.1):
 - WHO reference under age 2; CDC 2000 LMS data from age 2 through 18.
 - CDC LMS files are bundled locally after validated retrieval from the MITRE GrowthViz mirror.
 - UI intentionally caps routine charting at 18 years.
+
+Global persistent navigation shell:
+- Home, CTU, Medications, Calculators, PCCU, and Library remain visible while navigating into tools.
+- Each main section has its own nested Navigator and preserves its navigation history.
+- Re-selecting the active tab returns that section to its root.
+- System back first navigates within the current section, then returns to Home.
