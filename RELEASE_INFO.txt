@@ -1,5 +1,5 @@
 ﻿PedsFlow targeted clinical update
-Version: 20.5.0+2050
+Version: 20.5.1+2051
 Release date: August 29, 2026
 
 Simplified potassium-rate checker:
@@ -52,3 +52,10 @@ NICU Specific Patient Feeding Plan (v20.5.0):
 Clinical source basis:
 - LHSC NICU Basic Nutrition Quick Guide / Neonatal TPN and Enteral quick-reference cards, updated 2024.
 - The active full LHSC Neonatal TPN and Enteral Guideline, NICU clinical judgment, pharmacy and dietitian recommendations remain authoritative.
+
+Navigation cleanup v20.5.1:
+- Removed ED/PICU Decision Support from the Home clinical-tools list.
+- Removed the duplicate PCCU Home shortcut because PCCU already has a dedicated bottom-navigation tab.
+- Removed the standalone Hypokalemia Home shortcut because potassium remains available through the Electrolyte Replacement Engine / calculator pathways.
+- No underlying PCCU, hypokalemia, or integrated-clinical-support source files were deleted.
+- Updated Neonatal Hub Home description to highlight the Specific Patient Feeding Plan.

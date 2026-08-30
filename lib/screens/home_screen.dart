@@ -1,4 +1,4 @@
-// PedsFlow - Proprietary Software
+﻿// PedsFlow - Proprietary Software
 // Copyright (c) 2026 Ahmed Saleh. All rights reserved.
 // See LICENSE in the repository root.
 // Third-party materials remain subject to their respective licenses.
@@ -9,7 +9,6 @@ import '../features/growth/growth_suite_screen.dart';
 import '../features/neonatal/neonatal_hub_screen.dart';
 import '../features/endocrine/endocrine_hub_screen.dart';
 import '../features/electrolytes/electrolyte_engine_screen.dart';
-import '../features/electrolytes/hypokalemia_engine_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../models/admission_plan.dart';
@@ -20,8 +19,6 @@ import 'escalation_screen.dart';
 import 'antibiotic_guide_screen.dart';
 import 'backup_screen.dart';
 import 'universal_search_screen.dart';
-import 'integrated_clinical_support_screen.dart';
-import 'pccu_screen.dart';
 import 'pain_management_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -86,7 +83,7 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 26),
               const _SectionHeading(
                 title: 'Clinical tools',
-                subtitle: 'Fast access without oversized dashboard cards',
+                subtitle: 'High-value bedside tools and clinical references',
               ),
               const SizedBox(height: 12),
               _ClinicalToolRow(
@@ -149,7 +146,7 @@ class HomeScreen extends StatelessWidget {
                   accent: Color(0xFF6D4C8E),
                 ),
                 title: 'Neonatal Hub',
-                subtitle: 'Bilirubin, glucose, EOS, fluids/GIR, feeds, corrected GA and newborn resuscitation',
+                subtitle: 'Patient-specific feeding plan, bilirubin, glucose, EOS, fluids/GIR, corrected GA and resuscitation',
                 meta: 'Neonatal',
                 onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const NeonatalHubScreen())),
               ),
@@ -176,28 +173,10 @@ class HomeScreen extends StatelessWidget {
                 ),
                 title: 'Electrolyte Replacement Engine',
                 subtitle: 'Potassium, sodium, magnesium, phosphate and calcium replacement safety',
-                meta: 'K • Na • Mg • PO₄ • Ca',
+                meta: 'K ΓÇó Na ΓÇó Mg ΓÇó POΓéä ΓÇó Ca',
                 onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const ElectrolyteEngineScreen())),
               ),
-              const SizedBox(height: 10),
-              _ClinicalToolRow(
-                illustration: const _IllustratedBadge(
-                  icon: Icons.bolt_outlined,
-                  secondaryIcon: Icons.water_drop_outlined,
-                  background: Color(0xFFFFF0D2),
-                  accent: Color(0xFF99610C),
-                ),
-                title: 'Hypokalemia replacement engine',
-                subtitle: 'Oral/IV KCl, current-fluid potassium, infusion rate, fluid burden and monitoring',
-                meta: 'Electrolytes',
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (BuildContext context) => const HypokalemiaEngineScreen(),
-                    ),
-                  );
-                },
-              ),
+
               const SizedBox(height: 10),
               _ClinicalToolRow(
                 illustration: const _IllustratedBadge(
@@ -237,45 +216,8 @@ class HomeScreen extends StatelessWidget {
                   );
                 },
               ),
-              const SizedBox(height: 10),
-              _ClinicalToolRow(
-                illustration: const _IllustratedBadge(
-                  icon: Icons.monitor_heart_outlined,
-                  secondaryIcon: Icons.bolt_outlined,
-                  background: Color(0xFFFFE8E8),
-                  accent: Color(0xFF9E2A2A),
-                ),
-                title: 'PCCU',
-                subtitle: '14 PCCU categories, comprehensive pathways, medication pages and critical-care calculators',
-                meta: '',
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (BuildContext context) => const PccuScreen(),
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(height: 10),
-              _ClinicalToolRow(
-                illustration: const _IllustratedBadge(
-                  icon: Icons.health_and_safety_outlined,
-                  secondaryIcon: Icons.bolt_outlined,
-                  background: Color(0xFFE7F3EE),
-                  accent: Color(0xFF176B4D),
-                ),
-                title: 'ED/PICU decision support',
-                subtitle: 'Electrolytes, EMR order sets, antibiotics and emergency algorithms',
-                meta: '',
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (BuildContext context) =>
-                          const IntegratedClinicalSupportScreen(),
-                    ),
-                  );
-                },
-              ),
+
+
               const SizedBox(height: 10),
               _ClinicalToolRow(
                 illustration: const _IllustratedBadge(
@@ -1121,3 +1063,4 @@ class _SectionHeading extends StatelessWidget {
     );
   }
 }
+

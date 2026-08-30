@@ -1,0 +1,17 @@
+PedsFlow v20.5.1 NAVIGATION CLEANUP - INSTALLER HOTFIX
+
+This fixes the PowerShell $HOME variable collision in the original installer.
+
+1. Extract/copy this file into:
+   C:\Users\drham\pedsflow_v2
+
+2. Run:
+   cd C:\Users\drham\pedsflow_v2
+   powershell -ExecutionPolicy Bypass -File .\install_navigation_cleanup.ps1
+
+3. Then run separately:
+   flutter analyze
+   flutter test
+   flutter build web --release --base-href "/pedsflow/"
+
+Do not commit/push unless all three pass.
