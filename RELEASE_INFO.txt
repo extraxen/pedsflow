@@ -82,3 +82,12 @@ Working Growth Suite repair (v20.5.1):
 - Supports longitudinal patient points and optional corrected-age charting for preterm infants under 2 years.
 - Does not extrapolate beyond installed source coverage.
 - CDC 5-20 years, BMI, head circumference, Fenton, and INTERGROWTH remain future validated-data expansions.
+
+Birth-to-18 Growth Suite (v20.5.1):
+- Enter weight and height together.
+- Shows weight-for-age centile and z-score.
+- Shows height-for-age centile and z-score.
+- Displays separate weight and height percentile charts.
+- WHO reference under age 2; CDC 2000 LMS data from age 2 through 18.
+- CDC LMS files are bundled locally after validated retrieval from the MITRE GrowthViz mirror.
+- UI intentionally caps routine charting at 18 years.

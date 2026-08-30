@@ -25,5 +25,8 @@ flutter:
     - assets/clinical_sources.json
     - assets/static_search_index.json
     - assets/growth_reference_manifest.json
+    - assets/growth/cdc_wtage_2_20.csv
+    - assets/growth/cdc_statage_2_20.csv
+
 
 

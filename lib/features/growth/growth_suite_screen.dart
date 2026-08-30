@@ -1,11 +1,8 @@
-// PedsFlow - Proprietary Software
-// Copyright (c) 2026 Ahmed Saleh. All rights reserved.
-// See LICENSE in the repository root.
-
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import 'cdc_growth_repository.dart';
 import 'growth_reference_engine.dart';
 
 class GrowthSuiteScreen extends StatefulWidget {
@@ -16,18 +13,35 @@ class GrowthSuiteScreen extends StatefulWidget {
 }
 
 class _GrowthSuiteScreenState extends State<GrowthSuiteScreen> {
-  DateTime _dob = DateTime.now().subtract(const Duration(days: 365));
+  DateTime _dob = DateTime.now().subtract(const Duration(days: 365 * 5));
   DateTime _measurementDate = DateTime.now();
   GrowthSex _sex = GrowthSex.male;
   int _gaWeeks = 40;
   int _gaDays = 0;
   bool _useCorrectedAge = true;
-  GrowthMetric _metric = GrowthMetric.weight;
 
-  final TextEditingController _weight = TextEditingController(text: '10.2');
-  final TextEditingController _height = TextEditingController(text: '75.5');
+  final TextEditingController _weight = TextEditingController(text: '18');
+  final TextEditingController _height = TextEditingController(text: '110');
 
-  final List<_PatientGrowthPoint> _points = <_PatientGrowthPoint>[];
+  CdcGrowthRepository? _cdc;
+  Object? _loadError;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCdc();
+  }
+
+  Future<void> _loadCdc() async {
+    try {
+      final repo = await CdcGrowthRepository.load();
+      if (!mounted) return;
+      setState(() => _cdc = repo);
+    } catch (error) {
+      if (!mounted) return;
+      setState(() => _loadError = error);
+    }
+  }
 
   @override
   void dispose() {
@@ -36,47 +50,46 @@ class _GrowthSuiteScreenState extends State<GrowthSuiteScreen> {
     super.dispose();
   }
 
-  double? _number(TextEditingController controller) {
+  double? _num(TextEditingController controller) {
     final value = double.tryParse(controller.text.trim());
     return value != null && value.isFinite && value > 0 ? value : null;
   }
 
   int get _chronologicalDays =>
       math.max(0, _measurementDate.difference(_dob).inDays);
-
   int get _prematurityDays =>
       math.max(0, 280 - (_gaWeeks * 7 + _gaDays));
-
   int get _correctedDays =>
       math.max(0, _chronologicalDays - _prematurityDays);
-
   double get _chronologicalMonths => _chronologicalDays / 30.4375;
   double get _correctedMonths => _correctedDays / 30.4375;
-
   bool get _correctionApplicable =>
       _gaWeeks < 37 && _chronologicalDays < 730;
+  double get _ageMonths => _useCorrectedAge && _correctionApplicable
+      ? _correctedMonths
+      : _chronologicalMonths;
 
-  double get _referenceAgeMonths =>
-      _useCorrectedAge && _correctionApplicable
-          ? _correctedMonths
-          : _chronologicalMonths;
+  bool get _ageSupported => _ageMonths >= 0 && _ageMonths < 216.999;
 
-  double? get _currentValue =>
-      _metric == GrowthMetric.weight ? _number(_weight) : _number(_height);
+  GrowthReferenceResult? _assess(GrowthMetric metric, double? value) {
+    if (value == null || !_ageSupported) return null;
 
-  GrowthReferenceResult? get _result {
-    final value = _currentValue;
-    if (value == null) return null;
-    return GrowthReferenceEngine.assess(
-      metric: _metric,
+    if (_ageMonths < 24) {
+      return GrowthReferenceEngine.assess(
+        metric: metric,
+        sex: _sex,
+        ageMonths: _ageMonths,
+        value: value,
+      );
+    }
+
+    return _cdc?.assess(
+      metric: metric,
       sex: _sex,
-      ageMonths: _referenceAgeMonths,
+      ageMonths: _ageMonths,
       value: value,
     );
   }
-
-  String _dateText(DateTime date) =>
-      '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
 
   Future<void> _pickDate({required bool dob}) async {
     final chosen = await showDatePicker(
@@ -89,46 +102,39 @@ class _GrowthSuiteScreenState extends State<GrowthSuiteScreen> {
     setState(() {
       if (dob) {
         _dob = chosen;
-        if (_measurementDate.isBefore(_dob)) {
-          _measurementDate = _dob;
-        }
+        if (_measurementDate.isBefore(_dob)) _measurementDate = _dob;
       } else {
         _measurementDate = chosen.isBefore(_dob) ? _dob : chosen;
       }
     });
   }
 
-  void _addPoint() {
-    final value = _currentValue;
-    if (value == null) return;
+  String _dateText(DateTime d) =>
+      '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
 
-    setState(() {
-      _points.removeWhere(
-        (point) =>
-            point.date.year == _measurementDate.year &&
-            point.date.month == _measurementDate.month &&
-            point.date.day == _measurementDate.day &&
-            point.metric == _metric,
-      );
-      _points.add(
-        _PatientGrowthPoint(
-          date: _measurementDate,
-          ageMonths: _referenceAgeMonths,
-          metric: _metric,
-          value: value,
-        ),
-      );
-      _points.sort((a, b) => a.date.compareTo(b.date));
-    });
+  String _percentile(double p) {
+    if (p < 0.1) return '<0.1st';
+    if (p > 99.9) return '>99.9th';
+    final rounded = p.round();
+    final mod100 = rounded % 100;
+    final mod10 = rounded % 10;
+    if (mod100 >= 11 && mod100 <= 13) return '${rounded}th';
+    if (mod10 == 1) return '${rounded}st';
+    if (mod10 == 2) return '${rounded}nd';
+    if (mod10 == 3) return '${rounded}rd';
+    return '${rounded}th';
   }
 
   @override
   Widget build(BuildContext context) {
-    final result = _result;
-    final supported = GrowthReferenceEngine.supports(
-      metric: _metric,
-      ageMonths: _referenceAgeMonths,
-    );
+    final weight = _num(_weight);
+    final height = _num(_height);
+    final weightResult = _assess(GrowthMetric.weight, weight);
+    final heightResult = _assess(GrowthMetric.lengthHeight, height);
+    final bmi = weight != null && height != null
+        ? weight / math.pow(height / 100, 2)
+        : null;
+    final isCdcAge = _ageMonths >= 24;
 
     return Scaffold(
       appBar: AppBar(
@@ -139,7 +145,7 @@ class _GrowthSuiteScreenState extends State<GrowthSuiteScreen> {
       ),
       body: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1000),
+          constraints: const BoxConstraints(maxWidth: 1050),
           child: ListView(
             padding: const EdgeInsets.fromLTRB(16, 10, 16, 28),
             children: <Widget>[
@@ -148,243 +154,188 @@ class _GrowthSuiteScreenState extends State<GrowthSuiteScreen> {
                 child: const Padding(
                   padding: EdgeInsets.all(14),
                   child: Text(
-                    'Working offline growth chart. Validated reference coverage in this build: WHO birth to 24 months and CDC 2 to 5 years for weight-for-age and length/stature-for-age. Percentiles and z-scores use the published LMS equations. Older-child CDC and preterm Fenton/INTERGROWTH tables are not yet enabled.',
+                    'Enter weight and height once. PedsFlow gives separate weight-for-age and height-for-age centiles and z-scores and plots both growth charts. WHO is used under 2 years; CDC 2000 is used from 2 through 18 years.',
                     style: TextStyle(fontWeight: FontWeight.w700, height: 1.4),
                   ),
                 ),
               ),
               const SizedBox(height: 12),
-              _section(
-                context,
-                'Patient',
-                <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: DropdownButtonFormField<GrowthSex>(
-                          initialValue: _sex,
-                          decoration: const InputDecoration(
-                            labelText: 'Sex for reference',
-                            border: OutlineInputBorder(),
-                          ),
-                          items: const <DropdownMenuItem<GrowthSex>>[
-                            DropdownMenuItem(
-                              value: GrowthSex.male,
-                              child: Text('Male'),
-                            ),
-                            DropdownMenuItem(
-                              value: GrowthSex.female,
-                              child: Text('Female'),
-                            ),
-                          ],
-                          onChanged: (value) {
-                            if (value == null) return;
-                            setState(() => _sex = value);
-                          },
+              _section(context, 'Patient & age', <Widget>[
+                Row(children: <Widget>[
+                  Expanded(
+                    child: DropdownButtonFormField<GrowthSex>(
+                      initialValue: _sex,
+                      decoration: const InputDecoration(
+                        labelText: 'Sex for growth chart',
+                        border: OutlineInputBorder(),
+                      ),
+                      items: const <DropdownMenuItem<GrowthSex>>[
+                        DropdownMenuItem(
+                          value: GrowthSex.male,
+                          child: Text('Male'),
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: DropdownButtonFormField<GrowthMetric>(
-                          initialValue: _metric,
-                          decoration: const InputDecoration(
-                            labelText: 'Chart',
-                            border: OutlineInputBorder(),
-                          ),
-                          items: const <DropdownMenuItem<GrowthMetric>>[
-                            DropdownMenuItem(
-                              value: GrowthMetric.weight,
-                              child: Text('Weight for age'),
-                            ),
-                            DropdownMenuItem(
-                              value: GrowthMetric.lengthHeight,
-                              child: Text('Length / height for age'),
-                            ),
-                          ],
-                          onChanged: (value) {
-                            if (value == null) return;
-                            setState(() => _metric = value);
-                          },
+                        DropdownMenuItem(
+                          value: GrowthSex.female,
+                          child: Text('Female'),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: () => _pickDate(dob: true),
-                          icon: const Icon(Icons.cake_outlined),
-                          label: Text('DOB\n${_dateText(_dob)}'),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: () => _pickDate(dob: false),
-                          icon: const Icon(Icons.event_outlined),
-                          label: Text(
-                            'Measurement\n${_dateText(_measurementDate)}',
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: DropdownButtonFormField<int>(
-                          initialValue: _gaWeeks,
-                          decoration: const InputDecoration(
-                            labelText: 'GA at birth (weeks)',
-                            border: OutlineInputBorder(),
-                          ),
-                          items: List<int>.generate(24, (i) => i + 20)
-                              .map(
-                                (week) => DropdownMenuItem<int>(
-                                  value: week,
-                                  child: Text('$week'),
-                                ),
-                              )
-                              .toList(),
-                          onChanged: (value) =>
-                              setState(() => _gaWeeks = value ?? _gaWeeks),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: DropdownButtonFormField<int>(
-                          initialValue: _gaDays,
-                          decoration: const InputDecoration(
-                            labelText: '+ days',
-                            border: OutlineInputBorder(),
-                          ),
-                          items: List<int>.generate(7, (i) => i)
-                              .map(
-                                (day) => DropdownMenuItem<int>(
-                                  value: day,
-                                  child: Text('$day'),
-                                ),
-                              )
-                              .toList(),
-                          onChanged: (value) =>
-                              setState(() => _gaDays = value ?? _gaDays),
-                        ),
-                      ),
-                    ],
-                  ),
-                  if (_correctionApplicable)
-                    SwitchListTile.adaptive(
-                      contentPadding: EdgeInsets.zero,
-                      title: const Text('Use corrected age for charting'),
-                      subtitle: Text(
-                        'Chronological ${_chronologicalMonths.toStringAsFixed(1)} mo • corrected ${_correctedMonths.toStringAsFixed(1)} mo',
-                      ),
-                      value: _useCorrectedAge,
-                      onChanged: (value) =>
-                          setState(() => _useCorrectedAge = value),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              _section(
-                context,
-                'Measurement',
-                <Widget>[
-                  if (_metric == GrowthMetric.weight)
-                    _field(_weight, 'Weight', 'kg')
-                  else
-                    _field(_height, 'Length / height', 'cm'),
-                  const SizedBox(height: 12),
-                  _resultRow(
-                    'Reference age',
-                    '${_referenceAgeMonths.toStringAsFixed(2)} months',
-                  ),
-                  _resultRow(
-                    'Reference',
-                    supported
-                        ? GrowthReferenceEngine.referenceForAge(
-                            _referenceAgeMonths,
-                          )
-                        : 'Not available in this build',
-                  ),
-                  if (result != null) ...<Widget>[
-                    _resultRow(
-                      'Percentile',
-                      _formatPercentile(result.percentile),
-                    ),
-                    _resultRow(
-                      'Z-score',
-                      result.zScore.toStringAsFixed(2),
-                    ),
-                  ],
-                  if (!supported)
-                    _warning(
-                      context,
-                      'This build has validated LMS data through age 5 years only. PedsFlow will not estimate or extrapolate a percentile beyond the installed reference table.',
-                    ),
-                  const SizedBox(height: 8),
-                  FilledButton.icon(
-                    onPressed: supported && _currentValue != null
-                        ? _addPoint
-                        : null,
-                    icon: const Icon(Icons.add_chart),
-                    label: const Text('Add / update point'),
-                  ),
-                ],
-              ),
-              if (supported) ...<Widget>[
-                const SizedBox(height: 12),
-                _section(
-                  context,
-                  _metric == GrowthMetric.weight
-                      ? 'Weight-for-age chart'
-                      : 'Length / height-for-age chart',
-                  <Widget>[
-                    SizedBox(
-                      height: 360,
-                      child: _GrowthChart(
-                        sex: _sex,
-                        metric: _metric,
-                        currentAgeMonths: _referenceAgeMonths,
-                        currentValue: _currentValue,
-                        patientPoints: _points
-                            .where((point) => point.metric == _metric)
-                            .toList(),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Wrap(
-                      spacing: 12,
-                      runSpacing: 4,
-                      children: <Widget>[
-                        Text('Curves: 3rd, 10th, 25th, 50th, 75th, 90th, 97th'),
-                        Text('● Patient'),
                       ],
+                      onChanged: (value) {
+                        if (value != null) setState(() => _sex = value);
+                      },
                     ),
-                  ],
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () => _pickDate(dob: true),
+                      icon: const Icon(Icons.cake_outlined),
+                      label: Text('DOB\n${_dateText(_dob)}'),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () => _pickDate(dob: false),
+                      icon: const Icon(Icons.event_outlined),
+                      label: Text('Measure\n${_dateText(_measurementDate)}'),
+                    ),
+                  ),
+                ]),
+                const SizedBox(height: 10),
+                Row(children: <Widget>[
+                  Expanded(
+                    child: DropdownButtonFormField<int>(
+                      initialValue: _gaWeeks,
+                      decoration: const InputDecoration(
+                        labelText: 'GA at birth',
+                        border: OutlineInputBorder(),
+                      ),
+                      items: List.generate(24, (i) => i + 20)
+                          .map(
+                            (week) => DropdownMenuItem(
+                              value: week,
+                              child: Text('$week weeks'),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) =>
+                          setState(() => _gaWeeks = value ?? _gaWeeks),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: DropdownButtonFormField<int>(
+                      initialValue: _gaDays,
+                      decoration: const InputDecoration(
+                        labelText: '+ days',
+                        border: OutlineInputBorder(),
+                      ),
+                      items: List.generate(7, (i) => i)
+                          .map(
+                            (day) => DropdownMenuItem(
+                              value: day,
+                              child: Text('$day'),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) =>
+                          setState(() => _gaDays = value ?? _gaDays),
+                    ),
+                  ),
+                ]),
+                if (_correctionApplicable)
+                  SwitchListTile.adaptive(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Use corrected age'),
+                    subtitle: Text(
+                      'Chronological ${_chronologicalMonths.toStringAsFixed(1)} mo; corrected ${_correctedMonths.toStringAsFixed(1)} mo',
+                    ),
+                    value: _useCorrectedAge,
+                    onChanged: (value) =>
+                        setState(() => _useCorrectedAge = value),
+                  ),
+                _resultRow(
+                  'Chart age',
+                  '${(_ageMonths / 12).toStringAsFixed(2)} years',
+                ),
+                _resultRow(
+                  'Reference',
+                  _ageMonths < 24
+                      ? 'WHO Child Growth Standards'
+                      : 'CDC 2000 Growth Charts',
+                ),
+              ]),
+              const SizedBox(height: 12),
+              _section(context, 'Measurements', <Widget>[
+                Row(children: <Widget>[
+                  Expanded(child: _field(_weight, 'Weight', 'kg')),
+                  const SizedBox(width: 10),
+                  Expanded(child: _field(_height, 'Height / length', 'cm')),
+                ]),
+                if (bmi != null) ...<Widget>[
+                  const SizedBox(height: 8),
+                  _resultRow('BMI', bmi.toStringAsFixed(1)),
+                ],
+                if (!_ageSupported)
+                  _warning(
+                    context,
+                    'This Growth Suite is intentionally capped at 18 years.',
+                  ),
+                if (_loadError != null && isCdcAge)
+                  _warning(
+                    context,
+                    'CDC reference data could not be loaded. Reinstall this growth-data update.',
+                  ),
+              ]),
+              const SizedBox(height: 12),
+              _resultCard(
+                context,
+                title: 'Weight for age',
+                icon: Icons.monitor_weight_outlined,
+                value: weight == null
+                    ? 'Enter weight'
+                    : '${weight.toStringAsFixed(2)} kg',
+                result: weightResult,
+              ),
+              const SizedBox(height: 10),
+              _resultCard(
+                context,
+                title: 'Height for age',
+                icon: Icons.height_outlined,
+                value: height == null
+                    ? 'Enter height'
+                    : '${height.toStringAsFixed(1)} cm',
+                result: heightResult,
+              ),
+              if (_ageSupported &&
+                  (!isCdcAge || _cdc != null) &&
+                  weight != null) ...<Widget>[
+                const SizedBox(height: 12),
+                _chartSection(
+                  context,
+                  title: 'Weight-for-age chart',
+                  metric: GrowthMetric.weight,
+                  value: weight,
+                ),
+              ],
+              if (_ageSupported &&
+                  (!isCdcAge || _cdc != null) &&
+                  height != null) ...<Widget>[
+                const SizedBox(height: 12),
+                _chartSection(
+                  context,
+                  title: 'Height-for-age chart',
+                  metric: GrowthMetric.lengthHeight,
+                  value: height,
                 ),
               ],
               const SizedBox(height: 12),
-              Card(
-                child: ExpansionTile(
-                  title: const Text(
-                    'Reference & limitations',
-                    style: TextStyle(fontWeight: FontWeight.w900),
+              const Card(
+                child: Padding(
+                  padding: EdgeInsets.all(14),
+                  child: Text(
+                    'WHO Child Growth Standards are used below age 2. CDC 2000 Growth Chart LMS data are used from age 2 through 18. Growth charts support clinical assessment and should not be the sole basis for diagnosis.',
                   ),
-                  childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                  children: const <Widget>[
-                    Text(
-                      'WHO: Child Growth Standards, weight-for-age and length-for-age. CDC: 2000 Growth Charts LMS data files. CDC publishes the LMS equations used here and notes that interpolation may be used between age rows. Growth charts support clinical assessment and are not diagnostic by themselves.',
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'This first repaired release intentionally limits exact percentile output to the reference rows embedded and validated in the app. BMI-for-age, head circumference, CDC 5–20 years, and preterm Fenton/INTERGROWTH will be added only with validated source tables.',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                  ],
                 ),
               ),
             ],
@@ -394,311 +345,332 @@ class _GrowthSuiteScreenState extends State<GrowthSuiteScreen> {
     );
   }
 
-  String _formatPercentile(double p) {
-    if (p < 0.1) return '<0.1st';
-    if (p > 99.9) return '>99.9th';
-    if (p < 1 || p > 99) return '${p.toStringAsFixed(1)}th';
-    return '${p.round()}th';
-  }
+  Widget _chartSection(
+    BuildContext context, {
+    required String title,
+    required GrowthMetric metric,
+    required double value,
+  }) =>
+      _section(context, title, <Widget>[
+        SizedBox(
+          height: 390,
+          child: _GrowthChart(
+            sex: _sex,
+            metric: metric,
+            ageMonths: _ageMonths,
+            value: value,
+            cdc: _cdc,
+          ),
+        ),
+        const SizedBox(height: 6),
+        const Text(
+          'Curves: 3rd, 10th, 25th, 50th, 75th, 90th, 97th. Dot = patient.',
+        ),
+      ]);
+
+  Widget _resultCard(
+    BuildContext context, {
+    required String title,
+    required IconData icon,
+    required String value,
+    required GrowthReferenceResult? result,
+  }) =>
+      Card(
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Row(children: <Widget>[
+            CircleAvatar(child: Icon(icon)),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Text(value),
+                ],
+              ),
+            ),
+            if (result != null)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Text(
+                    _percentile(result.percentile),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 22,
+                    ),
+                  ),
+                  Text('z ${result.zScore.toStringAsFixed(2)}'),
+                ],
+              ),
+          ]),
+        ),
+      );
 
   Widget _field(
     TextEditingController controller,
     String label,
     String suffix,
-  ) {
-    return TextField(
-      controller: controller,
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      onChanged: (_) => setState(() {}),
-      decoration: InputDecoration(
-        labelText: label,
-        suffixText: suffix,
-        border: const OutlineInputBorder(),
-      ),
-    );
-  }
+  ) =>
+      TextField(
+        controller: controller,
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        onChanged: (_) => setState(() {}),
+        decoration: InputDecoration(
+          labelText: label,
+          suffixText: suffix,
+          border: const OutlineInputBorder(),
+        ),
+      );
 
   Widget _section(
     BuildContext context,
     String title,
     List<Widget> children,
-  ) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Text(
-              title,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w900,
-                  ),
-            ),
-            const SizedBox(height: 12),
-            ...children,
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _resultRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Row(
-        children: <Widget>[
-          Expanded(child: Text(label)),
-          const SizedBox(width: 12),
-          Flexible(
-            child: Text(
-              value,
-              textAlign: TextAlign.right,
-              style: const TextStyle(fontWeight: FontWeight.w900),
-            ),
+  ) =>
+      Card(
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Text(
+                title,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w900,
+                    ),
+              ),
+              const SizedBox(height: 12),
+              ...children,
+            ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _warning(BuildContext context, String text) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.errorContainer,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Theme.of(context).colorScheme.onErrorContainer,
-          fontWeight: FontWeight.w700,
         ),
-      ),
-    );
-  }
-}
+      );
 
-class _PatientGrowthPoint {
-  final DateTime date;
-  final double ageMonths;
-  final GrowthMetric metric;
-  final double value;
+  Widget _resultRow(String label, String value) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Row(children: <Widget>[
+          Expanded(child: Text(label)),
+          Text(value, style: const TextStyle(fontWeight: FontWeight.w800)),
+        ]),
+      );
 
-  const _PatientGrowthPoint({
-    required this.date,
-    required this.ageMonths,
-    required this.metric,
-    required this.value,
-  });
+  Widget _warning(BuildContext context, String text) => Container(
+        margin: const EdgeInsets.only(top: 10),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.errorContainer,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(text),
+      );
 }
 
 class _GrowthChart extends StatelessWidget {
   final GrowthSex sex;
   final GrowthMetric metric;
-  final double currentAgeMonths;
-  final double? currentValue;
-  final List<_PatientGrowthPoint> patientPoints;
+  final double ageMonths;
+  final double value;
+  final CdcGrowthRepository? cdc;
 
   const _GrowthChart({
     required this.sex,
     required this.metric,
-    required this.currentAgeMonths,
-    required this.currentValue,
-    required this.patientPoints,
+    required this.ageMonths,
+    required this.value,
+    required this.cdc,
   });
 
   @override
   Widget build(BuildContext context) {
-    final maxAge = math.max(24.0, math.min(60.5, currentAgeMonths + 6));
+    const percentiles = <({double z, String label})>[
+      (z: -1.88079, label: '3'),
+      (z: -1.28155, label: '10'),
+      (z: -0.67449, label: '25'),
+      (z: 0.0, label: '50'),
+      (z: 0.67449, label: '75'),
+      (z: 1.28155, label: '90'),
+      (z: 1.88079, label: '97'),
+    ];
+
+    final curves = <_Curve>[];
+    if (ageMonths < 24) {
+      for (final p in percentiles) {
+        curves.add(
+          _Curve(
+            label: p.label,
+            points: GrowthReferenceEngine.curve(
+              metric: metric,
+              sex: sex,
+              z: p.z,
+              maxAgeMonths: 24,
+            ),
+          ),
+        );
+      }
+    } else if (cdc != null) {
+      for (final p in percentiles) {
+        curves.add(
+          _Curve(
+            label: p.label,
+            points: cdc!.curve(
+              metric: metric,
+              sex: sex,
+              z: p.z,
+              startAgeMonths: 24,
+              endAgeMonths: 216,
+            ),
+          ),
+        );
+      }
+    }
+
     return CustomPaint(
-      painter: _PercentileChartPainter(
-        sex: sex,
-        metric: metric,
-        maxAgeMonths: maxAge,
-        currentAgeMonths: currentAgeMonths,
-        currentValue: currentValue,
-        patientPoints: patientPoints,
-        primary: Theme.of(context).colorScheme.primary,
+      painter: _ChartPainter(
+        curves: curves,
+        ageMonths: ageMonths,
+        value: value,
+        color: Theme.of(context).colorScheme.primary,
         textColor: Theme.of(context).colorScheme.onSurface,
+        minAge: ageMonths < 24 ? 0 : 24,
+        maxAge: ageMonths < 24 ? 24 : 216,
       ),
       child: const SizedBox.expand(),
     );
   }
 }
 
-class _PercentileChartPainter extends CustomPainter {
-  final GrowthSex sex;
-  final GrowthMetric metric;
-  final double maxAgeMonths;
-  final double currentAgeMonths;
-  final double? currentValue;
-  final List<_PatientGrowthPoint> patientPoints;
-  final Color primary;
+class _Curve {
+  final String label;
+  final List<GrowthCurvePoint> points;
+  const _Curve({required this.label, required this.points});
+}
+
+class _ChartPainter extends CustomPainter {
+  final List<_Curve> curves;
+  final double ageMonths;
+  final double value;
+  final Color color;
   final Color textColor;
+  final double minAge;
+  final double maxAge;
 
-  const _PercentileChartPainter({
-    required this.sex,
-    required this.metric,
-    required this.maxAgeMonths,
-    required this.currentAgeMonths,
-    required this.currentValue,
-    required this.patientPoints,
-    required this.primary,
+  const _ChartPainter({
+    required this.curves,
+    required this.ageMonths,
+    required this.value,
+    required this.color,
     required this.textColor,
+    required this.minAge,
+    required this.maxAge,
   });
-
-  static const List<({double z, String label})> _curves = <
-      ({double z, String label})>[
-    (z: -1.88079, label: '3'),
-    (z: -1.28155, label: '10'),
-    (z: -0.67449, label: '25'),
-    (z: 0, label: '50'),
-    (z: 0.67449, label: '75'),
-    (z: 1.28155, label: '90'),
-    (z: 1.88079, label: '97'),
-  ];
 
   @override
   void paint(Canvas canvas, Size size) {
-    const left = 46.0;
-    const right = 28.0;
+    if (curves.isEmpty) return;
+
+    const left = 48.0;
+    const right = 34.0;
     const top = 18.0;
     const bottom = 34.0;
-    final rect = Rect.fromLTRB(
-      left,
-      top,
-      size.width - right,
-      size.height - bottom,
-    );
-
-    final allCurves = _curves
-        .map(
-          (curve) => (
-            curve: curve,
-            points: GrowthReferenceEngine.curve(
-              metric: metric,
-              sex: sex,
-              z: curve.z,
-              maxAgeMonths: maxAgeMonths,
-            ),
-          ),
-        )
-        .toList();
+    final rect =
+        Rect.fromLTRB(left, top, size.width - right, size.height - bottom);
 
     final values = <double>[
-      for (final item in allCurves)
-        for (final point in item.points) point.value,
-      if (currentValue != null) currentValue!,
-      ...patientPoints.map((point) => point.value),
+      for (final curve in curves)
+        for (final point in curve.points) point.value,
+      value,
     ];
-    if (values.isEmpty) return;
-
     double minY = values.reduce(math.min);
     double maxY = values.reduce(math.max);
-    final padding = math.max(1.0, (maxY - minY) * 0.08);
-    minY -= padding;
-    maxY += padding;
+    final pad = math.max(1.0, (maxY - minY) * 0.06);
+    minY -= pad;
+    maxY += pad;
 
-    final axisPaint = Paint()
-      ..color = textColor.withValues(alpha: 0.24)
+    Offset map(double age, double yValue) => Offset(
+          rect.left + ((age - minAge) / (maxAge - minAge)) * rect.width,
+          rect.bottom - ((yValue - minY) / (maxY - minY)) * rect.height,
+        );
+
+    final axis = Paint()
+      ..color = textColor.withValues(alpha: 0.25)
       ..strokeWidth = 1;
+
     canvas.drawLine(
       Offset(rect.left, rect.bottom),
       Offset(rect.right, rect.bottom),
-      axisPaint,
+      axis,
     );
     canvas.drawLine(
       Offset(rect.left, rect.top),
       Offset(rect.left, rect.bottom),
-      axisPaint,
+      axis,
     );
 
-    Offset mapPoint(double age, double value) {
-      final x = rect.left + (age / maxAgeMonths) * rect.width;
-      final y =
-          rect.bottom - ((value - minY) / (maxY - minY)) * rect.height;
-      return Offset(x, y);
-    }
-
-    for (final item in allCurves) {
-      final isMedian = item.curve.z == 0;
+    for (final curve in curves) {
+      final median = curve.label == '50';
       final paint = Paint()
-        ..color = primary.withValues(alpha: isMedian ? 0.92 : 0.45)
-        ..strokeWidth = isMedian ? 2.4 : 1.2
+        ..color = color.withValues(alpha: median ? 0.95 : 0.42)
+        ..strokeWidth = median ? 2.3 : 1.1
         ..style = PaintingStyle.stroke;
+
       final path = Path();
-      for (int i = 0; i < item.points.length; i++) {
-        final p = mapPoint(item.points[i].ageMonths, item.points[i].value);
-        if (i == 0) {
+      bool started = false;
+      for (final point in curve.points) {
+        final p = map(point.ageMonths, point.value);
+        if (!started) {
           path.moveTo(p.dx, p.dy);
+          started = true;
         } else {
           path.lineTo(p.dx, p.dy);
         }
       }
       canvas.drawPath(path, paint);
 
-      if (item.points.isNotEmpty) {
-        final end = mapPoint(
-          item.points.last.ageMonths,
-          item.points.last.value,
-        );
+      if (curve.points.isNotEmpty) {
+        final end = curve.points.last;
         _text(
           canvas,
-          '${item.curve.label}th',
-          end.translate(4, -7),
+          '${curve.label}th',
+          map(end.ageMonths, end.value).translate(3, -6),
           9,
-          primary,
+          color,
         );
       }
     }
 
-    for (final point in patientPoints) {
-      if (point.ageMonths < 0 || point.ageMonths > maxAgeMonths) continue;
-      final offset = mapPoint(point.ageMonths, point.value);
-      canvas.drawCircle(offset, 4.5, Paint()..color = textColor);
-    }
+    final patient = map(ageMonths, value);
+    canvas.drawCircle(patient, 6.5, Paint()..color = color);
+    canvas.drawCircle(
+      patient,
+      9,
+      Paint()
+        ..color = color
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.5,
+    );
 
-    if (currentValue != null &&
-        currentAgeMonths >= 0 &&
-        currentAgeMonths <= maxAgeMonths) {
-      final offset = mapPoint(currentAgeMonths, currentValue!);
-      canvas.drawCircle(offset, 6, Paint()..color = primary);
-      canvas.drawCircle(
-        offset,
-        8,
-        Paint()
-          ..color = primary
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.5,
-      );
-    }
-
-    for (int month = 0; month <= maxAgeMonths.floor(); month += 12) {
-      final x = mapPoint(month.toDouble(), minY).dx;
+    final yearsStart = (minAge / 12).ceil();
+    final yearsEnd = (maxAge / 12).floor();
+    final step = maxAge <= 24 ? 1 : 2;
+    for (int year = yearsStart; year <= yearsEnd; year += step) {
+      final x = map(year * 12.0, minY).dx;
       canvas.drawLine(
         Offset(x, rect.bottom),
         Offset(x, rect.bottom + 4),
-        axisPaint,
+        axis,
       );
       _text(
         canvas,
-        month < 24 ? '${month}m' : '${(month / 12).round()}y',
-        Offset(x - 8, rect.bottom + 8),
-        10,
-        textColor,
-      );
-    }
-
-    for (int i = 0; i <= 4; i++) {
-      final value = minY + (maxY - minY) * i / 4;
-      final y = mapPoint(0, value).dy;
-      _text(
-        canvas,
-        value.toStringAsFixed(metric == GrowthMetric.weight ? 1 : 0),
-        Offset(4, y - 6),
+        '${year}y',
+        Offset(x - 7, rect.bottom + 8),
         10,
         textColor,
       );
@@ -713,24 +685,12 @@ class _PercentileChartPainter extends CustomPainter {
     Color color,
   ) {
     final painter = TextPainter(
-      text: TextSpan(
-        text: text,
-        style: TextStyle(fontSize: size, color: color),
-      ),
+      text: TextSpan(text: text, style: TextStyle(fontSize: size, color: color)),
       textDirection: TextDirection.ltr,
     )..layout();
     painter.paint(canvas, offset);
   }
 
   @override
-  bool shouldRepaint(covariant _PercentileChartPainter oldDelegate) {
-    return oldDelegate.sex != sex ||
-        oldDelegate.metric != metric ||
-        oldDelegate.maxAgeMonths != maxAgeMonths ||
-        oldDelegate.currentAgeMonths != currentAgeMonths ||
-        oldDelegate.currentValue != currentValue ||
-        oldDelegate.patientPoints != patientPoints ||
-        oldDelegate.primary != primary ||
-        oldDelegate.textColor != textColor;
-  }
+  bool shouldRepaint(covariant _ChartPainter oldDelegate) => true;
 }
