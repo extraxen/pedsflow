@@ -72,3 +72,13 @@ Expanded CTU grouping (v20.5.1):
 - CTU now contains Admission Plans, Antibiotics & organisms, Pediatric Pain Management, and Growth Suite.
 - Removed separate Home shortcuts for Antibiotics & organisms and Pediatric pain management.
 - Underlying antibiotic and pain-management screens remain unchanged.
+
+Working Growth Suite repair (v20.5.1):
+- Replaced the placeholder trajectory-only Growth Suite with an offline LMS percentile engine.
+- WHO birth-24 months: weight-for-age and length-for-age.
+- CDC 2-5 years: weight-for-age and stature-for-age.
+- Displays exact LMS z-score and percentile from embedded validated reference rows.
+- Draws 3rd, 10th, 25th, 50th, 75th, 90th, and 97th percentile curves with the patient point.
+- Supports longitudinal patient points and optional corrected-age charting for preterm infants under 2 years.
+- Does not extrapolate beyond installed source coverage.
+- CDC 5-20 years, BMI, head circumference, Fenton, and INTERGROWTH remain future validated-data expansions.

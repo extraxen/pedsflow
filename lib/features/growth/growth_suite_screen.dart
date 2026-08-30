@@ -1,10 +1,12 @@
 // PedsFlow - Proprietary Software
 // Copyright (c) 2026 Ahmed Saleh. All rights reserved.
 // See LICENSE in the repository root.
-// Third-party materials remain subject to their respective licenses.
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+
+import 'growth_reference_engine.dart';
 
 class GrowthSuiteScreen extends StatefulWidget {
   const GrowthSuiteScreen({super.key});
@@ -15,52 +17,71 @@ class GrowthSuiteScreen extends StatefulWidget {
 
 class _GrowthSuiteScreenState extends State<GrowthSuiteScreen> {
   DateTime _dob = DateTime.now().subtract(const Duration(days: 365));
-  DateTime _date = DateTime.now();
-  String _sex = 'Male';
-  String _standard = 'Auto';
+  DateTime _measurementDate = DateTime.now();
+  GrowthSex _sex = GrowthSex.male;
   int _gaWeeks = 40;
   int _gaDays = 0;
+  bool _useCorrectedAge = true;
+  GrowthMetric _metric = GrowthMetric.weight;
+
   final TextEditingController _weight = TextEditingController(text: '10.2');
   final TextEditingController _height = TextEditingController(text: '75.5');
-  final TextEditingController _head = TextEditingController(text: '46.5');
-  final List<_GrowthPoint> _points = <_GrowthPoint>[];
+
+  final List<_PatientGrowthPoint> _points = <_PatientGrowthPoint>[];
 
   @override
   void dispose() {
     _weight.dispose();
     _height.dispose();
-    _head.dispose();
     super.dispose();
   }
 
-  double? _num(TextEditingController c) {
-    final double? v = double.tryParse(c.text.trim());
-    return v != null && v.isFinite && v > 0 ? v : null;
+  double? _number(TextEditingController controller) {
+    final value = double.tryParse(controller.text.trim());
+    return value != null && value.isFinite && value > 0 ? value : null;
   }
 
-  int get _chronologicalDays => math.max(0, _date.difference(_dob).inDays);
-  int get _prematurityDays => math.max(0, 280 - (_gaWeeks * 7 + _gaDays));
-  int get _correctedDays => math.max(0, _chronologicalDays - _prematurityDays);
-  double get _ageMonths => _chronologicalDays / 30.4375;
+  int get _chronologicalDays =>
+      math.max(0, _measurementDate.difference(_dob).inDays);
+
+  int get _prematurityDays =>
+      math.max(0, 280 - (_gaWeeks * 7 + _gaDays));
+
+  int get _correctedDays =>
+      math.max(0, _chronologicalDays - _prematurityDays);
+
+  double get _chronologicalMonths => _chronologicalDays / 30.4375;
   double get _correctedMonths => _correctedDays / 30.4375;
 
-  String get _recommendedStandard {
-    if (_gaWeeks < 37 && _correctedDays < 126) return 'Fenton / INTERGROWTH preterm';
-    if (_chronologicalDays < 730) return 'WHO 0–2 years';
-    return 'CDC 2–20 years';
+  bool get _correctionApplicable =>
+      _gaWeeks < 37 && _chronologicalDays < 730;
+
+  double get _referenceAgeMonths =>
+      _useCorrectedAge && _correctionApplicable
+          ? _correctedMonths
+          : _chronologicalMonths;
+
+  double? get _currentValue =>
+      _metric == GrowthMetric.weight ? _number(_weight) : _number(_height);
+
+  GrowthReferenceResult? get _result {
+    final value = _currentValue;
+    if (value == null) return null;
+    return GrowthReferenceEngine.assess(
+      metric: _metric,
+      sex: _sex,
+      ageMonths: _referenceAgeMonths,
+      value: value,
+    );
   }
 
-  double? get _bmi {
-    final double? w = _num(_weight);
-    final double? h = _num(_height);
-    if (w == null || h == null) return null;
-    return w / math.pow(h / 100, 2);
-  }
+  String _dateText(DateTime date) =>
+      '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
 
   Future<void> _pickDate({required bool dob}) async {
-    final DateTime? chosen = await showDatePicker(
+    final chosen = await showDatePicker(
       context: context,
-      initialDate: dob ? _dob : _date,
+      initialDate: dob ? _dob : _measurementDate,
       firstDate: DateTime(2000),
       lastDate: DateTime.now(),
     );
@@ -68,261 +89,648 @@ class _GrowthSuiteScreenState extends State<GrowthSuiteScreen> {
     setState(() {
       if (dob) {
         _dob = chosen;
-        if (_date.isBefore(_dob)) _date = _dob;
+        if (_measurementDate.isBefore(_dob)) {
+          _measurementDate = _dob;
+        }
       } else {
-        _date = chosen.isBefore(_dob) ? _dob : chosen;
+        _measurementDate = chosen.isBefore(_dob) ? _dob : chosen;
       }
     });
   }
 
   void _addPoint() {
-    final double? w = _num(_weight);
-    final double? h = _num(_height);
-    final double? hc = _num(_head);
-    if (w == null && h == null && hc == null) return;
-    final double? bmi = w != null && h != null ? w / math.pow(h / 100, 2) : null;
+    final value = _currentValue;
+    if (value == null) return;
+
     setState(() {
-      _points.removeWhere((p) => p.date.year == _date.year && p.date.month == _date.month && p.date.day == _date.day);
-      _points.add(_GrowthPoint(date: _date, weightKg: w, heightCm: h, headCm: hc, bmi: bmi));
+      _points.removeWhere(
+        (point) =>
+            point.date.year == _measurementDate.year &&
+            point.date.month == _measurementDate.month &&
+            point.date.day == _measurementDate.day &&
+            point.metric == _metric,
+      );
+      _points.add(
+        _PatientGrowthPoint(
+          date: _measurementDate,
+          ageMonths: _referenceAgeMonths,
+          metric: _metric,
+          value: value,
+        ),
+      );
       _points.sort((a, b) => a.date.compareTo(b.date));
     });
   }
 
-  String _dateText(DateTime d) => '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
-
-  String _velocity(String metric) {
-    if (_points.length < 2) return 'Add ≥2 longitudinal points';
-    final _GrowthPoint a = _points[_points.length - 2];
-    final _GrowthPoint b = _points.last;
-    final int days = b.date.difference(a.date).inDays;
-    if (days <= 0) return 'Need measurements on different dates';
-    double? first;
-    double? second;
-    String unit;
-    switch (metric) {
-      case 'weight':
-        first = a.weightKg; second = b.weightKg; unit = 'kg/year';
-        break;
-      case 'height':
-        first = a.heightCm; second = b.heightCm; unit = 'cm/year';
-        break;
-      default:
-        first = a.bmi; second = b.bmi; unit = 'BMI units/year';
-    }
-    if (first == null || second == null) return 'Both points need this measurement';
-    final double perYear = (second - first) / days * 365.2425;
-    return '${perYear.toStringAsFixed(2)} $unit over $days days';
-  }
-
   @override
   Widget build(BuildContext context) {
-    final double? bmi = _bmi;
+    final result = _result;
+    final supported = GrowthReferenceEngine.supports(
+      metric: _metric,
+      ageMonths: _referenceAgeMonths,
+    );
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Growth Suite', style: TextStyle(fontWeight: FontWeight.w900))),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
-        children: <Widget>[
-          Card(
-            color: Theme.of(context).colorScheme.primaryContainer,
-            child: const Padding(
-              padding: EdgeInsets.all(14),
-              child: Text(
-                'Offline longitudinal growth workspace. WHO and CDC use LMS-based z-scores/percentiles; Fenton and INTERGROWTH are preterm standards. PedsFlow keeps standards separate and displays the selected source/provenance. Growth charts support clinical assessment but are not diagnostic by themselves.',
+      appBar: AppBar(
+        title: const Text(
+          'Growth Suite',
+          style: TextStyle(fontWeight: FontWeight.w900),
+        ),
+      ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 28),
+            children: <Widget>[
+              Card(
+                color: Theme.of(context).colorScheme.primaryContainer,
+                child: const Padding(
+                  padding: EdgeInsets.all(14),
+                  child: Text(
+                    'Working offline growth chart. Validated reference coverage in this build: WHO birth to 24 months and CDC 2 to 5 years for weight-for-age and length/stature-for-age. Percentiles and z-scores use the published LMS equations. Older-child CDC and preterm Fenton/INTERGROWTH tables are not yet enabled.',
+                    style: TextStyle(fontWeight: FontWeight.w700, height: 1.4),
+                  ),
+                ),
               ),
+              const SizedBox(height: 12),
+              _section(
+                context,
+                'Patient',
+                <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: DropdownButtonFormField<GrowthSex>(
+                          initialValue: _sex,
+                          decoration: const InputDecoration(
+                            labelText: 'Sex for reference',
+                            border: OutlineInputBorder(),
+                          ),
+                          items: const <DropdownMenuItem<GrowthSex>>[
+                            DropdownMenuItem(
+                              value: GrowthSex.male,
+                              child: Text('Male'),
+                            ),
+                            DropdownMenuItem(
+                              value: GrowthSex.female,
+                              child: Text('Female'),
+                            ),
+                          ],
+                          onChanged: (value) {
+                            if (value == null) return;
+                            setState(() => _sex = value);
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: DropdownButtonFormField<GrowthMetric>(
+                          initialValue: _metric,
+                          decoration: const InputDecoration(
+                            labelText: 'Chart',
+                            border: OutlineInputBorder(),
+                          ),
+                          items: const <DropdownMenuItem<GrowthMetric>>[
+                            DropdownMenuItem(
+                              value: GrowthMetric.weight,
+                              child: Text('Weight for age'),
+                            ),
+                            DropdownMenuItem(
+                              value: GrowthMetric.lengthHeight,
+                              child: Text('Length / height for age'),
+                            ),
+                          ],
+                          onChanged: (value) {
+                            if (value == null) return;
+                            setState(() => _metric = value);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: () => _pickDate(dob: true),
+                          icon: const Icon(Icons.cake_outlined),
+                          label: Text('DOB\n${_dateText(_dob)}'),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: () => _pickDate(dob: false),
+                          icon: const Icon(Icons.event_outlined),
+                          label: Text(
+                            'Measurement\n${_dateText(_measurementDate)}',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: DropdownButtonFormField<int>(
+                          initialValue: _gaWeeks,
+                          decoration: const InputDecoration(
+                            labelText: 'GA at birth (weeks)',
+                            border: OutlineInputBorder(),
+                          ),
+                          items: List<int>.generate(24, (i) => i + 20)
+                              .map(
+                                (week) => DropdownMenuItem<int>(
+                                  value: week,
+                                  child: Text('$week'),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (value) =>
+                              setState(() => _gaWeeks = value ?? _gaWeeks),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: DropdownButtonFormField<int>(
+                          initialValue: _gaDays,
+                          decoration: const InputDecoration(
+                            labelText: '+ days',
+                            border: OutlineInputBorder(),
+                          ),
+                          items: List<int>.generate(7, (i) => i)
+                              .map(
+                                (day) => DropdownMenuItem<int>(
+                                  value: day,
+                                  child: Text('$day'),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (value) =>
+                              setState(() => _gaDays = value ?? _gaDays),
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (_correctionApplicable)
+                    SwitchListTile.adaptive(
+                      contentPadding: EdgeInsets.zero,
+                      title: const Text('Use corrected age for charting'),
+                      subtitle: Text(
+                        'Chronological ${_chronologicalMonths.toStringAsFixed(1)} mo • corrected ${_correctedMonths.toStringAsFixed(1)} mo',
+                      ),
+                      value: _useCorrectedAge,
+                      onChanged: (value) =>
+                          setState(() => _useCorrectedAge = value),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              _section(
+                context,
+                'Measurement',
+                <Widget>[
+                  if (_metric == GrowthMetric.weight)
+                    _field(_weight, 'Weight', 'kg')
+                  else
+                    _field(_height, 'Length / height', 'cm'),
+                  const SizedBox(height: 12),
+                  _resultRow(
+                    'Reference age',
+                    '${_referenceAgeMonths.toStringAsFixed(2)} months',
+                  ),
+                  _resultRow(
+                    'Reference',
+                    supported
+                        ? GrowthReferenceEngine.referenceForAge(
+                            _referenceAgeMonths,
+                          )
+                        : 'Not available in this build',
+                  ),
+                  if (result != null) ...<Widget>[
+                    _resultRow(
+                      'Percentile',
+                      _formatPercentile(result.percentile),
+                    ),
+                    _resultRow(
+                      'Z-score',
+                      result.zScore.toStringAsFixed(2),
+                    ),
+                  ],
+                  if (!supported)
+                    _warning(
+                      context,
+                      'This build has validated LMS data through age 5 years only. PedsFlow will not estimate or extrapolate a percentile beyond the installed reference table.',
+                    ),
+                  const SizedBox(height: 8),
+                  FilledButton.icon(
+                    onPressed: supported && _currentValue != null
+                        ? _addPoint
+                        : null,
+                    icon: const Icon(Icons.add_chart),
+                    label: const Text('Add / update point'),
+                  ),
+                ],
+              ),
+              if (supported) ...<Widget>[
+                const SizedBox(height: 12),
+                _section(
+                  context,
+                  _metric == GrowthMetric.weight
+                      ? 'Weight-for-age chart'
+                      : 'Length / height-for-age chart',
+                  <Widget>[
+                    SizedBox(
+                      height: 360,
+                      child: _GrowthChart(
+                        sex: _sex,
+                        metric: _metric,
+                        currentAgeMonths: _referenceAgeMonths,
+                        currentValue: _currentValue,
+                        patientPoints: _points
+                            .where((point) => point.metric == _metric)
+                            .toList(),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Wrap(
+                      spacing: 12,
+                      runSpacing: 4,
+                      children: <Widget>[
+                        Text('Curves: 3rd, 10th, 25th, 50th, 75th, 90th, 97th'),
+                        Text('● Patient'),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+              const SizedBox(height: 12),
+              Card(
+                child: ExpansionTile(
+                  title: const Text(
+                    'Reference & limitations',
+                    style: TextStyle(fontWeight: FontWeight.w900),
+                  ),
+                  childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  children: const <Widget>[
+                    Text(
+                      'WHO: Child Growth Standards, weight-for-age and length-for-age. CDC: 2000 Growth Charts LMS data files. CDC publishes the LMS equations used here and notes that interpolation may be used between age rows. Growth charts support clinical assessment and are not diagnostic by themselves.',
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'This first repaired release intentionally limits exact percentile output to the reference rows embedded and validated in the app. BMI-for-age, head circumference, CDC 5–20 years, and preterm Fenton/INTERGROWTH will be added only with validated source tables.',
+                      style: TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _formatPercentile(double p) {
+    if (p < 0.1) return '<0.1st';
+    if (p > 99.9) return '>99.9th';
+    if (p < 1 || p > 99) return '${p.toStringAsFixed(1)}th';
+    return '${p.round()}th';
+  }
+
+  Widget _field(
+    TextEditingController controller,
+    String label,
+    String suffix,
+  ) {
+    return TextField(
+      controller: controller,
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      onChanged: (_) => setState(() {}),
+      decoration: InputDecoration(
+        labelText: label,
+        suffixText: suffix,
+        border: const OutlineInputBorder(),
+      ),
+    );
+  }
+
+  Widget _section(
+    BuildContext context,
+    String title,
+    List<Widget> children,
+  ) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Text(
+              title,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w900,
+                  ),
+            ),
+            const SizedBox(height: 12),
+            ...children,
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _resultRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        children: <Widget>[
+          Expanded(child: Text(label)),
+          const SizedBox(width: 12),
+          Flexible(
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              style: const TextStyle(fontWeight: FontWeight.w900),
             ),
           ),
-          const SizedBox(height: 12),
-          _section(context, 'Patient & age', <Widget>[
-            Row(children: <Widget>[
-              Expanded(child: DropdownButtonFormField<String>(
-                initialValue: _sex,
-                decoration: const InputDecoration(labelText: 'Sex for growth standard', border: OutlineInputBorder()),
-                items: const ['Male', 'Female'].map((x) => DropdownMenuItem(value: x, child: Text(x))).toList(),
-                onChanged: (v) => setState(() => _sex = v ?? _sex),
-              )),
-              const SizedBox(width: 10),
-              Expanded(child: DropdownButtonFormField<String>(
-                initialValue: _standard,
-                decoration: const InputDecoration(labelText: 'Reference', border: OutlineInputBorder()),
-                items: const ['Auto', 'WHO', 'CDC', 'Fenton', 'INTERGROWTH'].map((x) => DropdownMenuItem(value: x, child: Text(x))).toList(),
-                onChanged: (v) => setState(() => _standard = v ?? _standard),
-              )),
-            ]),
-            const SizedBox(height: 10),
-            Row(children: <Widget>[
-              Expanded(child: OutlinedButton.icon(onPressed: () => _pickDate(dob: true), icon: const Icon(Icons.cake_outlined), label: Text('DOB\n${_dateText(_dob)}'))),
-              const SizedBox(width: 10),
-              Expanded(child: OutlinedButton.icon(onPressed: () => _pickDate(dob: false), icon: const Icon(Icons.event_outlined), label: Text('Measurement\n${_dateText(_date)}'))),
-            ]),
-            const SizedBox(height: 10),
-            Row(children: <Widget>[
-              Expanded(child: DropdownButtonFormField<int>(
-                initialValue: _gaWeeks,
-                decoration: const InputDecoration(labelText: 'GA at birth (weeks)', border: OutlineInputBorder()),
-                items: List.generate(24, (i) => i + 20).map((x) => DropdownMenuItem(value: x, child: Text('$x'))).toList(),
-                onChanged: (v) => setState(() => _gaWeeks = v ?? _gaWeeks),
-              )),
-              const SizedBox(width: 10),
-              Expanded(child: DropdownButtonFormField<int>(
-                initialValue: _gaDays,
-                decoration: const InputDecoration(labelText: '+ days', border: OutlineInputBorder()),
-                items: List.generate(7, (i) => i).map((x) => DropdownMenuItem(value: x, child: Text('$x'))).toList(),
-                onChanged: (v) => setState(() => _gaDays = v ?? _gaDays),
-              )),
-            ]),
-            const SizedBox(height: 12),
-            _resultRow('Chronological age', '$_chronologicalDays days (${_ageMonths.toStringAsFixed(1)} mo)'),
-            _resultRow('Prematurity correction', '$_prematurityDays days'),
-            _resultRow('Corrected age', '$_correctedDays days (${_correctedMonths.toStringAsFixed(1)} mo)'),
-            _resultRow('Suggested reference', _recommendedStandard),
-          ]),
-          const SizedBox(height: 12),
-          _section(context, 'Measurements', <Widget>[
-            Row(children: <Widget>[
-              Expanded(child: _field(_weight, 'Weight', 'kg')),
-              const SizedBox(width: 8),
-              Expanded(child: _field(_height, 'Length / height', 'cm')),
-              const SizedBox(width: 8),
-              Expanded(child: _field(_head, 'Head circumference', 'cm')),
-            ]),
-            const SizedBox(height: 12),
-            if (bmi != null) _resultRow('BMI', '${bmi.toStringAsFixed(2)} kg/m²'),
-            FilledButton.icon(onPressed: _addPoint, icon: const Icon(Icons.add_chart), label: const Text('Add / update longitudinal point')),
-          ]),
-          const SizedBox(height: 12),
-          _section(context, 'Percentile & Z-score engine', <Widget>[
-            const Text('The LMS calculation engine is implemented without the previous growth_standards runtime package. Exact output is only enabled when the corresponding embedded reference table is present and provenance-validated.'),
-            const SizedBox(height: 10),
-            _datasetRow('WHO 0–2 years', true, 'Official WHO/CDC LMS source architecture'),
-            _datasetRow('CDC 2–20 years', true, 'Official CDC LMS source architecture'),
-            _datasetRow('Fenton preterm', false, 'Dataset redistribution/licence sign-off required'),
-            _datasetRow('INTERGROWTH-21', false, 'Reference-table import validation required'),
-            const SizedBox(height: 10),
-            const Text('Until a standard is marked validated in the installed build, PedsFlow will not manufacture a percentile or z-score. This prevents false precision.'),
-          ]),
-          if (_points.isNotEmpty) ...<Widget>[
-            const SizedBox(height: 12),
-            _section(context, 'Longitudinal trajectory', <Widget>[
-              SizedBox(height: 220, child: _TrajectoryChart(points: _points, metric: 'weight')),
-              const SizedBox(height: 8),
-              _resultRow('Weight velocity', _velocity('weight')),
-              _resultRow('Height velocity', _velocity('height')),
-              _resultRow('BMI trajectory', _velocity('bmi')),
-              const Divider(),
-              ..._points.reversed.take(8).map((p) => ListTile(
-                dense: true,
-                contentPadding: EdgeInsets.zero,
-                title: Text(_dateText(p.date)),
-                subtitle: Text([
-                  if (p.weightKg != null) '${p.weightKg!.toStringAsFixed(2)} kg',
-                  if (p.heightCm != null) '${p.heightCm!.toStringAsFixed(1)} cm',
-                  if (p.bmi != null) 'BMI ${p.bmi!.toStringAsFixed(1)}',
-                ].join(' • ')),
-                trailing: IconButton(icon: const Icon(Icons.delete_outline), onPressed: () => setState(() => _points.remove(p))),
-              )),
-            ]),
-          ],
-          const SizedBox(height: 12),
-          const Card(child: Padding(
-            padding: EdgeInsets.all(14),
-            child: Text('Reference provenance: WHO Child Growth Standards; CDC/NCHS 2000 Growth Charts and LMS data files; Fenton preterm growth charts; INTERGROWTH-21 standards. Corrected age is commonly used for children born preterm; local neonatology/growth policy should determine when correction is discontinued.'),
-          )),
         ],
       ),
     );
   }
 
-  Widget _field(TextEditingController c, String label, String suffix) => TextField(
-    controller: c,
-    keyboardType: const TextInputType.numberWithOptions(decimal: true),
-    decoration: InputDecoration(labelText: label, suffixText: suffix, border: const OutlineInputBorder()),
-    onChanged: (_) => setState(() {}),
-  );
-
-  Widget _section(BuildContext context, String title, List<Widget> children) => Card(
-    child: Padding(
-      padding: const EdgeInsets.all(14),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
-        Text(title, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w900)),
-        const SizedBox(height: 12),
-        ...children,
-      ]),
-    ),
-  );
-
-  Widget _resultRow(String label, String value) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 5),
-    child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-      Expanded(child: Text(label)),
-      const SizedBox(width: 12),
-      Flexible(child: Text(value, textAlign: TextAlign.right, style: const TextStyle(fontWeight: FontWeight.w800))),
-    ]),
-  );
-
-  Widget _datasetRow(String name, bool architectureReady, String note) => ListTile(
-    contentPadding: EdgeInsets.zero,
-    leading: Icon(architectureReady ? Icons.verified_outlined : Icons.pending_actions_outlined),
-    title: Text(name, style: const TextStyle(fontWeight: FontWeight.w800)),
-    subtitle: Text(note),
-  );
+  Widget _warning(BuildContext context, String text) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.errorContainer,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onErrorContainer,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+  }
 }
 
-class _GrowthPoint {
+class _PatientGrowthPoint {
   final DateTime date;
-  final double? weightKg;
-  final double? heightCm;
-  final double? headCm;
-  final double? bmi;
-  const _GrowthPoint({required this.date, this.weightKg, this.heightCm, this.headCm, this.bmi});
+  final double ageMonths;
+  final GrowthMetric metric;
+  final double value;
+
+  const _PatientGrowthPoint({
+    required this.date,
+    required this.ageMonths,
+    required this.metric,
+    required this.value,
+  });
 }
 
-class _TrajectoryChart extends StatelessWidget {
-  final List<_GrowthPoint> points;
-  final String metric;
-  const _TrajectoryChart({required this.points, required this.metric});
+class _GrowthChart extends StatelessWidget {
+  final GrowthSex sex;
+  final GrowthMetric metric;
+  final double currentAgeMonths;
+  final double? currentValue;
+  final List<_PatientGrowthPoint> patientPoints;
+
+  const _GrowthChart({
+    required this.sex,
+    required this.metric,
+    required this.currentAgeMonths,
+    required this.currentValue,
+    required this.patientPoints,
+  });
 
   @override
-  Widget build(BuildContext context) => CustomPaint(
-    painter: _TrajectoryPainter(points: points, metric: metric, lineColor: Theme.of(context).colorScheme.primary),
-    child: const SizedBox.expand(),
-  );
+  Widget build(BuildContext context) {
+    final maxAge = math.max(24.0, math.min(60.5, currentAgeMonths + 6));
+    return CustomPaint(
+      painter: _PercentileChartPainter(
+        sex: sex,
+        metric: metric,
+        maxAgeMonths: maxAge,
+        currentAgeMonths: currentAgeMonths,
+        currentValue: currentValue,
+        patientPoints: patientPoints,
+        primary: Theme.of(context).colorScheme.primary,
+        textColor: Theme.of(context).colorScheme.onSurface,
+      ),
+      child: const SizedBox.expand(),
+    );
+  }
 }
 
-class _TrajectoryPainter extends CustomPainter {
-  final List<_GrowthPoint> points;
-  final String metric;
-  final Color lineColor;
-  _TrajectoryPainter({required this.points, required this.metric, required this.lineColor});
+class _PercentileChartPainter extends CustomPainter {
+  final GrowthSex sex;
+  final GrowthMetric metric;
+  final double maxAgeMonths;
+  final double currentAgeMonths;
+  final double? currentValue;
+  final List<_PatientGrowthPoint> patientPoints;
+  final Color primary;
+  final Color textColor;
 
-  double? _value(_GrowthPoint p) => switch (metric) { 'height' => p.heightCm, 'bmi' => p.bmi, _ => p.weightKg };
+  const _PercentileChartPainter({
+    required this.sex,
+    required this.metric,
+    required this.maxAgeMonths,
+    required this.currentAgeMonths,
+    required this.currentValue,
+    required this.patientPoints,
+    required this.primary,
+    required this.textColor,
+  });
+
+  static const List<({double z, String label})> _curves = <
+      ({double z, String label})>[
+    (z: -1.88079, label: '3'),
+    (z: -1.28155, label: '10'),
+    (z: -0.67449, label: '25'),
+    (z: 0, label: '50'),
+    (z: 0.67449, label: '75'),
+    (z: 1.28155, label: '90'),
+    (z: 1.88079, label: '97'),
+  ];
 
   @override
   void paint(Canvas canvas, Size size) {
-    final List<_GrowthPoint> usable = points.where((p) => _value(p) != null).toList();
-    if (usable.isEmpty) return;
-    final Paint axis = Paint()..color = lineColor.withValues(alpha: 0.25)..strokeWidth = 1;
-    final Paint line = Paint()..color = lineColor..strokeWidth = 2.5..style = PaintingStyle.stroke;
-    final Paint dot = Paint()..color = lineColor;
-    const double left = 30, top = 12, bottom = 24, right = 12;
-    final Rect r = Rect.fromLTRB(left, top, size.width - right, size.height - bottom);
-    canvas.drawLine(Offset(r.left, r.bottom), Offset(r.right, r.bottom), axis);
-    canvas.drawLine(Offset(r.left, r.top), Offset(r.left, r.bottom), axis);
-    final double minV = usable.map(_value).whereType<double>().reduce(math.min);
-    final double maxV = usable.map(_value).whereType<double>().reduce(math.max);
-    final int minD = usable.first.date.millisecondsSinceEpoch;
-    final int maxD = usable.last.date.millisecondsSinceEpoch;
-    final Path path = Path();
-    for (int i = 0; i < usable.length; i++) {
-      final _GrowthPoint p = usable[i];
-      final double x = maxD == minD ? r.center.dx : r.left + (p.date.millisecondsSinceEpoch - minD) / (maxD - minD) * r.width;
-      final double value = _value(p)!;
-      final double y = maxV == minV ? r.center.dy : r.bottom - (value - minV) / (maxV - minV) * r.height;
-      if (i == 0) path.moveTo(x, y); else path.lineTo(x, y);
-      canvas.drawCircle(Offset(x, y), 4, dot);
+    const left = 46.0;
+    const right = 28.0;
+    const top = 18.0;
+    const bottom = 34.0;
+    final rect = Rect.fromLTRB(
+      left,
+      top,
+      size.width - right,
+      size.height - bottom,
+    );
+
+    final allCurves = _curves
+        .map(
+          (curve) => (
+            curve: curve,
+            points: GrowthReferenceEngine.curve(
+              metric: metric,
+              sex: sex,
+              z: curve.z,
+              maxAgeMonths: maxAgeMonths,
+            ),
+          ),
+        )
+        .toList();
+
+    final values = <double>[
+      for (final item in allCurves)
+        for (final point in item.points) point.value,
+      if (currentValue != null) currentValue!,
+      ...patientPoints.map((point) => point.value),
+    ];
+    if (values.isEmpty) return;
+
+    double minY = values.reduce(math.min);
+    double maxY = values.reduce(math.max);
+    final padding = math.max(1.0, (maxY - minY) * 0.08);
+    minY -= padding;
+    maxY += padding;
+
+    final axisPaint = Paint()
+      ..color = textColor.withValues(alpha: 0.24)
+      ..strokeWidth = 1;
+    canvas.drawLine(
+      Offset(rect.left, rect.bottom),
+      Offset(rect.right, rect.bottom),
+      axisPaint,
+    );
+    canvas.drawLine(
+      Offset(rect.left, rect.top),
+      Offset(rect.left, rect.bottom),
+      axisPaint,
+    );
+
+    Offset mapPoint(double age, double value) {
+      final x = rect.left + (age / maxAgeMonths) * rect.width;
+      final y =
+          rect.bottom - ((value - minY) / (maxY - minY)) * rect.height;
+      return Offset(x, y);
     }
-    canvas.drawPath(path, line);
+
+    for (final item in allCurves) {
+      final isMedian = item.curve.z == 0;
+      final paint = Paint()
+        ..color = primary.withValues(alpha: isMedian ? 0.92 : 0.45)
+        ..strokeWidth = isMedian ? 2.4 : 1.2
+        ..style = PaintingStyle.stroke;
+      final path = Path();
+      for (int i = 0; i < item.points.length; i++) {
+        final p = mapPoint(item.points[i].ageMonths, item.points[i].value);
+        if (i == 0) {
+          path.moveTo(p.dx, p.dy);
+        } else {
+          path.lineTo(p.dx, p.dy);
+        }
+      }
+      canvas.drawPath(path, paint);
+
+      if (item.points.isNotEmpty) {
+        final end = mapPoint(
+          item.points.last.ageMonths,
+          item.points.last.value,
+        );
+        _text(
+          canvas,
+          '${item.curve.label}th',
+          end.translate(4, -7),
+          9,
+          primary,
+        );
+      }
+    }
+
+    for (final point in patientPoints) {
+      if (point.ageMonths < 0 || point.ageMonths > maxAgeMonths) continue;
+      final offset = mapPoint(point.ageMonths, point.value);
+      canvas.drawCircle(offset, 4.5, Paint()..color = textColor);
+    }
+
+    if (currentValue != null &&
+        currentAgeMonths >= 0 &&
+        currentAgeMonths <= maxAgeMonths) {
+      final offset = mapPoint(currentAgeMonths, currentValue!);
+      canvas.drawCircle(offset, 6, Paint()..color = primary);
+      canvas.drawCircle(
+        offset,
+        8,
+        Paint()
+          ..color = primary
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5,
+      );
+    }
+
+    for (int month = 0; month <= maxAgeMonths.floor(); month += 12) {
+      final x = mapPoint(month.toDouble(), minY).dx;
+      canvas.drawLine(
+        Offset(x, rect.bottom),
+        Offset(x, rect.bottom + 4),
+        axisPaint,
+      );
+      _text(
+        canvas,
+        month < 24 ? '${month}m' : '${(month / 12).round()}y',
+        Offset(x - 8, rect.bottom + 8),
+        10,
+        textColor,
+      );
+    }
+
+    for (int i = 0; i <= 4; i++) {
+      final value = minY + (maxY - minY) * i / 4;
+      final y = mapPoint(0, value).dy;
+      _text(
+        canvas,
+        value.toStringAsFixed(metric == GrowthMetric.weight ? 1 : 0),
+        Offset(4, y - 6),
+        10,
+        textColor,
+      );
+    }
+  }
+
+  void _text(
+    Canvas canvas,
+    String text,
+    Offset offset,
+    double size,
+    Color color,
+  ) {
+    final painter = TextPainter(
+      text: TextSpan(
+        text: text,
+        style: TextStyle(fontSize: size, color: color),
+      ),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    painter.paint(canvas, offset);
   }
 
   @override
-  bool shouldRepaint(covariant _TrajectoryPainter oldDelegate) => oldDelegate.points != points || oldDelegate.metric != metric || oldDelegate.lineColor != lineColor;
+  bool shouldRepaint(covariant _PercentileChartPainter oldDelegate) {
+    return oldDelegate.sex != sex ||
+        oldDelegate.metric != metric ||
+        oldDelegate.maxAgeMonths != maxAgeMonths ||
+        oldDelegate.currentAgeMonths != currentAgeMonths ||
+        oldDelegate.currentValue != currentValue ||
+        oldDelegate.patientPoints != patientPoints ||
+        oldDelegate.primary != primary ||
+        oldDelegate.textColor != textColor;
+  }
 }
