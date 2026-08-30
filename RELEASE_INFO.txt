@@ -1,6 +1,6 @@
-PedsFlow targeted clinical update
-Version: 20.4.1+2041
-Release date: August 23, 2026
+﻿PedsFlow targeted clinical update
+Version: 20.5.0+2050
+Release date: August 29, 2026
 
 Simplified potassium-rate checker:
 - Replaces the complex stackable hypokalemia builder with a four-step bedside workflow.
@@ -34,3 +34,21 @@ UI refinement v20.4.1:
 - Moved thresholds/headroom into one collapsed Advanced LHSC rate limits & monitoring section.
 - Corrected headroom so "remaining" is calculated from the CURRENT TOTAL planned IV potassium rate.
 - No potassium dosing formulas or LHSC rate limits changed.
+
+NICU Specific Patient Feeding Plan (v20.5.0):
+- Added to the Neonatal Hub as a separate workflow from the basic feeding calculator.
+- NEWBORN mode: GA + birth weight in grams -> local quick-guide starting feeds, donor EBM eligibility, and initial TPN/IV pathway.
+- Calculates initial feed mL/day and mL/kg/day.
+- Calculates TFI mL/day and mL/hr when the quick-guide pathway specifies a single TFI.
+- ALREADY ON FEEDS mode: calculates current mL/day and mL/kg/day and shows the next documented nutrition milestone.
+- Fortification milestone: 100 mL/kg/day.
+- TPN/SMOF milestone: 100-120 mL/kg/day OR 75-80% feeds, as stated on the supplied quick card.
+- IV discontinuation milestone: minimum 130-140 mL/kg/day AND fortified feeds tolerated.
+- Adds donor EBM, HIE/perinatal acidosis, PRBC/iron, probiotic, and >32-week monitoring prompts where supported by the supplied card.
+- Does NOT invent a universal feed-advancement rate; exact next-feed increases remain unautomated until verified from the full LHSC Neonatal TPN and Enteral Guideline.
+- Exact 26+0-week TPN boundary is deliberately flagged for verification because the supplied card wording is not unambiguous.
+- Added pure-engine unit tests for feed bands, TPN pathways, mL/kg/day arithmetic, donor eligibility and major milestones.
+
+Clinical source basis:
+- LHSC NICU Basic Nutrition Quick Guide / Neonatal TPN and Enteral quick-reference cards, updated 2024.
+- The active full LHSC Neonatal TPN and Enteral Guideline, NICU clinical judgment, pharmacy and dietitian recommendations remain authoritative.

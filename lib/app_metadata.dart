@@ -1,8 +1,9 @@
-// PedsFlow - Proprietary Software
+﻿// PedsFlow - Proprietary Software
 // Copyright (c) 2026 Ahmed Saleh. All rights reserved.
 // See LICENSE in the repository root.
 
-const String pedsFlowVersion = '20.4.1';
-const int pedsFlowBuildNumber = 2041;
-const String pedsFlowVersionLabel = '20.4.1+2041';
-const String pedsFlowReleaseDate = 'August 23, 2026';
+const String pedsFlowVersion = '20.5.0';
+const int pedsFlowBuildNumber = 2050;
+const String pedsFlowVersionLabel = '20.5.0+2050';
+const String pedsFlowReleaseDate = 'August 29, 2026';
+

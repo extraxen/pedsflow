@@ -1,0 +1,26 @@
+PedsFlow v20.5.0 NICU Specific Patient Feeding Plan
+
+INSTALL
+1. Extract this ZIP.
+2. Copy the contents into the ROOT of C:\Users\drham\pedsflow_v2
+   Choose Replace if Windows asks.
+3. Open PowerShell in C:\Users\drham\pedsflow_v2
+4. Run:
+   powershell -ExecutionPolicy Bypass -File .\install_nicu_feeding_plan.ps1
+5. Then run separately:
+   flutter analyze
+   flutter test
+   flutter build web --release --base-href "/pedsflow/"
+
+Do not commit/push unless all three pass.
+
+WHAT IS ADDED
+- Neonatal Hub -> Specific Patient Feeding Plan
+- NEWBORN mode
+- ALREADY ON FEEDS mode
+- Pure NICU feeding-plan rule engine
+- Unit tests
+
+SOURCE / LIMITATION
+Based on the LHSC NICU quick-reference cards supplied for the project (updated 2024).
+The module does not invent an exact universal feed-advancement schedule that is not explicit on those cards.
