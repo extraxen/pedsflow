@@ -14,10 +14,8 @@ import '../services/app_store.dart';
 import '../services/global_search.dart';
 import '../widgets/plan_tile.dart';
 import 'escalation_screen.dart';
-import 'antibiotic_guide_screen.dart';
 import 'backup_screen.dart';
 import 'universal_search_screen.dart';
-import 'pain_management_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final AppStore store;
@@ -147,45 +145,6 @@ class HomeScreen extends StatelessWidget {
                 subtitle: 'DKA, adrenal crisis, hypoglycemia, DI/SIADH, calcium, thyroid and insulin tools',
                 meta: 'Endocrine',
                 onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const EndocrineHubScreen())),
-              ),
-              const SizedBox(height: 10),
-              _ClinicalToolRow(
-                illustration: const _IllustratedBadge(
-                  icon: Icons.healing_outlined,
-                  secondaryIcon: Icons.favorite_outline,
-                  background: Color(0xFFF7E7F0),
-                  accent: Color(0xFF9B3F72),
-                ),
-                title: 'Pediatric pain management',
-                subtitle: 'Mild to severe pain, sickle-cell, SJS/TEN, opioids and naloxone',
-                meta: '12 pathways',
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (BuildContext context) => const PainManagementScreen(),
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(height: 10),
-              _ClinicalToolRow(
-                illustration: const _IllustratedBadge(
-                  icon: Icons.biotech_outlined,
-                  secondaryIcon: Icons.shield_outlined,
-                  background: Color(0xFFFFF0D2),
-                  accent: Color(0xFF99610C),
-                ),
-                title: 'Antibiotics & organisms',
-                subtitle: 'Syndrome-based empiric approach and spectrum pearls',
-                meta: '12 syndromes',
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (BuildContext context) =>
-                          AntibioticGuideScreen(store: store),
-                    ),
-                  );
-                },
               ),
               const SizedBox(height: 10),
               _ClinicalToolRow(

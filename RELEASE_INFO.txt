@@ -67,3 +67,8 @@ CTU hierarchy cleanup (v20.5.1):
 - Electrolyte Replacement Engine remains under Calculators.
 - Removed duplicate Home shortcuts for Growth, Electrolytes, Hypokalemia, PCCU, and ED/PICU Decision Support.
 - No underlying clinical feature files were deleted.
+
+Expanded CTU grouping (v20.5.1):
+- CTU now contains Admission Plans, Antibiotics & organisms, Pediatric Pain Management, and Growth Suite.
+- Removed separate Home shortcuts for Antibiotics & organisms and Pediatric pain management.
+- Underlying antibiotic and pain-management screens remain unchanged.

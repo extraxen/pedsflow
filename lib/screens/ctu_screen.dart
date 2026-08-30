@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 
 import '../features/growth/growth_suite_screen.dart';
 import '../services/app_store.dart';
+import 'antibiotic_guide_screen.dart';
+import 'pain_management_screen.dart';
 import 'plans_screen.dart';
 
 class CtuScreen extends StatelessWidget {
@@ -45,7 +47,7 @@ class CtuScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 5),
                       const Text(
-                        'Admission planning and growth tools for inpatient pediatrics.',
+                        'Ward tools for admission planning, antimicrobial decisions, pain management, and growth.',
                       ),
                     ],
                   ),
@@ -61,6 +63,34 @@ class CtuScreen extends StatelessWidget {
                   Navigator.of(context).push(
                     MaterialPageRoute<void>(
                       builder: (_) => PlansScreen(store: store),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 10),
+              _CtuToolCard(
+                icon: Icons.biotech_outlined,
+                title: 'Antibiotics & organisms',
+                subtitle:
+                    'Syndrome-based empiric approach and spectrum pearls',
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => AntibioticGuideScreen(store: store),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 10),
+              _CtuToolCard(
+                icon: Icons.healing_outlined,
+                title: 'Pediatric Pain Management',
+                subtitle:
+                    'Mild to severe pain, sickle-cell, SJS/TEN, opioids and naloxone',
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const PainManagementScreen(),
                     ),
                   );
                 },
