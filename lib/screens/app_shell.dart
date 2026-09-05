@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 
 import '../services/app_store.dart';
 import 'calculators_screen.dart';
-import 'cardiology_screen.dart';
 import 'ctu_screen.dart';
 import 'home_screen.dart';
 import 'library_screen.dart';
@@ -31,7 +30,7 @@ class _AppShellState extends State<AppShell> {
 
   final List<GlobalKey<NavigatorState>> _navigatorKeys =
       List<GlobalKey<NavigatorState>>.generate(
-    7,
+    6,
     (_) => GlobalKey<NavigatorState>(),
   );
 
@@ -67,8 +66,6 @@ class _AppShellState extends State<AppShell> {
         return const PccuScreen();
       case 5:
         return LibraryScreen(store: widget.store);
-      case 6:
-        return const CardiologyScreen();
       default:
         return HomeScreen(
           store: widget.store,
@@ -124,7 +121,7 @@ class _AppShellState extends State<AppShell> {
         body: IndexedStack(
           index: selectedIndex,
           children: List<Widget>.generate(
-            7,
+            6,
             _tabNavigator,
           ),
         ),
@@ -161,11 +158,6 @@ class _AppShellState extends State<AppShell> {
               icon: Icon(Icons.photo_library_outlined),
               selectedIcon: Icon(Icons.photo_library),
               label: 'Library',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.favorite_border),
-              selectedIcon: Icon(Icons.favorite),
-              label: 'Cardiology',
             ),
           ],
         ),
