@@ -13,6 +13,7 @@ import '../models/admission_plan.dart';
 import '../services/app_store.dart';
 import '../services/global_search.dart';
 import '../widgets/plan_tile.dart';
+import 'cardiology_screen.dart';
 import 'escalation_screen.dart';
 import 'backup_screen.dart';
 import 'universal_search_screen.dart';
@@ -145,6 +146,21 @@ class HomeScreen extends StatelessWidget {
                 subtitle: 'DKA, adrenal crisis, hypoglycemia, DI/SIADH, calcium, thyroid and insulin tools',
                 meta: 'Endocrine',
                 onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const EndocrineHubScreen())),
+              ),
+              const SizedBox(height: 10),
+              _ClinicalToolRow(
+                illustration: const _IllustratedBadge(
+                  icon: Icons.favorite_outline,
+                  secondaryIcon: Icons.monitor_heart_outlined,
+                  background: Color(0xFFFCE8EC),
+                  accent: Color(0xFFA43A55),
+                ),
+                title: 'Cardiology',
+                subtitle: 'Pediatric ECG normal values and interpretation tools',
+                meta: 'ECG',
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (_) => const CardiologyScreen()),
+                ),
               ),
               const SizedBox(height: 10),
               _ClinicalToolRow(
