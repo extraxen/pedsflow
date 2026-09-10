@@ -14,6 +14,7 @@ import '../features/electrolytes/hypokalemia_engine_screen.dart';
 import '../features/endocrine/endocrine_hub_screen.dart';
 import '../features/growth/growth_suite_screen.dart';
 import '../features/neonatal/neonatal_hub_screen.dart';
+import '../features/pager/pager_mode_screen.dart';
 import '../models/admission_plan.dart';
 import '../models/medication_monograph.dart';
 import '../services/app_store.dart';
@@ -34,6 +35,7 @@ import 'pediatric_reference_screen.dart';
 import 'plan_screen.dart';
 
 IconData searchIconForKind(String kind) => switch (kind) {
+      'pager' => Icons.notifications_active_outlined,
       'medication' => Icons.medication_outlined,
       'plan' => Icons.assignment_outlined,
       'pccu' => Icons.monitor_heart_outlined,
@@ -55,6 +57,9 @@ void openSearchDocument(
 ) {
   Widget? screen;
   switch (document.kind) {
+    case 'pager':
+      screen = PagerTopicScreen.forId(document.target);
+      break;
     case 'plan':
       final AdmissionPlan? plan = store.planById(document.objectId!);
       if (plan != null) screen = PlanScreen(plan: plan, store: store);
@@ -165,6 +170,7 @@ class _UniversalSearchScreenState extends State<UniversalSearchScreen> {
 
   static const List<(String, String)> _filters = <(String, String)>[
     ('all', 'All'),
+    ('pager', 'Pager Mode'),
     ('pccu', 'PCCU'),
     ('medication', 'Medications'),
     ('plan', 'Plans'),

@@ -7,6 +7,7 @@ import 'dart:async';
 import '../app_metadata.dart';
 import '../features/neonatal/neonatal_hub_screen.dart';
 import '../features/endocrine/endocrine_hub_screen.dart';
+import '../features/pager/pager_mode_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../models/admission_plan.dart';
@@ -83,6 +84,24 @@ class HomeScreen extends StatelessWidget {
                 subtitle: 'High-value bedside tools and clinical references',
               ),
               const SizedBox(height: 12),
+              _ClinicalToolRow(
+                illustration: const _IllustratedBadge(
+                  icon: Icons.notifications_active_outlined,
+                  secondaryIcon: Icons.directions_run_rounded,
+                  background: Color(0xFFFCE5E7),
+                  accent: Color(0xFFB4232F),
+                ),
+                title: 'Pager Mode',
+                subtitle: 'Rapid response to symptoms and abnormal vital signs',
+                meta: '12 overnight calls',
+                warning: true,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const PagerModeScreen(),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
               _ClinicalToolRow(
                 illustration: const _IllustratedBadge(
                   icon: Icons.local_hospital_outlined,

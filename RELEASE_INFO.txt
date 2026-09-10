@@ -1,6 +1,20 @@
 ﻿PedsFlow targeted clinical update
-Version: 20.7.0+2070
+Version: 20.8.0+2080
 Release date: September 10, 2026
+
+Pager Mode:
+- Added a prominent Home entry for symptom-first overnight calls.
+- Added 12 searchable pathways covering desaturation, respiratory distress,
+  tachycardia, poor perfusion, fever, altered consciousness, seizures,
+  oliguria, vomiting, hypoglycemia, anaphylaxis and IV extravasation.
+- Every pathway begins with bedside-now triggers and follows a consistent,
+  ordered response: phone questions, first actions, assessment,
+  investigations, treatment/reassessment and escalation.
+- Added an optional single patient-weight entry and calculated emergency dose
+  cards for IM epinephrine, crystalloid aliquots, lorazepam, midazolam and D10W.
+- Pager topics are included in Home/Global Search and can be opened directly
+  from search results.
+- Added data-integrity and dose-arithmetic tests.
 
 Persistent vomiting / cyclic vomiting syndrome admission plan:
 - Added under CTU > Admission Plans > Gastroenterology.
