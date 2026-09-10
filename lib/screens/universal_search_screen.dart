@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../features/bilirubin/bilirubin_screen.dart';
+import '../features/cardiology/ecg_tool_screens.dart';
 import '../features/dka/dka_calculator_screen.dart';
 import '../features/electrolytes/electrolyte_engine_screen.dart';
 import '../features/electrolytes/hypokalemia_engine_screen.dart';
@@ -21,6 +22,7 @@ import '../services/app_store.dart';
 import '../services/global_search.dart';
 import 'antibiotic_guide_screen.dart';
 import 'calculators_screen.dart';
+import 'cardiology_screen.dart';
 import 'clinical_sources_screen.dart';
 import 'escalation_screen.dart';
 import 'integrated_clinical_support_screen.dart';
@@ -46,6 +48,7 @@ IconData searchIconForKind(String kind) => switch (kind) {
       'growth' => Icons.show_chart,
       'neonatal' => Icons.child_care_outlined,
       'endocrine' => Icons.hub_outlined,
+      'cardiology' => Icons.monitor_heart_outlined,
       'electrolytes' || 'hypokalemia_engine' => Icons.science_outlined,
       _ => Icons.search_outlined,
     };
@@ -59,6 +62,17 @@ void openSearchDocument(
   switch (document.kind) {
     case 'pager':
       screen = PagerTopicScreen.forId(document.target);
+      break;
+    case 'cardiology':
+      screen = switch (document.target) {
+        'normal-values' => const PediatricEcgNormalValuesScreen(),
+        'interpretation' => const EcgInterpretationGuideScreen(),
+        'axis' => const EcgAxisHelperScreen(),
+        'rate' => const EcgRateCalculatorScreen(),
+        'qtc' => const QtcCalculatorScreen(),
+        'patterns' => const EcgPatternsScreen(),
+        _ => const CardiologyScreen(),
+      };
       break;
     case 'plan':
       final AdmissionPlan? plan = store.planById(document.objectId!);

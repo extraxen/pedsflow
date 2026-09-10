@@ -1,6 +1,19 @@
 ﻿PedsFlow targeted clinical update
-Version: 20.8.0+2080
+Version: 20.9.0+2090
 Release date: September 10, 2026
+
+Cardiology / ECG expansion:
+- Replaced the ECG Interpretation Guide and Axis Helper placeholders with working tools.
+- Added an eight-step pediatric ECG interpretation workflow.
+- Added an interactive QRS quadrant-axis helper with pediatric age cautions.
+- Added regular- and irregular-rhythm rate calculators for 25 and 50 mm/s tracings.
+- Added manual Bazett and Fridericia QTc calculations with measurement and escalation prompts.
+- Added high-risk recognition and response cards for SVT, wide-complex tachycardia,
+  bradycardia/AV block, WPW/pre-excitation and hyperkalemia ECG progression.
+- Added direct Global Search results for all Cardiology tools.
+- Added unit tests for ECG-rate, QTc and axis calculations.
+- Clinical basis: 2025 AHA pediatric tachyarrhythmia/bradycardia algorithms and
+  Royal Children's Hospital Melbourne pediatric ECG, SVT and hyperkalemia guidelines.
 
 Pager Mode:
 - Added a prominent Home entry for symptom-first overnight calls.
