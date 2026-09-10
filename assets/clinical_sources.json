@@ -1,6 +1,6 @@
 {
-  "version": "20.3.0",
-  "lastBuilt": "2026-08-17",
+  "version": "20.7.0",
+  "lastBuilt": "2026-09-10",
   "jurisdiction": "Ontario / Canada",
   "disclaimer": "PedsFlow is an educational and clinical-support reference. Every plan must be reconciled with the current institutional pathway, specialist advice and patient-specific clinical context.",
   "sources": [
@@ -8,6 +8,16 @@
       "name": "Canadian Paediatric Society",
       "type": "National professional guidance",
       "use": "Position statements and practice points for Canadian pediatric care."
+    },
+    {
+      "name": "NASPGHAN",
+      "type": "North American pediatric gastroenterology guidance",
+      "use": "Pediatric cyclic vomiting syndrome diagnosis, targeted evaluation, acute rescue and preventive-treatment framework; older consensus doses require current local verification."
+    },
+    {
+      "name": "Health Canada Drug Product Database and safety communications",
+      "type": "Current Canadian official product information",
+      "use": "Marketed formulations, age restrictions, contraindications, interactions and medication safety warnings."
     },
     {
       "name": "TREKK",

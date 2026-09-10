@@ -1,6 +1,15 @@
 ﻿PedsFlow targeted clinical update
-Version: 20.5.1+2051
-Release date: August 29, 2026
+Version: 20.7.0+2070
+Release date: September 10, 2026
+
+Persistent vomiting / cyclic vomiting syndrome admission plan:
+- Added under CTU > Admission Plans > Gastroenterology.
+- Uses a 12-part ordered plan for disposition, monitoring, fluids, investigations, imaging, medications, consultations, nursing instructions and reassessment.
+- Separates uncomplicated gastroenteritis dosing from general persistent vomiting and established CVS rescue/prevention.
+- Includes first-line and alternative antiemetics without presenting them as interchangeable.
+- Adds medication cards for granisetron, palonosetron, chlorpromazine, fosaprepitant, scopolamine, sumatriptan, cyproheptadine and pizotifen.
+- Adds safety stops for bilious/bloody/coffee-ground emesis, obstruction, altered neurology, metabolic decompensation, QT-active drug stacking, EPS and cumulative sedation.
+- Keeps high-risk, oncology and CVS-specific agents specialist/protocol directed.
 
 Simplified potassium-rate checker:
 - Replaces the complex stackable hypokalemia builder with a four-step bedside workflow.

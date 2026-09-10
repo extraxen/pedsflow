@@ -1,7 +1,7 @@
 # PedsFlow
 
-**Version:** 20.2.1+2021  
-**Release date:** August 17, 2026  
+**Version:** 20.7.0+2070
+**Release date:** September 10, 2026
 **Status:** Clean full-source release
 
 PedsFlow is a Flutter pediatric clinical reference and decision-support application. This clean release consolidates the current source into one project and removes historical patch installers, generated Flutter state, and obsolete release-note files from the project root.
@@ -16,6 +16,7 @@ PedsFlow is a Flutter pediatric clinical reference and decision-support applicat
 - Global Search v2
 - Bilirubin and DKA engines
 - Current web/PWA files and GitHub Pages workflow
+- Persistent vomiting/CVS admission plan with a stepwise antiemetic guide
 - Proprietary PedsFlow license and third-party notice
 
 ## Build
@@ -59,3 +60,11 @@ Copyright (c) 2026 Ahmed Saleh. All Rights Reserved. See `LICENSE`.
 - Keeps live suggestions mounted while a query has results, even when the TextField loses focus during a tap.
 - Direct suggestion taps now open the selected destination normally.
 - Clears stale Home suggestions after opening a direct result.
+
+### v20.7.0 Persistent vomiting and antiemetic pathway
+
+- Added **Persistent vomiting / cyclic vomiting syndrome** under Gastroenterology admission plans.
+- Added an ordered 12-part plan covering red flags, investigations, hydration, monitoring, consultations, reassessment and discharge readiness.
+- Added layered treatment cards for first-line, antihistamine/anticholinergic, dopamine-antagonist/prokinetic, specialist antiemetic, CVS rescue, CVS prevention and GI/pain adjunct options.
+- Added medication monographs for granisetron, palonosetron, chlorpromazine, fosaprepitant, scopolamine, sumatriptan, cyproheptadine and pizotifen.
+- Added explicit safety stops for bilious/bloody/coffee-ground emesis, obstruction, QT-active medication stacking, EPS, sedation and respiratory depression.

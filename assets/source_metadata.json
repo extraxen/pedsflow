@@ -1,6 +1,6 @@
 {
-  "datasetVersion": "8.0.0",
-  "generatedDate": "2026-08-17",
+  "datasetVersion": "8.1.0",
+  "generatedDate": "2026-09-10",
   "jurisdiction": "Ontario, Canada",
   "sources": [
     {
@@ -26,6 +26,12 @@
       "date": "2024-03",
       "type": "Current Ontario emergency reference",
       "coverage": "11 emergency medications"
+    },
+    {
+      "title": "PedsFlow persistent-vomiting/CVS medication update",
+      "date": "2026-09-10",
+      "type": "Curated clinical-support update",
+      "coverage": "Added specialist antiemetic and CVS medication cards with CPS, NASPGHAN, Health Canada and local-formulary verification boundaries"
     }
   ]
 }

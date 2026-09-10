@@ -20,12 +20,81 @@ void main() {
     }
   });
 
+  test('persistent vomiting plan includes stepwise medication safety', () async {
+    final String raw =
+        await rootBundle.loadString('assets/admission_plans.json');
+    final List<dynamic> plans = jsonDecode(raw) as List<dynamic>;
+    final Map<String, dynamic> plan = plans.cast<Map<String, dynamic>>()
+        .singleWhere((Map<String, dynamic> item) => item['id'] == 219);
+
+    expect(plan['title'], 'Persistent vomiting / cyclic vomiting syndrome');
+    expect((plan['sections'] as List<dynamic>).length, 12);
+
+    final String treatmentText = (plan['treatments'] as List<dynamic>)
+        .cast<Map<String, dynamic>>()
+        .map((Map<String, dynamic> item) => item['text'] as String)
+        .join(' ')
+        .toLowerCase();
+
+    for (final String medication in <String>[
+      'ondansetron',
+      'dimenhydrinate',
+      'metoclopramide',
+      'prochlorperazine',
+      'chlorpromazine',
+      'promethazine',
+      'domperidone',
+      'granisetron',
+      'palonosetron',
+      'aprepitant',
+      'fosaprepitant',
+      'lorazepam',
+      'scopolamine',
+      'olanzapine',
+      'cyproheptadine',
+      'amitriptyline',
+      'propranolol',
+      'topiramate',
+      'pizotifen',
+    ]) {
+      expect(treatmentText, contains(medication));
+    }
+
+    expect(treatmentText, contains('bilious'));
+    expect(treatmentText, contains('qt'));
+    expect(treatmentText, contains('not a primary antiemetic'));
+  });
+
   test('medication catalogue contains at least 300 entries', () async {
     final String raw =
         await rootBundle.loadString('assets/medications_300.json');
     final List<dynamic> medications = jsonDecode(raw) as List<dynamic>;
 
     expect(medications.length, greaterThanOrEqualTo(300));
+  });
+
+  test('persistent vomiting specialist medications are available', () async {
+    final String raw =
+        await rootBundle.loadString('assets/medications_300.json');
+    final List<dynamic> medications = jsonDecode(raw) as List<dynamic>;
+    final Set<String> names = medications
+        .cast<Map<String, dynamic>>()
+        .map((Map<String, dynamic> item) =>
+            (item['name'] as String).toLowerCase())
+        .toSet();
+
+    for (final String medication in <String>[
+      'granisetron',
+      'palonosetron',
+      'chlorpromazine',
+      'fosaprepitant',
+      'scopolamine',
+      'sumatriptan',
+      'cyproheptadine',
+      'pizotifen',
+    ]) {
+      expect(names, contains(medication));
+    }
   });
 
   test('medication dose coverage remains measurable', () async {
