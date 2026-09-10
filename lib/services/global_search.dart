@@ -10,6 +10,8 @@ import '../models/admission_plan.dart';
 import '../models/algorithm_item.dart';
 import '../models/antibiotic_guide.dart';
 import '../models/medication_monograph.dart';
+import '../features/pager/pager_mode_data.dart';
+import '../features/pager/pager_mode_models.dart';
 import 'app_store.dart';
 
 class SearchDocument {
@@ -300,6 +302,33 @@ class GlobalSearchIndex {
           aliases: const <String>[],
           fragments: <String>[algorithm.notes],
           body: algorithm.notes,
+        ),
+      );
+    }
+
+    for (final PagerTopic topic in pagerTopics) {
+      final List<String> fragments = <String>[
+        ...topic.goNowIf,
+        ...topic.sections.expand(
+          (PagerSection section) => <String>[
+            '${section.title}: ${section.items.join(' ')}',
+          ],
+        ),
+      ];
+      docs.add(
+        SearchDocument(
+          id: 'pager:${topic.id}',
+          title: topic.title,
+          category: 'Pager Mode • ${topic.category}',
+          kind: 'pager',
+          target: topic.id,
+          aliases: topic.aliases,
+          fragments: fragments,
+          body: <String>[
+            topic.subtitle,
+            ...fragments,
+            ...topic.sources,
+          ].join(' '),
         ),
       );
     }

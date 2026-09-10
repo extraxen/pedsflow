@@ -1,6 +1,6 @@
 # PedsFlow
 
-**Version:** 20.7.0+2070
+**Version:** 20.8.0+2080
 **Release date:** September 10, 2026
 **Status:** Clean full-source release
 
@@ -17,6 +17,7 @@ PedsFlow is a Flutter pediatric clinical reference and decision-support applicat
 - Bilirubin and DKA engines
 - Current web/PWA files and GitHub Pages workflow
 - Persistent vomiting/CVS admission plan with a stepwise antiemetic guide
+- Pager Mode with 12 symptom-first overnight-call pathways and weight-based emergency dose cards
 - Proprietary PedsFlow license and third-party notice
 
 ## Build
