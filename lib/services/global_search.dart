@@ -333,6 +333,63 @@ class GlobalSearchIndex {
       );
     }
 
+    docs.addAll(const <SearchDocument>[
+      SearchDocument(
+        id: 'cardiology:normal-values',
+        title: 'Pediatric ECG Normal Values',
+        category: 'Cardiology • ECG',
+        kind: 'cardiology',
+        target: 'normal-values',
+        aliases: <String>['ecg norms', 'normal intervals', 'pediatric ecg'],
+        body: 'heart rate qrs axis pr interval qrs duration qtc age sex reference range',
+      ),
+      SearchDocument(
+        id: 'cardiology:interpretation',
+        title: 'ECG Interpretation Guide',
+        category: 'Cardiology • ECG',
+        kind: 'cardiology',
+        target: 'interpretation',
+        aliases: <String>['read ecg', 'ecg approach', 'ecg checklist'],
+        body: 'rate rhythm axis intervals p wave qrs chamber hypertrophy st segment t wave systematic interpretation',
+      ),
+      SearchDocument(
+        id: 'cardiology:axis',
+        title: 'QRS Axis Helper',
+        category: 'Cardiology • ECG',
+        kind: 'cardiology',
+        target: 'axis',
+        aliases: <String>['ecg axis', 'left axis', 'right axis', 'superior axis'],
+        body: 'lead I avf polarity frontal plane quadrant pediatric age',
+      ),
+      SearchDocument(
+        id: 'cardiology:rate',
+        title: 'ECG Rate Calculator',
+        category: 'Cardiology • ECG',
+        kind: 'cardiology',
+        target: 'rate',
+        aliases: <String>['heart rate ecg', '300 rule', 'rr interval'],
+        body: 'regular irregular rhythm large squares qrs count strip 25 50 mm second',
+      ),
+      SearchDocument(
+        id: 'cardiology:qtc',
+        title: 'QT / QTc Calculator',
+        category: 'Cardiology • ECG',
+        kind: 'cardiology',
+        target: 'qtc',
+        aliases: <String>['bazett', 'fridericia', 'long qt', 'corrected qt'],
+        body: 'qt interval rr interval prolonged qtc tangent method',
+      ),
+      SearchDocument(
+        id: 'cardiology:patterns',
+        title: 'High-risk ECG Patterns',
+        category: 'Cardiology • ECG',
+        kind: 'cardiology',
+        target: 'patterns',
+        aliases: <String>['dangerous ecg', 'arrhythmia', 'wpw', 'heart block'],
+        body: 'svt sinus tachycardia wide complex ventricular tachycardia bradycardia av block pre-excitation hyperkalemia pals cardioversion adenosine',
+      ),
+    ]);
+
     return GlobalSearchIndex(docs);
   }
 

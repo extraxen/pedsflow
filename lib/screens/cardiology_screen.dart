@@ -5,6 +5,8 @@
 
 import 'package:flutter/material.dart';
 
+import '../features/cardiology/ecg_tool_screens.dart';
+
 class CardiologyScreen extends StatelessWidget {
   const CardiologyScreen({super.key});
 
@@ -93,35 +95,136 @@ class CardiologyScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              const Card(
+              Card(
                 child: ListTile(
-                  leading: CircleAvatar(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  leading: const CircleAvatar(
                     child: Icon(Icons.fact_check_outlined),
                   ),
-                  title: Text(
+                  title: const Text(
                     'ECG Interpretation Guide',
                     style: TextStyle(fontWeight: FontWeight.w800),
                   ),
-                  subtitle: Text(
+                  subtitle: const Text(
                     'Rate → rhythm → axis → intervals → chambers → ST-T changes',
                   ),
-                  trailing: Chip(label: Text('Next')),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const EcgInterpretationGuideScreen(),
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 10),
-              const Card(
+              Card(
                 child: ListTile(
-                  leading: CircleAvatar(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  leading: const CircleAvatar(
                     child: Icon(Icons.explore_outlined),
                   ),
-                  title: Text(
+                  title: const Text(
                     'Axis Helper',
                     style: TextStyle(fontWeight: FontWeight.w800),
                   ),
-                  subtitle: Text(
+                  subtitle: const Text(
                     'Rapid pediatric frontal-plane QRS axis interpretation',
                   ),
-                  trailing: Chip(label: Text('Next')),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const EcgAxisHelperScreen(),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Card(
+                child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  leading: const CircleAvatar(
+                    child: Icon(Icons.speed_outlined),
+                  ),
+                  title: const Text(
+                    'ECG Rate Calculator',
+                    style: TextStyle(fontWeight: FontWeight.w800),
+                  ),
+                  subtitle: const Text(
+                    'Regular and irregular rhythms at 25 or 50 mm/s',
+                  ),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const EcgRateCalculatorScreen(),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Card(
+                child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  leading: const CircleAvatar(
+                    child: Icon(Icons.timelapse_outlined),
+                  ),
+                  title: const Text(
+                    'QT / QTc Calculator',
+                    style: TextStyle(fontWeight: FontWeight.w800),
+                  ),
+                  subtitle: const Text(
+                    'Manual Bazett and Fridericia correction with safety prompts',
+                  ),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const QtcCalculatorScreen(),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 22),
+              Text(
+                'Recognition & emergencies',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w900,
+                    ),
+              ),
+              const SizedBox(height: 10),
+              Card(
+                color: Theme.of(context).colorScheme.errorContainer,
+                child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
+                  leading: const CircleAvatar(
+                    child: Icon(Icons.emergency_outlined),
+                  ),
+                  title: const Text(
+                    'High-risk ECG Patterns',
+                    style: TextStyle(fontWeight: FontWeight.w900),
+                  ),
+                  subtitle: const Text(
+                    'SVT, wide-complex tachycardia, bradycardia/heart block, WPW and hyperkalemia',
+                  ),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const EcgPatternsScreen(),
+                    ),
+                  ),
                 ),
               ),
             ],

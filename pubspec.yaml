@@ -1,7 +1,7 @@
 ﻿name: pediatric_night_companion
 description: PedsFlow pediatric night companion.
 publish_to: "none"
-version: 20.8.0+2080
+version: 20.9.0+2090
 environment:
   sdk: ">=3.8.0 <4.0.0"
 
@@ -27,4 +27,3 @@ flutter:
     - assets/growth_reference_manifest.json
     - assets/growth/cdc_wtage_2_20.csv
     - assets/growth/cdc_statage_2_20.csv
-
