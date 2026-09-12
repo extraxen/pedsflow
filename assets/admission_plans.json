@@ -12716,7 +12716,7 @@
       {
         "number": 9,
         "label": "Medications / treatment",
-        "text": "Analgesia and antimicrobial therapy covering streptococci and oral anaerobes. Drainage strategy is determined by ENT and patient cooperation/severity."
+        "text": "Antibiotics must cover GAS, oral streptococci and anaerobes. IV first line: ampicillin-sulbactam 50 mg ampicillin/kg/dose IV q6h (maximum 2 g ampicillin/dose; 3 g combined product/dose). Oral/step-down first line: amoxicillin-clavulanate 20–22.5 mg amoxicillin/kg/dose PO q12h (maximum 875 mg amoxicillin/dose). High-risk immediate penicillin allergy: clindamycin 10 mg/kg/dose IV q8h (maximum 900 mg/dose) or PO q8h (maximum 600 mg/dose), guided by local susceptibility. Formulary-dependent IV alternative: ceftriaxone 50 mg/kg/dose IV q24h (maximum 2 g/dose) PLUS metronidazole 10 mg/kg/dose IV/PO q8h (maximum 500 mg/dose; age 1 month or older). Do not add metronidazole to ampicillin-sulbactam or amoxicillin-clavulanate routinely because these already provide anaerobic coverage. Tailor to cultures, allergy history, renal/hepatic function and local formulary. Usual total antibiotic duration is 10–14 days, counting IV plus PO and guided by drainage and clinical response. Give weight-based acetaminophen/ibuprofen when appropriate; consider one dose dexamethasone 0.6 mg/kg IV/PO (maximum 10 mg) for marked edema/pain after airway assessment. Drainage strategy is determined urgently with ENT according to airway risk, abscess, cooperation and severity."
       },
       {
         "number": 10,
@@ -12741,18 +12741,20 @@
       },
       {
         "group": "Medications / treatment",
-        "text": "Analgesia and antimicrobial therapy covering streptococci and oral anaerobes. Drainage strategy is determined by ENT and patient cooperation/severity."
+        "text": "IV: ampicillin-sulbactam 50 mg ampicillin/kg/dose q6h (maximum 2 g ampicillin/dose; 3 g combined product/dose). PO/step-down: amoxicillin-clavulanate 20–22.5 mg amoxicillin/kg/dose q12h (maximum 875 mg amoxicillin/dose). High-risk immediate penicillin allergy: clindamycin 10 mg/kg/dose IV q8h (maximum 900 mg/dose) or PO q8h (maximum 600 mg/dose), guided by local susceptibility. Formulary-dependent alternative: ceftriaxone 50 mg/kg/dose IV q24h (maximum 2 g/dose) PLUS metronidazole 10 mg/kg/dose IV/PO q8h (maximum 500 mg/dose; age 1 month or older). Do not routinely add metronidazole to ampicillin-sulbactam or amoxicillin-clavulanate. Treat for 10–14 days total, tailor to cultures and response, and involve ENT for drainage/source control."
       }
     ],
-    "guidance": "Current local deep-neck infection and peritonsillar-abscess pathway.",
+    "guidance": "UCSF Pediatric Peritonsillar/Retropharyngeal Abscess guidance; Children's Mercy Peritonsillar Abscess pathway (updated 2025-10-22); local deep-neck infection pathway and formulary.",
     "contentStatus": "Structured PedsFlow reference — local clinical review required",
-    "lastUpdated": "2026-07-17",
+    "lastUpdated": "2026-09-12",
     "sourceLabels": [
       "Canadian Paediatric Society",
       "TREKK pediatric emergency resources",
       "CHEO pediatric clinical and drug resources",
       "IWK pediatric drug and clinical resources",
-      "Current Ontario/local institutional pathways"
+      "Current Ontario/local institutional pathways",
+      "UCSF Infectious Diseases Management Program",
+      "Children's Mercy Peritonsillar Abscess clinical pathway"
     ]
   },
   {

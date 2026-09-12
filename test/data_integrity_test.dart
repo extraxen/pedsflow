@@ -65,6 +65,27 @@ void main() {
     expect(treatmentText, contains('not a primary antiemetic'));
   });
 
+  test('peritonsillar abscess plan includes verified IV and oral antibiotics',
+      () async {
+    final String raw =
+        await rootBundle.loadString('assets/admission_plans.json');
+    final List<dynamic> plans = jsonDecode(raw) as List<dynamic>;
+    final Map<String, dynamic> plan = plans.cast<Map<String, dynamic>>()
+        .singleWhere((Map<String, dynamic> item) => item['id'] == 141);
+    final String treatmentText = (plan['treatments'] as List<dynamic>)
+        .cast<Map<String, dynamic>>()
+        .map((Map<String, dynamic> item) => item['text'] as String)
+        .join(' ')
+        .toLowerCase();
+
+    expect(treatmentText, contains('ampicillin-sulbactam'));
+    expect(treatmentText, contains('amoxicillin-clavulanate'));
+    expect(treatmentText, contains('clindamycin'));
+    expect(treatmentText, contains('metronidazole 10 mg/kg/dose'));
+    expect(treatmentText, contains('maximum 500 mg/dose'));
+    expect(treatmentText, isNot(contains('15 mg/kg/dose')));
+  });
+
   test('medication catalogue contains at least 300 entries', () async {
     final String raw =
         await rootBundle.loadString('assets/medications_300.json');
