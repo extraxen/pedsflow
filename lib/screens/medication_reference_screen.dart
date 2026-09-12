@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../models/admission_plan.dart';
 import '../services/app_store.dart';
 import '../widgets/plan_tile.dart';
+import '../widgets/session_weight_bar.dart';
 
 class MedicationReferenceScreen extends StatefulWidget {
   final AppStore store;
@@ -57,6 +58,8 @@ class _MedicationReferenceScreenState
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
         children: <Widget>[
+          SessionWeightBar(store: widget.store),
+          const SizedBox(height: 12),
           Card(
             color: Theme.of(context)
                 .colorScheme

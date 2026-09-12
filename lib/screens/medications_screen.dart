@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../models/admission_plan.dart';
 import '../models/medication_monograph.dart';
 import '../services/app_store.dart';
+import '../widgets/session_weight_bar.dart';
 import 'medication_quality_screen.dart';
 import 'plan_screen.dart';
 
@@ -133,6 +134,8 @@ class _MedicationsScreenState extends State<MedicationsScreen> {
               28,
             ),
             children: <Widget>[
+              SessionWeightBar(store: widget.store),
+              const SizedBox(height: 14),
               _MedicationSummary(
                 total: widget.store.medications.length,
                 withDoses: widget.store.medications
@@ -641,6 +644,8 @@ class _MedicationDetailScreenState
               28,
             ),
             children: <Widget>[
+              SessionWeightBar(store: widget.store),
+              const SizedBox(height: 12),
               _MedicationHeader(medication: medication),
               if (routes.length > 1) ...<Widget>[
                 const SizedBox(height: 12),

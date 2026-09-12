@@ -36,6 +36,44 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+  <script>
+    let pedsFlowWakeLock = null;
+
+    window.pedsFlowSetWakeLock = async function (enabled) {
+      try {
+        if (!enabled) {
+          if (pedsFlowWakeLock && !pedsFlowWakeLock.released) {
+            await pedsFlowWakeLock.release();
+          }
+          pedsFlowWakeLock = null;
+          return true;
+        }
+
+        if (!('wakeLock' in navigator)) return false;
+        pedsFlowWakeLock = await navigator.wakeLock.request('screen');
+        pedsFlowWakeLock.addEventListener('release', () => {
+          pedsFlowWakeLock = null;
+        });
+        return true;
+      } catch (_) {
+        pedsFlowWakeLock = null;
+        return false;
+      }
+    };
+
+    window.pedsFlowInstallUpdate = async function () {
+      try {
+        if ('serviceWorker' in navigator) {
+          const registration = await navigator.serviceWorker.getRegistration('./');
+          if (registration) await registration.unregister();
+        }
+      } finally {
+        const nextUrl = new URL(window.location.href);
+        nextUrl.searchParams.set('update', Date.now().toString());
+        window.location.replace(nextUrl.toString());
+      }
+    };
+  </script>
   <!--
     You can customize the "flutter_bootstrap.js" script.
     This is useful to provide a custom configuration to the Flutter loader
