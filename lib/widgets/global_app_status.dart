@@ -133,35 +133,30 @@ class _ClinicalSafetyBar extends StatelessWidget {
                 height: 26,
                 color: colors.outlineVariant,
               ),
-              Tooltip(
-                message: store.keepScreenAwake
-                    ? 'Screen will stay awake'
-                    : 'Keep screen awake',
-                child: TextButton.icon(
-                  onPressed: () async {
-                    final bool enabled = !store.keepScreenAwake;
-                    final bool applied =
-                        await store.setKeepScreenAwake(enabled);
-                    if (context.mounted && enabled && !applied) {
-                      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            'Keep Screen Awake is not available in this browser.',
-                          ),
+              TextButton.icon(
+                onPressed: () async {
+                  final bool enabled = !store.keepScreenAwake;
+                  final bool applied =
+                      await store.setKeepScreenAwake(enabled);
+                  if (context.mounted && enabled && !applied) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Keep Screen Awake is not available in this browser.',
                         ),
-                      );
-                    }
-                  },
-                  icon: Icon(
-                    store.keepScreenAwake
-                        ? Icons.lightbulb
-                        : Icons.lightbulb_outline,
-                    color: store.keepScreenAwake ? colors.primary : null,
-                  ),
-                  label: Text(
-                    store.keepScreenAwake ? 'Awake on' : 'Awake',
-                    style: const TextStyle(fontSize: 12),
-                  ),
+                      ),
+                    );
+                  }
+                },
+                icon: Icon(
+                  store.keepScreenAwake
+                      ? Icons.lightbulb
+                      : Icons.lightbulb_outline,
+                  color: store.keepScreenAwake ? colors.primary : null,
+                ),
+                label: Text(
+                  store.keepScreenAwake ? 'Awake on' : 'Awake',
+                  style: const TextStyle(fontSize: 12),
                 ),
               ),
             ],
