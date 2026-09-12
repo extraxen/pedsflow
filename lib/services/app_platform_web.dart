@@ -6,8 +6,6 @@ import 'dart:js_interop';
 @JS('pedsFlowSetWakeLock')
 external JSPromise<JSBoolean> _setWakeLock(JSBoolean enabled);
 
-@JS('pedsFlowInstallUpdate')
-external void _installUpdate();
 
 Future<bool> setPlatformWakeLock(bool enabled) async {
   try {
@@ -18,4 +16,3 @@ Future<bool> setPlatformWakeLock(bool enabled) async {
   }
 }
 
-void reloadForAppUpdate() => _installUpdate();

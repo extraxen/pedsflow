@@ -1,7 +1,7 @@
-﻿name: pediatric_night_companion
+name: pediatric_night_companion
 description: PedsFlow pediatric night companion.
 publish_to: "none"
-version: 20.10.1+2101
+version: 20.10.2+2102
 environment:
   sdk: ">=3.8.0 <4.0.0"
 
@@ -10,7 +10,6 @@ dependencies:
     sdk: flutter
   shared_preferences: ^2.3.2
   image_picker: ^1.1.2
-  http: ^1.6.0
 
 dev_dependencies:
   flutter_test:

@@ -3,4 +3,3 @@
 
 Future<bool> setPlatformWakeLock(bool enabled) async => false;
 
-void reloadForAppUpdate() {}

@@ -36,7 +36,6 @@ class _PedsFlowAppState extends State<PedsFlowApp>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed && store.ready) {
-      unawaited(store.checkForUpdate());
       unawaited(store.restoreWakeLockIfNeeded());
     }
   }
