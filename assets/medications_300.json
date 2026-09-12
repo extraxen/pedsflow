@@ -6242,6 +6242,12 @@
         "planTitle": "Acute mastoiditis",
         "category": "Infectious Diseases",
         "excerpt": "Respiratory support: None routinely; support sepsis/airway as needed. Medications/treatments: Start IV ceftriaxone or ampicillin-sulbactam; add vancomycin for MRSA/severe/intracranial risk and metronidazole when anaerobic intracranial coverage is needed, per local formulary. Provide analgesia. Medications/treatments: Start IV ceftriaxone or ampicillin-sulbactam; add vancomycin for MRSA/severe/intracranial risk and metronidazole when anaerobic intracranial coverage is needed, per local formulary. Provide analgesia."
+      },
+      {
+        "planId": 141,
+        "planTitle": "Peritonsillar abscess",
+        "category": "Infectious Diseases",
+        "excerpt": "Formulary-dependent IV alternative: ceftriaxone 50 mg/kg/dose IV q24h (maximum 2 g/dose) plus metronidazole 10 mg/kg/dose IV/PO q8h (maximum 500 mg/dose; age 1 month or older). Do not routinely add metronidazole to ampicillin-sulbactam or amoxicillin-clavulanate because these already provide anaerobic coverage."
       }
     ],
     "summary": "Pediatric medication catalogue entry. Use the linked admission-plan text where available and verify indication-specific dosing against your local formulary, pharmacist, and current official product information.",
@@ -6253,16 +6259,16 @@
       "Health Canada Drug Product Database",
       "FDA prescribing information / DailyMed",
       "Local pediatric formulary",
-      "LHSC / Children's Hospital of Western Ontario PCCU Dosing Handbook (2020)"
+      "Current pediatric antimicrobial guidance"
     ],
     "verificationStatus": "Catalogue complete; monograph dosing not independently validated",
     "doseSections": [
       {
-        "title": "Local PCCU handbook dosing (2020)",
-        "routeGroup": "LHSC PCCU 2020",
-        "text": "Neonates over 2 kg 0-7 days over 7 days — 7.5 mg/kg/dose IV Q12H 15 mg/kg/dose IV Q12H\nInfants, Children General C. diff — 10 mg/kg/dose ORAL/IV Q8H 7.5 mg/kg/dose ORAL Q6H — max 500 mg/dose max 500 mg/dose",
-        "source": "LHSC / Children's Hospital of Western Ontario PCCU Dosing Handbook (2020)",
-        "sourceDate": "2020 edition",
+        "title": "Anaerobic infection (age 1 month or older)",
+        "routeGroup": "Oral / IV",
+        "text": "10 mg/kg/dose PO or IV every 8 hours; maximum 500 mg/dose. This is an indication-specific reference dose for anaerobic coverage (including when combined with ceftriaxone in the peritonsillar-abscess plan), not a universal metronidazole dose. Neonatal dosing is excluded because it varies by postmenstrual and postnatal age; use the current NICU formulary/pharmacist. The previously extracted 2020 Blue Book neonatal schedule has been removed because it was not reliable.",
+        "source": "Current pediatric antimicrobial guidance; verify local formulary",
+        "sourceDate": "Reviewed 2026-09-12",
         "requiresVerification": true
       },
       {
@@ -6282,7 +6288,7 @@
         "requiresVerification": true
       }
     ],
-    "sourceSummary": "IWK Pediatric Drug Dosing Guidelines, reviewed August 22, 2025. Includes a separately labeled LHSC/Children's Hospital of Western Ontario PCCU 2020 handbook section. The handbook itself advises consulting current literature and pediatric pharmacists; verify current local formulary and patient-specific dosing before prescribing.",
+    "sourceSummary": "The unreliable metronidazole schedule extracted from the LHSC/Children's Hospital of Western Ontario PCCU Dosing Handbook (2020) has been removed. The remaining dose is indication-specific for anaerobic infection in patients age 1 month or older. Use the current NICU formulary for neonates and verify patient-specific dosing with the local formulary/pharmacist.",
     "currentCanadianMonograph": "metroNIDAZOLE - [Flagyl]\nRenal Adjustment\nVarious Indications\n\nGo to Firstline\n\nSurgical Prophylaxis\n\nGo to Firstline\n\nSexually Transmitted Infection\n\nGo to Canadian Guidelines on Sexually Transmitted Infection\n\nAntibacterial\nVaginal (cream)\nManufacturer recommended\n\n500 mg (1 applicatorful) PV/Topical once to twice daily for 10-20 days.\nSupplied: Cream, Vaginal: 10 %\nInjection: 5 mg/mL\nSuspension: 50 mg/mL IWK Compounded\nTablet: 250 mg"
   },
   {
