@@ -55,18 +55,6 @@ class _PedsFlowAppState extends State<PedsFlowApp>
       title: 'PedsFlow',
       themeMode: ThemeMode.light,
       theme: PedsFlowTheme.light(),
-      builder: (BuildContext context, Widget? child) {
-        return AnimatedBuilder(
-          animation: store,
-          child: child,
-          builder: (BuildContext context, Widget? child) {
-            return GlobalAppStatus(
-              store: store,
-              child: child ?? const SizedBox.shrink(),
-            );
-          },
-        );
-      },
       home: AnimatedBuilder(
         animation: store,
         builder: (context, child) {
@@ -75,7 +63,10 @@ class _PedsFlowAppState extends State<PedsFlowApp>
               body: Center(child: CircularProgressIndicator()),
             );
           }
-          return AppShell(store: store);
+          return GlobalAppStatus(
+            store: store,
+            child: AppShell(store: store),
+          );
         },
       ),
     );
