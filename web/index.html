@@ -61,18 +61,7 @@
       }
     };
 
-    window.pedsFlowInstallUpdate = async function () {
-      try {
-        if ('serviceWorker' in navigator) {
-          const registration = await navigator.serviceWorker.getRegistration('./');
-          if (registration) await registration.unregister();
-        }
-      } finally {
-        const nextUrl = new URL(window.location.href);
-        nextUrl.searchParams.set('update', Date.now().toString());
-        window.location.replace(nextUrl.toString());
-      }
-    };
+
   </script>
   <!--
     You can customize the "flutter_bootstrap.js" script.

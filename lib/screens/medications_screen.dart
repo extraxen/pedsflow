@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../models/admission_plan.dart';
 import '../models/medication_monograph.dart';
 import '../services/app_store.dart';
+import '../services/medication_dose_calculator.dart';
 import '../widgets/session_weight_bar.dart';
 import 'medication_quality_screen.dart';
 import 'plan_screen.dart';
@@ -695,7 +696,7 @@ class _MedicationDetailScreenState
                 ),
               ...visible.map(
                 (MedicationDoseSection section) =>
-                    _DoseSectionCard(section: section),
+                    _DoseSectionCard(section: section, store: widget.store),
               ),
               if (medication.administration.isNotEmpty) ...<Widget>[
                 const SizedBox(height: 16),
@@ -851,70 +852,132 @@ class _MedicationHeader extends StatelessWidget {
 
 class _DoseSectionCard extends StatelessWidget {
   final MedicationDoseSection section;
+  final AppStore store;
 
   const _DoseSectionCard({
     required this.section,
+    required this.store,
   });
 
   @override
   Widget build(BuildContext context) {
-    final bool historical =
-        section.source.toLowerCase().contains('pccu') ||
-            section.sourceDate.contains('2003');
+    return AnimatedBuilder(
+      animation: store,
+      builder: (BuildContext context, Widget? child) {
+        final double? weightKg = store.sessionWeightKg;
+        final MedicationDoseCalculation? calculation = weightKg == null
+            ? null
+            : calculateMedicationDose(
+                text: section.text,
+                weightKg: weightKg,
+              );
+        final bool historical =
+            section.source.toLowerCase().contains('pccu') ||
+                section.sourceDate.contains('2003');
+        final ColorScheme colors = Theme.of(context).colorScheme;
 
-    return Card(
-      margin: const EdgeInsets.only(bottom: 10),
-      color: historical
-          ? Theme.of(context).colorScheme.errorContainer
-          : Theme.of(context).colorScheme.surfaceContainer,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
+        return Card(
+          margin: const EdgeInsets.only(bottom: 10),
+          color: historical
+              ? colors.errorContainer
+              : colors.surfaceContainer,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Expanded(
-                  child: Text(
-                    section.title,
-                    style: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w900,
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(
+                        section.title,
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                    Chip(label: Text(section.routeGroup)),
+                  ],
+                ),
+                if (calculation != null && weightKg != null) ...<Widget>[
+                  const SizedBox(height: 10),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(13),
+                    decoration: BoxDecoration(
+                      color: colors.primaryContainer.withValues(alpha: 0.7),
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
+                        color: colors.primary.withValues(alpha: 0.25),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'Calculated for ${formatMedicationDoseNumber(weightKg)} kg',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          calculation.formattedDose,
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w900,
+                            color: colors.onPrimaryContainer,
+                          ),
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          'From ${calculation.sourceRule}',
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                        const SizedBox(height: 5),
+                        const Text(
+                          'Arithmetic aid only — verify indication, maximum dose, frequency, route, concentration, and local policy before ordering.',
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                ],
+                const SizedBox(height: 9),
+                SelectableText(
+                  section.text,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    height: 1.45,
+                  ),
                 ),
-                Chip(label: Text(section.routeGroup)),
+                const SizedBox(height: 12),
+                Text(
+                  section.source,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                Text(section.sourceDate),
+                if (historical) ...<Widget>[
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Historical local reference — verify against the current local protocol.',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
               ],
             ),
-            const SizedBox(height: 9),
-            SelectableText(
-              section.text,
-              style: const TextStyle(
-                fontSize: 16,
-                height: 1.45,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              section.source,
-              style: const TextStyle(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            Text(section.sourceDate),
-            if (historical) ...<Widget>[
-              const SizedBox(height: 8),
-              const Text(
-                'Historical local reference — verify against '
-                'the current local protocol.',
-                style: TextStyle(
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ],
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

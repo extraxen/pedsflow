@@ -19,61 +19,15 @@ class GlobalAppStatus extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        if (store.availableUpdate != null)
-          _UpdateBanner(store: store),
         Expanded(
           child: MediaQuery.removePadding(
             context: context,
-            removeTop: store.availableUpdate != null,
             removeBottom: true,
             child: child,
           ),
         ),
         _ClinicalSafetyBar(store: store),
       ],
-    );
-  }
-}
-
-class _UpdateBanner extends StatelessWidget {
-  final AppStore store;
-
-  const _UpdateBanner({required this.store});
-
-  @override
-  Widget build(BuildContext context) {
-    final String version = store.availableUpdate!.version;
-    return Material(
-      color: const Color(0xFFDDF3FF),
-      child: SafeArea(
-        bottom: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 5, 8, 5),
-          child: Row(
-            children: <Widget>[
-              const Icon(Icons.system_update_alt, size: 18),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  'PedsFlow $version is available',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              FilledButton.tonalIcon(
-                onPressed: store.installAvailableUpdate,
-                icon: const Icon(Icons.refresh, size: 17),
-                label: const Text('Update now'),
-                style: FilledButton.styleFrom(
-                  visualDensity: VisualDensity.compact,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

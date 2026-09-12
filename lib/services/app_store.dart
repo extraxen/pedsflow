@@ -6,16 +6,13 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../app_metadata.dart';
 import '../models/admission_plan.dart';
 import '../models/algorithm_item.dart';
 import '../models/antibiotic_guide.dart';
 import '../models/medication_monograph.dart';
 import 'app_platform.dart';
-import 'app_version.dart';
 
 class AppStore extends ChangeNotifier {
   List<AdmissionPlan> plans = <AdmissionPlan>[];
@@ -36,8 +33,6 @@ class AppStore extends ChangeNotifier {
   double? sessionWeightKg;
   bool keepScreenAwake = false;
   bool wakeLockUnavailable = false;
-  bool isCheckingForUpdate = false;
-  AvailableAppVersion? availableUpdate;
 
   Future<void> initialize() async {
     final String raw =
@@ -105,7 +100,6 @@ class AppStore extends ChangeNotifier {
 
     ready = true;
     notifyListeners();
-    await checkForUpdate();
   }
 
   void setSessionWeight(double? weightKg) {
@@ -135,46 +129,6 @@ class AppStore extends ChangeNotifier {
     wakeLockUnavailable = !applied;
     notifyListeners();
   }
-
-  Future<void> checkForUpdate() async {
-    if (isCheckingForUpdate) {
-      return;
-    }
-    isCheckingForUpdate = true;
-    notifyListeners();
-
-    try {
-      final Uri baseUri = Uri.base.resolve('version.json');
-      final Uri versionUri = baseUri.replace(
-        queryParameters: <String, String>{
-          ...baseUri.queryParameters,
-          'checked': DateTime.now().millisecondsSinceEpoch.toString(),
-        },
-      );
-      final http.Response response = await http.get(
-        versionUri,
-        headers: const <String, String>{'Cache-Control': 'no-cache'},
-      );
-      if (response.statusCode != 200) {
-        return;
-      }
-
-      final AvailableAppVersion candidate =
-          AvailableAppVersion.fromJson(
-        jsonDecode(response.body) as Map<String, dynamic>,
-      );
-      availableUpdate = candidate.isNewerThan(pedsFlowBuildNumber)
-          ? candidate
-          : null;
-    } catch (_) {
-      // Update checks are best-effort and must never interrupt clinical use.
-    } finally {
-      isCheckingForUpdate = false;
-      notifyListeners();
-    }
-  }
-
-  void installAvailableUpdate() => reloadForAppUpdate();
 
   Set<int> _intSet(List<String>? values) {
     return (values ?? <String>[])

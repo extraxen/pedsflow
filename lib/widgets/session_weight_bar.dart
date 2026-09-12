@@ -95,12 +95,12 @@ class _SessionWeightBarState extends State<SessionWeightBar> {
                       children: <Widget>[
                         Text(
                           weight == null
-                              ? 'Session weight'
-                              : 'Session weight: ${_formatWeight(weight)} kg',
+                              ? 'Patient weight for dose calculations'
+                              : 'Dose calculation weight: ${_formatWeight(weight)} kg',
                           style: const TextStyle(fontWeight: FontWeight.w900),
                         ),
                         const Text(
-                          'Clears on restart • Verify measured weight and every dose',
+                          'Used only this session • Supported weight-based doses calculate automatically',
                           maxLines: 2,
                           style: TextStyle(fontSize: 11.5),
                         ),
