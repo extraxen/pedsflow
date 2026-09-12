@@ -2,7 +2,7 @@
 
 PedsFlow is proprietary software, but it uses and references third-party material.
 
-Flutter, Dart, shared_preferences, image_picker, flutter_lints, and their transitive dependencies remain governed by their respective upstream licenses. PedsFlow's proprietary license does not replace or restrict those licenses.
+Flutter, Dart, shared_preferences, image_picker, http, web, flutter_lints, and their transitive dependencies remain governed by their respective upstream licenses. PedsFlow's proprietary license does not replace or restrict those licenses.
 
 Clinical guidelines, publications, standards, reference tables, institutional pathways, medication information, growth references, and other external source material remain the property of their respective authors, publishers, institutions, or rights holders. Clinical facts themselves are not claimed as proprietary PedsFlow content.
 
@@ -19,4 +19,3 @@ for Drugs used in the Paediatric Critical Care Unit, 2020 edition**.
 The source remains a third-party institutional reference. PedsFlow does not claim ownership
 of the source publication. Handbook-derived entries are separately labeled and require
 verification against current institutional policy, pharmacy guidance, and current literature.
-

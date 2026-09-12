@@ -1,7 +1,7 @@
 # PedsFlow
 
-**Version:** 20.9.0+2090
-**Release date:** September 10, 2026
+**Version:** 20.10.0+2100
+**Release date:** September 12, 2026
 **Status:** Clean full-source release
 
 PedsFlow is a Flutter pediatric clinical reference and decision-support application. This clean release consolidates the current source into one project and removes historical patch installers, generated Flutter state, and obsolete release-note files from the project root.
@@ -20,6 +20,10 @@ PedsFlow is a Flutter pediatric clinical reference and decision-support applicat
 - Pager Mode with 12 symptom-first overnight-call pathways and weight-based emergency dose cards
 - Expanded Cardiology → ECG hub with a systematic interpretation guide, axis helper, rate and QTc calculators, and high-risk rhythm patterns
 - Proprietary PedsFlow license and third-party notice
+- Global clinical-safety footer with the full disclaimer available on every page
+- Session-only patient weight bar across the medication library and monographs
+- Keep Screen Awake control for supported browsers
+- Automatic version checks with an Update Available action
 
 ## Build
 
