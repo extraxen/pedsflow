@@ -1,6 +1,6 @@
 # PedsFlow
 
-**Version:** 20.10.4+2104
+**Version:** 20.11.0+2110
 **Release date:** September 18, 2026
 **Status:** Clean full-source release
 
@@ -25,6 +25,7 @@ PedsFlow is a Flutter pediatric clinical reference and decision-support applicat
 - Keep Screen Awake control for supported browsers
 - UTF-8 text normalization for clinical data to repair mojibake such as malformed bullets, dashes, arrows, degree signs, and Greek symbols
 - Hard-coded UI Unicode integrity check to prevent Windows-1252/CP437 mojibake from being committed
+- New Rheumatology / MSK pathways: swollen joint, rash + joint pain, JIA, systemic JIA/MAS, IgA vasculitis, pediatric SLE, juvenile dermatomyositis, and reactive/Lyme arthritis
 
 ## Build
 
