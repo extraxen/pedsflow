@@ -12,7 +12,8 @@ import '../models/antibiotic_guide.dart';
 import '../models/medication_monograph.dart';
 import '../features/pager/pager_mode_data.dart';
 import '../features/pager/pager_mode_models.dart';
-import 'app_store.dart';\nimport 'text_encoding_repair.dart';
+import 'app_store.dart';
+import 'text_encoding_repair.dart';
 
 class SearchDocument {
   final String id;
