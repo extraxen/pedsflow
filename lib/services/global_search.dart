@@ -12,7 +12,7 @@ import '../models/antibiotic_guide.dart';
 import '../models/medication_monograph.dart';
 import '../features/pager/pager_mode_data.dart';
 import '../features/pager/pager_mode_models.dart';
-import 'app_store.dart';
+import 'app_store.dart';\nimport 'text_encoding_repair.dart';
 
 class SearchDocument {
   final String id;
@@ -149,7 +149,7 @@ class GlobalSearchIndex {
       'assets/static_search_index.json',
     );
     docs.addAll(
-      (jsonDecode(raw) as List<dynamic>).map(
+      (repairMojibakeJson(jsonDecode(raw)) as List<dynamic>).map(
         (dynamic item) => SearchDocument.fromJson(
           item as Map<String, dynamic>,
         ),
