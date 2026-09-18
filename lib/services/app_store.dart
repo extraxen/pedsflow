@@ -12,7 +12,8 @@ import '../models/admission_plan.dart';
 import '../models/algorithm_item.dart';
 import '../models/antibiotic_guide.dart';
 import '../models/medication_monograph.dart';
-import 'app_platform.dart';\nimport 'text_encoding_repair.dart';
+import 'app_platform.dart';
+import 'text_encoding_repair.dart';
 
 class AppStore extends ChangeNotifier {
   List<AdmissionPlan> plans = <AdmissionPlan>[];
