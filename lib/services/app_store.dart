@@ -13,6 +13,7 @@ import '../models/algorithm_item.dart';
 import '../models/antibiotic_guide.dart';
 import '../models/medication_monograph.dart';
 import 'app_platform.dart';
+import 'text_encoding_repair.dart';
 
 class AppStore extends ChangeNotifier {
   List<AdmissionPlan> plans = <AdmissionPlan>[];
@@ -42,7 +43,7 @@ class AppStore extends ChangeNotifier {
     final String antibioticRaw =
         await rootBundle.loadString('assets/antibiotic_guide.json');
 
-    plans = (jsonDecode(raw) as List<dynamic>)
+    plans = (repairMojibakeJson(jsonDecode(raw)) as List<dynamic>)
         .map(
           (dynamic item) => AdmissionPlan.fromJson(
             item as Map<String, dynamic>,
@@ -50,7 +51,7 @@ class AppStore extends ChangeNotifier {
         )
         .toList();
 
-    medications = (jsonDecode(medicationsRaw) as List<dynamic>)
+    medications = (repairMojibakeJson(jsonDecode(medicationsRaw)) as List<dynamic>)
         .map(
           (dynamic item) => MedicationMonograph.fromJson(
             item as Map<String, dynamic>,
@@ -59,7 +60,7 @@ class AppStore extends ChangeNotifier {
         .toList();
 
     antibioticGuide = AntibioticGuideData.fromJson(
-      jsonDecode(antibioticRaw) as Map<String, dynamic>,
+      repairMojibakeJson(jsonDecode(antibioticRaw)) as Map<String, dynamic>,
     );
 
     final SharedPreferences preferences =
@@ -82,7 +83,7 @@ class AppStore extends ChangeNotifier {
     final String? algorithmsJson =
         preferences.getString('algorithms_v1');
     if (algorithmsJson != null && algorithmsJson.isNotEmpty) {
-      algorithms = (jsonDecode(algorithmsJson) as List<dynamic>)
+      algorithms = (repairMojibakeJson(jsonDecode(algorithmsJson)) as List<dynamic>)
           .map(
             (dynamic item) => AlgorithmItem.fromJson(
               item as Map<String, dynamic>,
