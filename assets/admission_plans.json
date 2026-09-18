@@ -19858,5 +19858,561 @@
       "Health Canada product monographs and safety communications",
       "Current local pediatric formulary, pharmacy and institutional pathways"
     ]
+  },
+  {
+    "id": 220,
+    "title": "Joint pain / swollen joint — initial approach",
+    "category": "Rheumatology / MSK",
+    "aliases": [
+      "arthralgia",
+      "arthritis",
+      "swollen joint",
+      "joint pain",
+      "limp",
+      "monoarthritis",
+      "oligoarthritis",
+      "polyarthritis"
+    ],
+    "summary": "Presentation-first pathway for a child with joint pain or swelling. First distinguish a septic/orthopedic emergency from inflammatory, post-infectious, hematologic and mechanical causes; avoid shotgun rheumatology testing.",
+    "sections": [
+      {
+        "number": 1,
+        "label": "Immediate safety screen",
+        "text": "Treat fever/toxic appearance, inability to weight-bear, severe focal pain, rapidly progressive swelling, immunocompromise, recent surgery/procedure, penetrating injury, prosthetic material, shock, neurologic deficit, or concern for compartment syndrome as urgent. Septic arthritis/osteomyelitis must be excluded before labeling inflammatory arthritis."
+      },
+      {
+        "number": 2,
+        "label": "History",
+        "text": "Clarify true joint swelling vs pain only; onset and duration; morning stiffness/gelling; functional limitation/limp; number and distribution of joints; fever pattern; rash; eye symptoms; weakness; weight loss/night sweats; bone pain; recent GI/GU/respiratory infection; medications; travel/tick exposure; trauma; bleeding history; psoriasis/IBD and family autoimmune history."
+      },
+      {
+        "number": 3,
+        "label": "Examination",
+        "text": "Vitals and general appearance. Observe gait and function. Examine every joint for swelling, warmth, effusion, tenderness and active/passive ROM; compare sides. Look for enthesitis, dactylitis, SI pain, rash/purpura, oral ulcers, lymphadenopathy/hepatosplenomegaly, muscle weakness, nail/psoriatic changes and eye inflammation."
+      },
+      {
+        "number": 4,
+        "label": "Pattern recognition",
+        "text": "Monoarthritis: infection/trauma first, then JIA, reactive/Lyme where exposure fits, hemarthrosis or malignancy. Oligoarthritis: JIA, reactive/post-infectious, Lyme, IBD/psoriatic disease. Polyarthritis: JIA, viral/reactive, SLE/CTD, rheumatic fever, IBD, malignancy and other systemic disease."
+      },
+      {
+        "number": 5,
+        "label": "Initial investigations",
+        "text": "Do not order a universal rheumatology panel. If inflammatory/systemic features are present, consider CBC/differential, CRP, ESR, electrolytes/creatinine, AST/ALT, albumin and urinalysis. Blood cultures before antibiotics when febrile/toxic or bacteremia is plausible. Add tests according to phenotype and differential."
+      },
+      {
+        "number": 6,
+        "label": "Targeted rheumatology tests",
+        "text": "ANA supports risk stratification (especially uveitis screening in JIA) but is not a screening test for nonspecific pain. RF/anti-CCP are useful only when the phenotype suggests inflammatory polyarthritis. C3/C4, dsDNA/ENA follow a convincing SLE/CTD phenotype. HLA-B27 is targeted to enthesitis/spondyloarthritis features, not routine screening."
+      },
+      {
+        "number": 7,
+        "label": "Imaging / aspiration",
+        "text": "Plain radiograph for trauma, focal bone pain, chronic symptoms or structural concern. Ultrasound can confirm effusion/synovitis and guide aspiration. MRI is useful for osteomyelitis, sacroiliitis, occult inflammation or malignancy. Suspected septic arthritis requires urgent orthopedic discussion and joint aspiration/culture when feasible; do not delay antibiotics in an unstable child."
+      },
+      {
+        "number": 8,
+        "label": "Red flags / consult",
+        "text": "Urgent senior/Ortho/ID assessment for suspected infection. Urgent hematology/oncology assessment for cytopenias, blasts, disproportionate bone/night pain, weight loss, lymphadenopathy or hepatosplenomegaly. Rheumatology referral for persistent objective arthritis, inflammatory pattern, multisystem autoimmune features or diagnostic uncertainty."
+      }
+    ],
+    "treatments": [
+      {
+        "group": "Core principle",
+        "text": "Treat the presentation, not the autoantibody. Objective synovitis and the clinical pattern determine the workup; ANA positivity alone does not diagnose JIA or SLE."
+      }
+    ],
+    "guidance": "ACR pediatric rheumatology guidance; current pediatric MSK, septic arthritis and osteomyelitis pathways.",
+    "contentStatus": "Clinical-support reference — verify the current local pathway and involve pediatric rheumatology when indicated",
+    "lastUpdated": "2026-09-18",
+    "sourceLabels": [
+      "American College of Rheumatology",
+      "EULAR/PReS pediatric rheumatology recommendations",
+      "Current local pediatric rheumatology, infectious diseases and emergency pathways"
+    ]
+  },
+  {
+    "id": 221,
+    "title": "Rash + joint pain — diagnostic pathway",
+    "category": "Rheumatology / MSK",
+    "aliases": [
+      "rash and joint pain",
+      "rash arthralgia",
+      "purpura arthritis",
+      "fever rash arthritis"
+    ],
+    "summary": "Pattern-based pathway linking rash morphology and systemic findings to urgent mimics and common pediatric rheumatologic diagnoses.",
+    "sections": [
+      {
+        "number": 1,
+        "label": "First question: sick or not sick?",
+        "text": "Petechiae/purpura with toxicity, shock, meningism or rapidly progressive rash is an infectious/hematologic emergency until proven otherwise. Also escalate for severe mucosal disease, anaphylaxis, significant bleeding, neurologic change or organ dysfunction."
+      },
+      {
+        "number": 2,
+        "label": "Purpura",
+        "text": "Palpable dependent purpura + arthralgia/arthritis ± abdominal pain suggests IgA vasculitis: check BP and urinalysis and assess renal/GI involvement. Thrombocytopenic/non-blanching rash requires CBC and an alternate differential."
+      },
+      {
+        "number": 3,
+        "label": "Fever + evanescent rash",
+        "text": "Daily/spiking fever with transient salmon-pink rash, arthritis/arthralgia, lymphadenopathy or hepatosplenomegaly raises systemic JIA after infection/malignancy are considered. Persistent fever with falling platelets, rising ferritin/LFTs, low fibrinogen or organ dysfunction raises MAS."
+      },
+      {
+        "number": 4,
+        "label": "Photosensitive / malar / mucosal features",
+        "text": "Malar/photosensitive rash, oral/nasal ulcers, alopecia, Raynaud phenomenon, cytopenias, edema/hypertension or arthritis suggests SLE/CTD; obtain CBC, creatinine, urinalysis/UPCR and targeted immunologic testing."
+      },
+      {
+        "number": 5,
+        "label": "Weakness + characteristic rash",
+        "text": "Proximal weakness with heliotrope change, Gottron papules/sign or other compatible rash suggests juvenile dermatomyositis; check muscle enzymes and assess swallowing, respiratory and cardiac involvement."
+      },
+      {
+        "number": 6,
+        "label": "Medication-associated rash",
+        "text": "Urticarial or morbilliform eruption with fever and arthralgia after a medication/infection may represent serum sickness-like reaction. Check for mucosal involvement, organ injury, anaphylaxis and alternative infectious causes."
+      },
+      {
+        "number": 7,
+        "label": "Other patterns",
+        "text": "Tender erythematous nodules suggest erythema nodosum and prompt evaluation for infection, IBD, medications and systemic inflammation. Psoriasis/nail pitting with arthritis/dactylitis suggests psoriatic JIA. Target infectious testing to exposure and phenotype."
+      },
+      {
+        "number": 8,
+        "label": "Minimum bedside data",
+        "text": "Document fever curve, rash morphology/distribution/blanching, mucosa, joint count, gait, BP, urine findings, lymph nodes/hepatosplenomegaly, muscle power and medication/infection timeline. Photograph evolving rash when consent/local policy permits."
+      }
+    ],
+    "treatments": [
+      {
+        "group": "Safety stop",
+        "text": "Rash + arthritis is not automatically rheumatologic. Sepsis, invasive bacterial infection, septic arthritis, hematologic disease and severe drug reactions take priority when clinically plausible."
+      }
+    ],
+    "guidance": "ACR/EULAR-PReS pediatric rheumatology guidance and current pediatric emergency pathways.",
+    "contentStatus": "Clinical-support reference — verify the current local pathway and involve pediatric rheumatology when indicated",
+    "lastUpdated": "2026-09-18",
+    "sourceLabels": [
+      "American College of Rheumatology",
+      "EULAR/PReS pediatric rheumatology recommendations",
+      "Current local pediatric rheumatology, infectious diseases and emergency pathways"
+    ]
+  },
+  {
+    "id": 222,
+    "title": "Juvenile idiopathic arthritis (JIA)",
+    "category": "Rheumatology / MSK",
+    "aliases": [
+      "JIA",
+      "juvenile arthritis",
+      "oligoarticular JIA",
+      "polyarticular JIA",
+      "enthesitis related arthritis",
+      "psoriatic JIA"
+    ],
+    "summary": "Chronic inflammatory arthritis beginning before age 16, persisting at least 6 weeks, after exclusion of alternative causes. Use phenotype and objective arthritis to guide testing; ANA/RF do not establish the diagnosis.",
+    "sections": [
+      {
+        "number": 1,
+        "label": "Recognition",
+        "text": "Inflammatory clues include persistent objective swelling/limited ROM, morning stiffness or gelling, limp after rest and improvement with activity. Pain can be surprisingly mild. JIA is a diagnosis of clinical pattern plus exclusion of mimics."
+      },
+      {
+        "number": 2,
+        "label": "Phenotypes",
+        "text": "Recognize oligoarticular disease (few joints early), polyarticular RF-negative/RF-positive disease, enthesitis-related/spondyloarthritis phenotype, psoriatic phenotype and systemic JIA. Classification systems continue to evolve; document the actual phenotype rather than relying only on a label."
+      },
+      {
+        "number": 3,
+        "label": "Initial workup",
+        "text": "CBC/differential, ESR/CRP, renal/liver profile and urinalysis as clinically indicated to assess inflammation and mimics. Imaging is targeted. ANA is mainly prognostic for uveitis risk; RF/anti-CCP help characterize selected polyarthritis; HLA-B27 is targeted to enthesitis/axial features."
+      },
+      {
+        "number": 4,
+        "label": "Do not miss mimics",
+        "text": "Exclude septic arthritis/osteomyelitis, leukemia/other malignancy, trauma, reactive/post-infectious arthritis, Lyme when epidemiologically appropriate, SLE/CTD, IBD-associated arthritis and mechanical/orthopedic disease."
+      },
+      {
+        "number": 5,
+        "label": "Oligoarticular pearls",
+        "text": "Often affects large lower-extremity joints and may be minimally painful. ANA-positive younger children have important risk of asymptomatic anterior uveitis; a normal eye appearance does not exclude it."
+      },
+      {
+        "number": 6,
+        "label": "Uveitis",
+        "text": "Arrange slit-lamp ophthalmology screening according to JIA category, ANA status, age at onset and disease duration. Do not wait for ocular symptoms because chronic anterior uveitis may be silent."
+      },
+      {
+        "number": 7,
+        "label": "Management principles",
+        "text": "Early pediatric rheumatology involvement. Treatment is phenotype/severity-specific and may include NSAIDs for symptom control, intra-articular glucocorticoid, conventional DMARDs and biologic therapy. Avoid prolonged systemic glucocorticoids when steroid-sparing control is feasible; verify current ACR/local protocols."
+      },
+      {
+        "number": 8,
+        "label": "Escalation",
+        "text": "Urgent assessment for systemic illness, suspected infection/malignancy, eye pain/redness/photophobia, cervical/TMJ complications, severe functional loss, or features of systemic JIA/MAS."
+      }
+    ],
+    "treatments": [
+      {
+        "group": "Do not shotgun-test",
+        "text": "ANA, RF, anti-CCP and HLA-B27 should answer a clinical question. Negative serology does not exclude JIA, and positive ANA alone does not diagnose it."
+      }
+    ],
+    "guidance": "American College of Rheumatology JIA guidance, including updated 2026 treatment recommendations; ophthalmology screening per current JIA guidance.",
+    "contentStatus": "Clinical-support reference — verify the current local pathway and involve pediatric rheumatology when indicated",
+    "lastUpdated": "2026-09-18",
+    "sourceLabels": [
+      "American College of Rheumatology",
+      "EULAR/PReS pediatric rheumatology recommendations",
+      "Current local pediatric rheumatology, infectious diseases and emergency pathways"
+    ]
+  },
+  {
+    "id": 223,
+    "title": "Systemic JIA + macrophage activation syndrome",
+    "category": "Rheumatology / MSK",
+    "aliases": [
+      "systemic JIA",
+      "sJIA",
+      "Still disease",
+      "Still's disease",
+      "MAS",
+      "macrophage activation syndrome",
+      "hyperferritinemia"
+    ],
+    "summary": "Recognize systemic JIA and rapidly identify MAS, a potentially life-threatening hyperinflammatory complication requiring urgent specialist treatment.",
+    "sections": [
+      {
+        "number": 1,
+        "label": "Systemic JIA pattern",
+        "text": "Consider with quotidian/spiking fever, evanescent salmon-pink rash and inflammatory arthritis, often with lymphadenopathy, hepatosplenomegaly or serositis. Infection, malignancy and other autoinflammatory disease must be considered."
+      },
+      {
+        "number": 2,
+        "label": "Baseline investigations",
+        "text": "CBC/differential, ESR, CRP, ferritin, AST/ALT, albumin, renal profile and urinalysis; cultures/infectious testing and imaging are guided by presentation. Persistent unexplained fever may require broader infectious/oncologic evaluation."
+      },
+      {
+        "number": 3,
+        "label": "MAS warning signs",
+        "text": "New persistent fever rather than usual spikes, ill appearance, CNS change, hepatosplenomegaly, bleeding, shock or organ dysfunction; falling platelets/WBC, rapidly rising ferritin and transaminases, rising triglycerides/D-dimer and falling fibrinogen are concerning."
+      },
+      {
+        "number": 4,
+        "label": "MAS laboratory bundle",
+        "text": "Urgently obtain CBC/differential, ferritin, AST/ALT, bilirubin, LDH, triglycerides, fibrinogen, PT/INR, aPTT, D-dimer, renal profile and inflammatory markers; trend serially because direction of change is highly informative."
+      },
+      {
+        "number": 5,
+        "label": "Interpret ESR carefully",
+        "text": "ESR may paradoxically fall in MAS as fibrinogen is consumed even while the child deteriorates; a falling ESR is not reassuring when ferritin/LFTs rise and cytopenias/coagulopathy develop."
+      },
+      {
+        "number": 6,
+        "label": "Escalation",
+        "text": "Suspected MAS requires immediate senior, pediatric rheumatology and often PICU/hematology involvement. Obtain cultures and assess infection because sepsis and MAS can overlap; do not delay stabilization while pursuing classification criteria."
+      },
+      {
+        "number": 7,
+        "label": "Treatment principle",
+        "text": "Treatment is specialist-directed and may include high-dose glucocorticoid and cytokine-directed/immunomodulatory therapy depending on phenotype and severity. Follow current rheumatology/PICU protocols rather than initiating from a static reference."
+      },
+      {
+        "number": 8,
+        "label": "Reassessment",
+        "text": "Trend fever curve, mental status, perfusion, CBC, ferritin, LFTs, fibrinogen, triglycerides and coagulation parameters closely; escalating organ dysfunction warrants critical-care management."
+      }
+    ],
+    "treatments": [
+      {
+        "group": "MAS safety stop",
+        "text": "Clinical deterioration + hyperferritinemia/cytopenias/transaminitis/coagulopathy in systemic inflammation is an emergency. Do not wait for every criterion to be met before escalating."
+      }
+    ],
+    "guidance": "Current ACR and EULAR/PReS systemic JIA/Still disease guidance; local rheumatology, hematology and PICU protocols.",
+    "contentStatus": "Clinical-support reference — verify the current local pathway and involve pediatric rheumatology when indicated",
+    "lastUpdated": "2026-09-18",
+    "sourceLabels": [
+      "American College of Rheumatology",
+      "EULAR/PReS pediatric rheumatology recommendations",
+      "Current local pediatric rheumatology, infectious diseases and emergency pathways"
+    ]
+  },
+  {
+    "id": 224,
+    "title": "IgA vasculitis (Henoch–Schönlein purpura)",
+    "category": "Rheumatology / MSK",
+    "aliases": [
+      "IgA vasculitis",
+      "HSP",
+      "Henoch Schonlein purpura",
+      "palpable purpura"
+    ],
+    "summary": "Palpable purpura with arthritis/arthralgia, abdominal and/or renal involvement. Blood pressure and urinalysis are essential even when the child looks well.",
+    "sections": [
+      {
+        "number": 1,
+        "label": "Recognition",
+        "text": "Typical pattern is non-thrombocytopenic palpable purpura, often buttocks/lower limbs, with arthralgia/arthritis, abdominal pain and possible renal disease. Edema may occur. Confirm platelets if the rash is atypical or diagnosis uncertain."
+      },
+      {
+        "number": 2,
+        "label": "Initial assessment",
+        "text": "Vitals including BP; hydration; skin distribution; joint exam; abdominal exam; edema; genital/scrotal symptoms; neurologic status. Ask about GI bleeding, urine change, reduced output and preceding infection."
+      },
+      {
+        "number": 3,
+        "label": "Investigations",
+        "text": "Urinalysis and BP for every suspected case. Consider urine protein:creatinine ratio, creatinine/electrolytes, albumin and CBC when renal/systemic involvement is possible. Additional testing is driven by atypical features or differential."
+      },
+      {
+        "number": 4,
+        "label": "GI red flags",
+        "text": "Severe/colicky abdominal pain, GI bleeding, bilious vomiting, peritonism or obstruction symptoms require urgent assessment; consider intussusception and obtain appropriate imaging/surgical input."
+      },
+      {
+        "number": 5,
+        "label": "Renal red flags",
+        "text": "Hypertension, macroscopic hematuria, significant/persistent proteinuria, rising creatinine, edema/nephrotic features or reduced urine output require prompt pediatric/nephrology review."
+      },
+      {
+        "number": 6,
+        "label": "Joint symptoms",
+        "text": "Arthritis/arthralgia is usually transient and often affects lower-extremity joints. Ensure a hot monoarthritis or toxic child is not being misattributed to IgA vasculitis."
+      },
+      {
+        "number": 7,
+        "label": "Management",
+        "text": "Supportive care and analgesia for uncomplicated disease. Corticosteroid decisions for significant GI or other organ involvement are indication-specific and do not replace renal surveillance; follow current local/nephrology guidance."
+      },
+      {
+        "number": 8,
+        "label": "Follow-up",
+        "text": "Arrange serial BP and urinalysis after diagnosis because renal involvement may emerge after the initial presentation; use the current local/nephrology schedule and extend follow-up when abnormalities occur."
+      }
+    ],
+    "treatments": [
+      {
+        "group": "Must document",
+        "text": "BP + urinalysis + abdominal red flags + renal red flags. A child with apparently mild skin/joint disease still needs renal surveillance."
+      }
+    ],
+    "guidance": "Current pediatric IgA vasculitis/nephrology guidance and local pathways.",
+    "contentStatus": "Clinical-support reference — verify the current local pathway and involve pediatric rheumatology when indicated",
+    "lastUpdated": "2026-09-18",
+    "sourceLabels": [
+      "American College of Rheumatology",
+      "EULAR/PReS pediatric rheumatology recommendations",
+      "Current local pediatric rheumatology, infectious diseases and emergency pathways"
+    ]
+  },
+  {
+    "id": 225,
+    "title": "Pediatric SLE — initial recognition and workup",
+    "category": "Rheumatology / MSK",
+    "aliases": [
+      "SLE",
+      "lupus",
+      "pediatric lupus",
+      "malar rash",
+      "lupus nephritis"
+    ],
+    "summary": "Multisystem autoimmune disease. Use ANA as an entry test only when the phenotype supports SLE; urine and renal assessment are central because nephritis may be clinically subtle.",
+    "sections": [
+      {
+        "number": 1,
+        "label": "Clinical clues",
+        "text": "Consider persistent inflammatory arthritis plus photosensitive/malar rash, oral/nasal ulcers, alopecia, Raynaud phenomenon, serositis, cytopenias, neurologic features, edema/hypertension or unexplained constitutional symptoms."
+      },
+      {
+        "number": 2,
+        "label": "Initial investigations",
+        "text": "CBC/differential, creatinine/electrolytes, AST/ALT, albumin, ESR/CRP and urinalysis. Quantify protein with urine protein:creatinine ratio when abnormal or renal disease is suspected."
+      },
+      {
+        "number": 3,
+        "label": "Immunology",
+        "text": "When SLE phenotype is convincing: ANA, anti-dsDNA, ENA profile and C3/C4; consider antiphospholipid antibodies based on presentation. ANA is sensitive but nonspecific and should not be used as a screen for isolated nonspecific musculoskeletal pain."
+      },
+      {
+        "number": 4,
+        "label": "Renal screen",
+        "text": "Check BP, creatinine, urinalysis for blood/protein/casts and UPCR. Hypertension, rising creatinine, active sediment or significant proteinuria requires urgent rheumatology/nephrology involvement."
+      },
+      {
+        "number": 5,
+        "label": "Important mimics",
+        "text": "Infection, malignancy, drug-induced disease, other connective-tissue disease and autoinflammatory disorders can mimic SLE. Interpret serology in the clinical context."
+      },
+      {
+        "number": 6,
+        "label": "Urgent complications",
+        "text": "Escalate for nephritis with renal dysfunction/hypertension, CNS involvement, severe cytopenias/bleeding, thrombosis, myocarditis/pericardial compromise, pulmonary hemorrhage or severe infection."
+      },
+      {
+        "number": 7,
+        "label": "Management principle",
+        "text": "Treatment is organ- and severity-specific and should be coordinated with pediatric rheumatology; nephritis requires nephrology involvement. Review immunization, infection risk and medication monitoring when immunosuppression is used."
+      },
+      {
+        "number": 8,
+        "label": "Reassessment",
+        "text": "Trend symptoms, BP, CBC, renal function, urinalysis/UPCR, complements and disease-specific markers according to organ involvement and specialist plan."
+      }
+    ],
+    "treatments": [
+      {
+        "group": "Pearl",
+        "text": "For suspected pediatric SLE, do not forget the urine: BP + urinalysis/UPCR + creatinine can reveal clinically quiet renal involvement."
+      }
+    ],
+    "guidance": "Current ACR lupus guidance and pediatric rheumatology/nephrology practice.",
+    "contentStatus": "Clinical-support reference — verify the current local pathway and involve pediatric rheumatology when indicated",
+    "lastUpdated": "2026-09-18",
+    "sourceLabels": [
+      "American College of Rheumatology",
+      "EULAR/PReS pediatric rheumatology recommendations",
+      "Current local pediatric rheumatology, infectious diseases and emergency pathways"
+    ]
+  },
+  {
+    "id": 226,
+    "title": "Juvenile dermatomyositis — recognition and workup",
+    "category": "Rheumatology / MSK",
+    "aliases": [
+      "juvenile dermatomyositis",
+      "JDM",
+      "Gottron papules",
+      "heliotrope rash",
+      "proximal weakness"
+    ],
+    "summary": "Proximal muscle weakness plus characteristic cutaneous findings. Assess swallowing, respiratory and cardiac involvement as well as muscle inflammation.",
+    "sections": [
+      {
+        "number": 1,
+        "label": "Recognition",
+        "text": "Symmetric proximal weakness (stairs, rising from floor/chair, lifting arms) with heliotrope eyelid change, Gottron papules/sign, photosensitive facial/extensor rash, nailfold changes or calcinosis suggests JDM."
+      },
+      {
+        "number": 2,
+        "label": "Examination",
+        "text": "Document functional strength, gait/Gowers, neck flexors and proximal upper/lower limbs; skin/nails; swallowing/voice; respiratory effort; cardiac symptoms; joint findings and calcinosis."
+      },
+      {
+        "number": 3,
+        "label": "Initial investigations",
+        "text": "CK, aldolase, AST/ALT, LDH, CBC, ESR/CRP, renal profile and urinalysis. Remember AST/ALT may reflect muscle rather than liver injury; correlate with CK and clinical findings."
+      },
+      {
+        "number": 4,
+        "label": "Further evaluation",
+        "text": "Pediatric rheumatology may use myositis-specific antibodies, MRI of muscle, nailfold assessment and selected EMG/biopsy when diagnosis remains uncertain. Testing should not delay assessment of dangerous organ involvement."
+      },
+      {
+        "number": 5,
+        "label": "Red flags",
+        "text": "Dysphagia/aspiration, weak cough or respiratory weakness, myocarditis/arrhythmia, severe generalized weakness, GI vasculopathy symptoms or rapidly progressive disease require urgent specialist assessment/admission."
+      },
+      {
+        "number": 6,
+        "label": "Differential",
+        "text": "Muscular dystrophy/neuromuscular disease, viral/infectious myositis, metabolic disease, medication/toxin, SLE/overlap CTD and malignancy are important alternatives."
+      },
+      {
+        "number": 7,
+        "label": "Management principle",
+        "text": "Early pediatric rheumatology involvement. Immunomodulatory treatment and rehabilitation are specialist-directed; protect from excessive UV exposure and monitor function, calcinosis and treatment toxicity."
+      },
+      {
+        "number": 8,
+        "label": "Reassessment",
+        "text": "Trend objective strength/function and muscle enzymes while recognizing that enzyme levels may not perfectly track disease activity."
+      }
+    ],
+    "treatments": [
+      {
+        "group": "Pearl",
+        "text": "A child with rash + 'joint pain' may actually have proximal myopathy. Ask specifically about stairs, getting up from the floor, hair washing and lifting arms."
+      }
+    ],
+    "guidance": "Current pediatric inflammatory myopathy/rheumatology guidance and local pathways.",
+    "contentStatus": "Clinical-support reference — verify the current local pathway and involve pediatric rheumatology when indicated",
+    "lastUpdated": "2026-09-18",
+    "sourceLabels": [
+      "American College of Rheumatology",
+      "EULAR/PReS pediatric rheumatology recommendations",
+      "Current local pediatric rheumatology, infectious diseases and emergency pathways"
+    ]
+  },
+  {
+    "id": 227,
+    "title": "Reactive / post-infectious arthritis and Lyme arthritis",
+    "category": "Rheumatology / MSK",
+    "aliases": [
+      "reactive arthritis",
+      "post infectious arthritis",
+      "post-infectious arthritis",
+      "Lyme arthritis",
+      "post viral arthritis"
+    ],
+    "summary": "Use exposure, geography and phenotype to target infectious testing. Exclude septic arthritis before attributing acute monoarthritis to a post-infectious cause.",
+    "sections": [
+      {
+        "number": 1,
+        "label": "Reactive pattern",
+        "text": "Arthritis may follow GI, GU or respiratory infection and can occur after viral illness. Ask about timing, diarrhea, dysuria, pharyngitis, conjunctivitis, enthesitis and rash; testing should be directed by the suspected trigger."
+      },
+      {
+        "number": 2,
+        "label": "Lyme pattern",
+        "text": "Consider Lyme with compatible tick exposure/endemic epidemiology and typically marked swelling of one/few large joints, especially the knee, often with less systemic toxicity than septic arthritis. Exposure history and local epidemiology matter."
+      },
+      {
+        "number": 3,
+        "label": "First exclude infection",
+        "text": "Fever/toxic appearance, severe pain with passive ROM, inability to weight-bear, bacteremia risk or rapidly progressive monoarthritis requires septic arthritis/osteomyelitis evaluation regardless of a preceding infection or positive Lyme serology."
+      },
+      {
+        "number": 4,
+        "label": "Investigations",
+        "text": "CBC/CRP/ESR when significant inflammation/systemic illness is present. Culture/aspirate suspected septic joints. Order pathogen-specific studies only when clinical/exposure history supports them; avoid broad infectious panels."
+      },
+      {
+        "number": 5,
+        "label": "Lyme testing",
+        "text": "Use recommended two-tier serologic testing when Lyme arthritis is clinically plausible. Do not use Lyme serology as a general screen for nonspecific arthralgia in a low-pretest-probability presentation."
+      },
+      {
+        "number": 6,
+        "label": "Imaging",
+        "text": "Ultrasound can identify effusion; radiograph/MRI is driven by trauma, bone pain, osteomyelitis, chronicity or diagnostic uncertainty."
+      },
+      {
+        "number": 7,
+        "label": "Management",
+        "text": "Reactive arthritis is usually supportive once dangerous infection is excluded; persistent or severe inflammatory disease may require rheumatology. Confirm Lyme treatment regimen/duration against current Canadian/local infectious-disease guidance."
+      },
+      {
+        "number": 8,
+        "label": "Escalation",
+        "text": "Escalate for systemic illness, inability to weight-bear, suspected septic joint/osteomyelitis, neurologic/cardiac Lyme manifestations, persistent objective arthritis or diagnostic uncertainty."
+      }
+    ],
+    "treatments": [
+      {
+        "group": "Core principle",
+        "text": "A recent infection does not protect against septic arthritis. In an acutely unwell child with monoarthritis, rule out invasive infection first."
+      }
+    ],
+    "guidance": "Current Canadian/local Lyme disease guidance, pediatric infectious diseases pathways and rheumatology practice.",
+    "contentStatus": "Clinical-support reference — verify the current local pathway and involve pediatric rheumatology when indicated",
+    "lastUpdated": "2026-09-18",
+    "sourceLabels": [
+      "American College of Rheumatology",
+      "EULAR/PReS pediatric rheumatology recommendations",
+      "Current local pediatric rheumatology, infectious diseases and emergency pathways"
+    ]
   }
 ]
