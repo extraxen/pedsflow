@@ -1,6 +1,6 @@
 # PedsFlow
 
-**Version:** 20.10.3+2103
+**Version:** 20.10.4+2104
 **Release date:** September 18, 2026
 **Status:** Clean full-source release
 
@@ -22,7 +22,9 @@ PedsFlow is a Flutter pediatric clinical reference and decision-support applicat
 - Proprietary PedsFlow license and third-party notice
 - Global clinical-safety footer with the full disclaimer available on every page
 - Session-only patient weight calculator that shows supported weight-based medication doses while preserving the source rule for verification
-- Keep Screen Awake control for supported browsers\n- UTF-8 text normalization for clinical data to repair mojibake such as malformed bullets, dashes, arrows, degree signs, and Greek symbols
+- Keep Screen Awake control for supported browsers
+- UTF-8 text normalization for clinical data to repair mojibake such as malformed bullets, dashes, arrows, degree signs, and Greek symbols
+- Hard-coded UI Unicode integrity check to prevent Windows-1252/CP437 mojibake from being committed
 
 ## Build
 
