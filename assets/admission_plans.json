@@ -19914,6 +19914,26 @@
         "number": 8,
         "label": "Red flags / consult",
         "text": "Urgent senior/Ortho/ID assessment for suspected infection. Urgent hematology/oncology assessment for cytopenias, blasts, disproportionate bone/night pain, weight loss, lymphadenopathy or hepatosplenomegaly. Rheumatology referral for persistent objective arthritis, inflammatory pattern, multisystem autoimmune features or diagnostic uncertainty."
+      },
+      {
+        "number": 9,
+        "label": "Monitoring",
+        "text": "Monitor vitals and clinical trajectory according to acuity; document joint function, pain, fever pattern and new systemic findings. Increase monitoring for hemodynamic instability, organ involvement, sedating treatment or rapidly evolving disease."
+      },
+      {
+        "number": 10,
+        "label": "Supportive care",
+        "text": "Provide age-appropriate analgesia, hydration and activity support while the diagnostic evaluation proceeds. Avoid interventions that could obscure an unstable child’s examination; immobilize/support a very painful joint when clinically appropriate."
+      },
+      {
+        "number": 11,
+        "label": "Reassessment / contingency",
+        "text": "Repeat the joint, skin and systemic examination when symptoms evolve and review trends rather than isolated laboratory values. Escalate for new fever/toxicity, inability to weight-bear, progressive swelling, cytopenias, renal/neurologic involvement, bleeding, shock or diagnostic uncertainty."
+      },
+      {
+        "number": 12,
+        "label": "Disposition / follow-up",
+        "text": "Disposition depends on physiologic stability, ability to mobilize/hydrate, exclusion of urgent infection/hematologic disease, organ involvement and access to timely follow-up. Arrange the appropriate pediatric rheumatology, ophthalmology, nephrology, infectious diseases or orthopedic follow-up for the working diagnosis."
       }
     ],
     "treatments": [
@@ -19982,6 +20002,26 @@
         "number": 8,
         "label": "Minimum bedside data",
         "text": "Document fever curve, rash morphology/distribution/blanching, mucosa, joint count, gait, BP, urine findings, lymph nodes/hepatosplenomegaly, muscle power and medication/infection timeline. Photograph evolving rash when consent/local policy permits."
+      },
+      {
+        "number": 9,
+        "label": "Monitoring",
+        "text": "Monitor vitals and clinical trajectory according to acuity; document joint function, pain, fever pattern and new systemic findings. Increase monitoring for hemodynamic instability, organ involvement, sedating treatment or rapidly evolving disease."
+      },
+      {
+        "number": 10,
+        "label": "Supportive care",
+        "text": "Provide age-appropriate analgesia, hydration and activity support while the diagnostic evaluation proceeds. Avoid interventions that could obscure an unstable child’s examination; immobilize/support a very painful joint when clinically appropriate."
+      },
+      {
+        "number": 11,
+        "label": "Reassessment / contingency",
+        "text": "Repeat the joint, skin and systemic examination when symptoms evolve and review trends rather than isolated laboratory values. Escalate for new fever/toxicity, inability to weight-bear, progressive swelling, cytopenias, renal/neurologic involvement, bleeding, shock or diagnostic uncertainty."
+      },
+      {
+        "number": 12,
+        "label": "Disposition / follow-up",
+        "text": "Disposition depends on physiologic stability, ability to mobilize/hydrate, exclusion of urgent infection/hematologic disease, organ involvement and access to timely follow-up. Arrange the appropriate pediatric rheumatology, ophthalmology, nephrology, infectious diseases or orthopedic follow-up for the working diagnosis."
       }
     ],
     "treatments": [
@@ -20052,6 +20092,26 @@
         "number": 8,
         "label": "Escalation",
         "text": "Urgent assessment for systemic illness, suspected infection/malignancy, eye pain/redness/photophobia, cervical/TMJ complications, severe functional loss, or features of systemic JIA/MAS."
+      },
+      {
+        "number": 9,
+        "label": "Monitoring",
+        "text": "Monitor vitals and clinical trajectory according to acuity; document joint function, pain, fever pattern and new systemic findings. Increase monitoring for hemodynamic instability, organ involvement, sedating treatment or rapidly evolving disease."
+      },
+      {
+        "number": 10,
+        "label": "Supportive care",
+        "text": "Provide age-appropriate analgesia, hydration and activity support while the diagnostic evaluation proceeds. Avoid interventions that could obscure an unstable child’s examination; immobilize/support a very painful joint when clinically appropriate."
+      },
+      {
+        "number": 11,
+        "label": "Reassessment / contingency",
+        "text": "Repeat the joint, skin and systemic examination when symptoms evolve and review trends rather than isolated laboratory values. Escalate for new fever/toxicity, inability to weight-bear, progressive swelling, cytopenias, renal/neurologic involvement, bleeding, shock or diagnostic uncertainty."
+      },
+      {
+        "number": 12,
+        "label": "Disposition / follow-up",
+        "text": "Disposition depends on physiologic stability, ability to mobilize/hydrate, exclusion of urgent infection/hematologic disease, organ involvement and access to timely follow-up. Arrange the appropriate pediatric rheumatology, ophthalmology, nephrology, infectious diseases or orthopedic follow-up for the working diagnosis."
       }
     ],
     "treatments": [
@@ -20123,6 +20183,26 @@
         "number": 8,
         "label": "Reassessment",
         "text": "Trend fever curve, mental status, perfusion, CBC, ferritin, LFTs, fibrinogen, triglycerides and coagulation parameters closely; escalating organ dysfunction warrants critical-care management."
+      },
+      {
+        "number": 9,
+        "label": "Monitoring",
+        "text": "Monitor vitals and clinical trajectory according to acuity; document joint function, pain, fever pattern and new systemic findings. Increase monitoring for hemodynamic instability, organ involvement, sedating treatment or rapidly evolving disease."
+      },
+      {
+        "number": 10,
+        "label": "Supportive care",
+        "text": "Provide age-appropriate analgesia, hydration and activity support while the diagnostic evaluation proceeds. Avoid interventions that could obscure an unstable child’s examination; immobilize/support a very painful joint when clinically appropriate."
+      },
+      {
+        "number": 11,
+        "label": "Reassessment / contingency",
+        "text": "Repeat the joint, skin and systemic examination when symptoms evolve and review trends rather than isolated laboratory values. Escalate for new fever/toxicity, inability to weight-bear, progressive swelling, cytopenias, renal/neurologic involvement, bleeding, shock or diagnostic uncertainty."
+      },
+      {
+        "number": 12,
+        "label": "Disposition / follow-up",
+        "text": "Disposition depends on physiologic stability, ability to mobilize/hydrate, exclusion of urgent infection/hematologic disease, organ involvement and access to timely follow-up. Arrange the appropriate pediatric rheumatology, ophthalmology, nephrology, infectious diseases or orthopedic follow-up for the working diagnosis."
       }
     ],
     "treatments": [
@@ -20191,6 +20271,26 @@
         "number": 8,
         "label": "Follow-up",
         "text": "Arrange serial BP and urinalysis after diagnosis because renal involvement may emerge after the initial presentation; use the current local/nephrology schedule and extend follow-up when abnormalities occur."
+      },
+      {
+        "number": 9,
+        "label": "Monitoring",
+        "text": "Monitor vitals and clinical trajectory according to acuity; document joint function, pain, fever pattern and new systemic findings. Increase monitoring for hemodynamic instability, organ involvement, sedating treatment or rapidly evolving disease."
+      },
+      {
+        "number": 10,
+        "label": "Supportive care",
+        "text": "Provide age-appropriate analgesia, hydration and activity support while the diagnostic evaluation proceeds. Avoid interventions that could obscure an unstable child’s examination; immobilize/support a very painful joint when clinically appropriate."
+      },
+      {
+        "number": 11,
+        "label": "Reassessment / contingency",
+        "text": "Repeat the joint, skin and systemic examination when symptoms evolve and review trends rather than isolated laboratory values. Escalate for new fever/toxicity, inability to weight-bear, progressive swelling, cytopenias, renal/neurologic involvement, bleeding, shock or diagnostic uncertainty."
+      },
+      {
+        "number": 12,
+        "label": "Disposition / follow-up",
+        "text": "Disposition depends on physiologic stability, ability to mobilize/hydrate, exclusion of urgent infection/hematologic disease, organ involvement and access to timely follow-up. Arrange the appropriate pediatric rheumatology, ophthalmology, nephrology, infectious diseases or orthopedic follow-up for the working diagnosis."
       }
     ],
     "treatments": [
@@ -20260,6 +20360,26 @@
         "number": 8,
         "label": "Reassessment",
         "text": "Trend symptoms, BP, CBC, renal function, urinalysis/UPCR, complements and disease-specific markers according to organ involvement and specialist plan."
+      },
+      {
+        "number": 9,
+        "label": "Monitoring",
+        "text": "Monitor vitals and clinical trajectory according to acuity; document joint function, pain, fever pattern and new systemic findings. Increase monitoring for hemodynamic instability, organ involvement, sedating treatment or rapidly evolving disease."
+      },
+      {
+        "number": 10,
+        "label": "Supportive care",
+        "text": "Provide age-appropriate analgesia, hydration and activity support while the diagnostic evaluation proceeds. Avoid interventions that could obscure an unstable child’s examination; immobilize/support a very painful joint when clinically appropriate."
+      },
+      {
+        "number": 11,
+        "label": "Reassessment / contingency",
+        "text": "Repeat the joint, skin and systemic examination when symptoms evolve and review trends rather than isolated laboratory values. Escalate for new fever/toxicity, inability to weight-bear, progressive swelling, cytopenias, renal/neurologic involvement, bleeding, shock or diagnostic uncertainty."
+      },
+      {
+        "number": 12,
+        "label": "Disposition / follow-up",
+        "text": "Disposition depends on physiologic stability, ability to mobilize/hydrate, exclusion of urgent infection/hematologic disease, organ involvement and access to timely follow-up. Arrange the appropriate pediatric rheumatology, ophthalmology, nephrology, infectious diseases or orthopedic follow-up for the working diagnosis."
       }
     ],
     "treatments": [
@@ -20329,6 +20449,26 @@
         "number": 8,
         "label": "Reassessment",
         "text": "Trend objective strength/function and muscle enzymes while recognizing that enzyme levels may not perfectly track disease activity."
+      },
+      {
+        "number": 9,
+        "label": "Monitoring",
+        "text": "Monitor vitals and clinical trajectory according to acuity; document joint function, pain, fever pattern and new systemic findings. Increase monitoring for hemodynamic instability, organ involvement, sedating treatment or rapidly evolving disease."
+      },
+      {
+        "number": 10,
+        "label": "Supportive care",
+        "text": "Provide age-appropriate analgesia, hydration and activity support while the diagnostic evaluation proceeds. Avoid interventions that could obscure an unstable child’s examination; immobilize/support a very painful joint when clinically appropriate."
+      },
+      {
+        "number": 11,
+        "label": "Reassessment / contingency",
+        "text": "Repeat the joint, skin and systemic examination when symptoms evolve and review trends rather than isolated laboratory values. Escalate for new fever/toxicity, inability to weight-bear, progressive swelling, cytopenias, renal/neurologic involvement, bleeding, shock or diagnostic uncertainty."
+      },
+      {
+        "number": 12,
+        "label": "Disposition / follow-up",
+        "text": "Disposition depends on physiologic stability, ability to mobilize/hydrate, exclusion of urgent infection/hematologic disease, organ involvement and access to timely follow-up. Arrange the appropriate pediatric rheumatology, ophthalmology, nephrology, infectious diseases or orthopedic follow-up for the working diagnosis."
       }
     ],
     "treatments": [
@@ -20398,6 +20538,26 @@
         "number": 8,
         "label": "Escalation",
         "text": "Escalate for systemic illness, inability to weight-bear, suspected septic joint/osteomyelitis, neurologic/cardiac Lyme manifestations, persistent objective arthritis or diagnostic uncertainty."
+      },
+      {
+        "number": 9,
+        "label": "Monitoring",
+        "text": "Monitor vitals and clinical trajectory according to acuity; document joint function, pain, fever pattern and new systemic findings. Increase monitoring for hemodynamic instability, organ involvement, sedating treatment or rapidly evolving disease."
+      },
+      {
+        "number": 10,
+        "label": "Supportive care",
+        "text": "Provide age-appropriate analgesia, hydration and activity support while the diagnostic evaluation proceeds. Avoid interventions that could obscure an unstable child’s examination; immobilize/support a very painful joint when clinically appropriate."
+      },
+      {
+        "number": 11,
+        "label": "Reassessment / contingency",
+        "text": "Repeat the joint, skin and systemic examination when symptoms evolve and review trends rather than isolated laboratory values. Escalate for new fever/toxicity, inability to weight-bear, progressive swelling, cytopenias, renal/neurologic involvement, bleeding, shock or diagnostic uncertainty."
+      },
+      {
+        "number": 12,
+        "label": "Disposition / follow-up",
+        "text": "Disposition depends on physiologic stability, ability to mobilize/hydrate, exclusion of urgent infection/hematologic disease, organ involvement and access to timely follow-up. Arrange the appropriate pediatric rheumatology, ophthalmology, nephrology, infectious diseases or orthopedic follow-up for the working diagnosis."
       }
     ],
     "treatments": [
