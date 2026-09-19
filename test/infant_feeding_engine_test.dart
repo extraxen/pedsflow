@@ -24,4 +24,17 @@ void main() {
   test('weight change calculation', () {
     expect(InfantFeedingEngine.percentWeightChange(birthWeightKg: 3.3, currentWeightKg: 3.0), closeTo(-9.09, 0.1));
   });
+  test('2023 DRI male infant EER equation', () {
+    final eer = InfantFeedingEngine.eerKcalDay(
+      ageDays: 30, heightCm: 56.5, weightKg: 5.0, sex: InfantSex.male);
+    expect(eer, closeTo(565.6, 1.0));
+    expect(InfantFeedingEngine.eerKcalKgDay(
+      ageDays: 30, heightCm: 56.5, weightKg: 5.0, sex: InfantSex.male),
+      closeTo(113.1, 0.5));
+  });
+  test('2023 DRI female infant EER equation', () {
+    final eer = InfantFeedingEngine.eerKcalDay(
+      ageDays: 30, heightCm: 55.9, weightKg: 4.9, sex: InfantSex.female);
+    expect(eer, closeTo(530.7, 1.0));
+  });
 }
