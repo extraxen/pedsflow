@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 import '../bilirubin/bilirubin_screen.dart';
 import 'nicu_feeding_plan_screen.dart';
+import 'infant_feeding_screen.dart';
 
 class NeonatalHubScreen extends StatelessWidget {
   const NeonatalHubScreen({super.key});
@@ -21,7 +22,7 @@ class NeonatalHubScreen extends StatelessWidget {
       _NeoItem('Neonatal fluids & GIR', 'mL/kg/day, hourly rate, glucose infusion rate and total glucose', Icons.water_drop_outlined, const NeonatalFluidsScreen()),
       _NeoItem('Corrected gestational age', 'PMA / corrected age from GA at birth and chronological age', Icons.calendar_month_outlined, const NeonatalCorrectedAgeScreen()),
       _NeoItem('Specific Patient Feeding Plan', 'LHSC newborn initial plan + current feeds → next nutrition milestones', Icons.route_outlined, const NicuSpecificFeedingPlanScreen()),
-      _NeoItem('Feeding calculator', 'mL/kg/day → mL/day, mL/feed and kcal/kg/day', Icons.local_drink_outlined, const NeonatalFeedingScreen()),
+      _NeoItem('Neonatal & infant feeding', 'DOL targets, mL/kg/day, mL/feed, calories and weight change', Icons.local_drink_outlined, const InfantFeedingScreen()),
       _NeoItem('Neonatal medication reference', 'GA/PMA-aware safety framework and high-alert reminders', Icons.medication_outlined, const NeonatalMedicationReferenceScreen()),
       _NeoItem('Newborn resuscitation quick reference', '2025 ventilation-first newborn resuscitation sequence', Icons.emergency_outlined, const NeonatalResuscitationScreen()),
     ];
