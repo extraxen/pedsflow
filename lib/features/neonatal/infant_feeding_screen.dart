@@ -17,6 +17,9 @@ class _InfantFeedingScreenState extends State<InfantFeedingScreen> {
   final volumeGoal = TextEditingController(text: '130');
   final kcalOz = TextEditingController(text: '20');
   final calorieGoal = TextEditingController(text: '100');
+  final height = TextEditingController(text: '50');
+  InfantSex sex = InfantSex.male;
+  bool useEer = false;
   int feeds = 8;
   bool useDolTarget = true;
 
@@ -26,7 +29,7 @@ class _InfantFeedingScreenState extends State<InfantFeedingScreen> {
   @override
   void dispose() {
     weight.dispose(); birthWeight.dispose(); ageDays.dispose(); volumeGoal.dispose();
-    kcalOz.dispose(); calorieGoal.dispose(); super.dispose();
+    kcalOz.dispose(); calorieGoal.dispose(); height.dispose(); super.dispose();
   }
 
   Widget field(TextEditingController c, String label, String suffix) => TextField(
@@ -55,7 +58,12 @@ class _InfantFeedingScreenState extends State<InfantFeedingScreen> {
     final daily = w != null && selectedMlKg != null ? InfantFeedingEngine.dailyVolume(weightKg: w, mlKgDay: selectedMlKg) : null;
     final perFeed = w != null && selectedMlKg != null ? InfantFeedingEngine.volumePerFeed(weightKg: w, mlKgDay: selectedMlKg, feedsPerDay: feeds) : null;
     final energy = selectedMlKg != null && density != null ? InfantFeedingEngine.kcalKgDay(mlKgDay: selectedMlKg, kcalPerOz: density) : null;
-    final desired = n(calorieGoal);
+    final h = n(height);
+    final eer = days != null && days >= 0 && days < 1096 && w != null && w > 0 && h != null && h > 0
+        ? InfantFeedingEngine.eerKcalDay(ageDays: days, heightCm: h, weightKg: w, sex: sex)
+        : null;
+    final eerKg = eer != null && w != null ? eer / w : null;
+    final desired = useEer && eerKg != null ? eerKg : n(calorieGoal);
     final reverse = desired != null && density != null && density > 0 ? InfantFeedingEngine.mlKgDayFromCalories(targetKcalKgDay: desired, kcalPerOz: density) : null;
     final change = w != null && bw != null && bw > 0 ? InfantFeedingEngine.percentWeightChange(birthWeightKg: bw, currentWeightKg: w) : null;
 
@@ -100,7 +108,32 @@ class _InfantFeedingScreenState extends State<InfantFeedingScreen> {
         const Divider(height: 30),
         const Text('CALORIE → VOLUME', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16)),
         const SizedBox(height: 8),
-        field(calorieGoal, 'Desired energy', 'kcal/kg/day'),
+        const Text('2023 DRI Estimated Energy Requirement (EER)', style: TextStyle(fontWeight: FontWeight.w800)),
+        const SizedBox(height: 8),
+        Wrap(spacing: 10, runSpacing: 10, children: [
+          SizedBox(width: 210, child: field(height, 'Length / height', 'cm')),
+          SizedBox(width: 210, child: DropdownButtonFormField<InfantSex>(
+            initialValue: sex,
+            decoration: const InputDecoration(labelText: 'Sex', border: OutlineInputBorder()),
+            items: const [
+              DropdownMenuItem(value: InfantSex.male, child: Text('Male')),
+              DropdownMenuItem(value: InfantSex.female, child: Text('Female')),
+            ],
+            onChanged: (v) => setState(() => sex = v ?? sex),
+          )),
+        ]),
+        if (eer != null && eerKg != null) ...[
+          result('Age/sex/size EER', eer.toStringAsFixed(0) + ' kcal/day'),
+          result('EER per kg', eerKg.toStringAsFixed(0) + ' kcal/kg/day'),
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            title: const Text('Use calculated EER for calorie → volume'),
+            subtitle: const Text('Turn off to enter a custom clinical calorie target.'),
+            value: useEer,
+            onChanged: (v) => setState(() => useEer = v),
+          ),
+        ],
+        if (!useEer || eerKg == null) field(calorieGoal, 'Desired energy', 'kcal/kg/day'),
         if (reverse != null) ...[
           result('Required volume', reverse.toStringAsFixed(0) + ' mL/kg/day'),
           if (w != null) result('Total volume needed', (reverse * w).toStringAsFixed(0) + ' mL/day'),
@@ -110,6 +143,7 @@ class _InfantFeedingScreenState extends State<InfantFeedingScreen> {
         const Text('Reference framework', style: TextStyle(fontWeight: FontWeight.w900)),
         const Text('• Term newborn reference progression: 60–80, 80–100, 100–120, 120–140, 140–150, then ~150 mL/kg/day.\n'
           '• Standard 20 kcal/oz milk is ~0.676 kcal/mL; therefore 150 mL/kg/day provides ~101 kcal/kg/day.\n'
+          '• Infant EER uses the 2023 Dietary Reference Intakes for Energy equations for ages 0 to <3 years (age, sex, length/height and weight); it is an estimate, not a fixed kcal/kg/day requirement.\n'
           '• Preterm infants should use the separate Specific Patient Feeding Plan / local NICU pathway; do not apply this term progression blindly.\n'
           '• Healthy direct breastfeeding should be assessed clinically rather than prescribed a fixed mL/feed solely from this calculator.'),
         const SizedBox(height: 10),
