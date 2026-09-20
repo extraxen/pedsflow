@@ -69,6 +69,8 @@ class _InfantFeedingScreenState extends State<InfantFeedingScreen> {
     final energy = mlKg != null ? InfantFeedingEngine.kcalKgDay(mlKgDay: mlKg, kcalPerOz: kcalOz) : null;
     final perFeed = !continuous && daily != null ? daily / feedsPerDay : null;
     final hourly = continuous && daily != null ? daily / 24 : null;
+    final calorieReference = days == null ? null : InfantFeedingEngine.calorieReferenceForAgeDays(days);
+    final calorieStatus = energy != null && calorieReference != null ? InfantFeedingEngine.calorieReferenceStatus(kcalKgDay: energy, reference: calorieReference) : null;
     final desiredKcal = n(customKcal);
     final volumeForCalories = desiredKcal != null ? InfantFeedingEngine.mlKgDayFromCalories(targetKcalKgDay: desiredKcal, kcalPerOz: kcalOz) : null;
 
@@ -132,6 +134,8 @@ class _InfantFeedingScreenState extends State<InfantFeedingScreen> {
         if (daily != null) result('Total daily volume', '${daily.toStringAsFixed(0)} mL/day'),
         if (mlKg != null) result('Volume target', '${mlKg.toStringAsFixed(0)} mL/kg/day'),
         if (energy != null) result('Calories delivered', '${energy.toStringAsFixed(0)} kcal/kg/day'),
+        if (calorieReference != null) result('Typical age calories', calorieReference.minMlKgDay.toStringAsFixed(0) + '–' + calorieReference.maxMlKgDay.toStringAsFixed(0) + ' kcal/kg/day'),
+        if (calorieStatus != null) result('Energy comparison', calorieStatus),
         const Divider(height: 30),
         ExpansionTile(
           tilePadding: EdgeInsets.zero,
