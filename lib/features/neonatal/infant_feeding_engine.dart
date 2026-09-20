@@ -28,6 +28,23 @@ class InfantFeedingEngine {
   static double mlKgDayFromCalories({required double targetKcalKgDay, required double kcalPerOz}) => targetKcalKgDay / kcalPerMl(kcalPerOz);
   static double percentWeightChange({required double birthWeightKg, required double currentWeightKg}) => (currentWeightKg - birthWeightKg) / birthWeightKg * 100;
 
+  // Practical bedside reference bands for healthy term infants.
+  // These intentionally remain approximate; current Canadian DRI EER is individualized.
+  static InfantFeedingTarget? calorieReferenceForAgeDays(int ageDays) {
+    if (ageDays < 0 || ageDays >= 365) return null;
+    if (ageDays < 30) return const InfantFeedingTarget(105, 115, '0–1 month');
+    if (ageDays < 61) return const InfantFeedingTarget(100, 110, '1–2 months');
+    if (ageDays < 91) return const InfantFeedingTarget(95, 105, '2–3 months');
+    if (ageDays < 183) return const InfantFeedingTarget(80, 95, '3–6 months');
+    return const InfantFeedingTarget(75, 90, '6–12 months');
+  }
+
+  static String calorieReferenceStatus({required double kcalKgDay, required InfantFeedingTarget reference}) {
+    if (kcalKgDay < reference.minMlKgDay) return 'Below typical reference';
+    if (kcalKgDay > reference.maxMlKgDay) return 'Above typical reference';
+    return 'Within typical reference';
+  }
+
   // 2023 Dietary Reference Intakes for Energy (US/Canada), ages 0 to <3 y.
   // Age is entered in days and converted to years; height is cm and weight kg.
   static double eerKcalDay({
