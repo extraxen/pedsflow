@@ -37,4 +37,13 @@ void main() {
       ageDays: 30, heightCm: 55.9, weightKg: 4.9, sex: InfantSex.female);
     expect(eer, closeTo(530.7, 1.0));
   });
+  test('age calorie reference bands and comparison', () {
+    final oneMonth = InfantFeedingEngine.calorieReferenceForAgeDays(30)!;
+    expect(oneMonth.minMlKgDay, 100);
+    expect(oneMonth.maxMlKgDay, 110);
+    expect(InfantFeedingEngine.calorieReferenceStatus(kcalKgDay: 105, reference: oneMonth), 'Within typical reference');
+    expect(InfantFeedingEngine.calorieReferenceStatus(kcalKgDay: 90, reference: oneMonth), 'Below typical reference');
+    expect(InfantFeedingEngine.calorieReferenceForAgeDays(365), isNull);
+  });
 }
+
