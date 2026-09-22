@@ -133,3 +133,11 @@ Global persistent navigation shell:
 - Each main section has its own nested Navigator and preserves its navigation history.
 - Re-selecting the active tab returns that section to its root.
 - System back first navigates within the current section, then returns to Home.
+
+Expanded Iron Poisoning chapter (2026-09-21):
+- Added elemental-iron dose risk categories.
+- Added classic toxicity phases and latent-period warning.
+- Added 4-6 hour serum iron timing and HAGMA assessment.
+- Added charcoal limitation, WBI guidance, and escalation for retained tablets.
+- Added deferoxamine indications, infusion guidance, monitoring, adverse effects, and endpoints.
+- Added LITFL Iron Overdose as a supplemental source while retaining Poison Centre/local guidance as primary.
