@@ -16858,90 +16858,100 @@
     "category": "Allergy & Toxicology",
     "aliases": [
       "iron overdose",
-      "ferrous sulfate poisoning"
+      "ferrous sulfate poisoning",
+      "ferrous fumarate poisoning",
+      "ferrous gluconate poisoning",
+      "elemental iron overdose",
+      "deferoxamine",
+      "desferrioxamine"
     ],
-    "summary": "Admit significant or uncertain ingestion, persistent GI symptoms, metabolic acidosis, shock, altered mental status, high/rising iron level or radiopaque tablets with symptoms.",
+    "summary": "Risk assessment is based on elemental iron dose. <20 mg/kg is usually asymptomatic, 20-60 mg/kg usually causes GI toxicity, 60-120 mg/kg can cause systemic toxicity, and >120 mg/kg is potentially lethal. Contact Poison Centre early for significant, symptomatic, uncertain, or intentional ingestion.",
     "sections": [
       {
         "number": 1,
         "label": "Admission / disposition",
-        "text": "Admit significant or uncertain ingestion, persistent GI symptoms, metabolic acidosis, shock, altered mental status, high/rising iron level or radiopaque tablets with symptoms."
+        "text": "Base risk on ELEMENTAL iron ingested, not total tablet/salt mass. LITFL dose-risk guide: <20 mg/kg usually asymptomatic; 20-60 mg/kg usually GI symptoms only; 60-120 mg/kg potential systemic toxicity; >120 mg/kg potentially lethal. In children, ingestion >40 mg/kg warrants hospital assessment per LITFL. Admit persistent GI symptoms, metabolic acidosis, shock, altered mental status, high/rising iron level, significant hepatic injury, or other systemic toxicity. Use PICU for shock, severe acidosis, encephalopathy, respiratory failure, or chelation requiring intensive monitoring."
       },
       {
         "number": 2,
         "label": "Vitals",
-        "text": "Vitals q4h when stable. Increase frequency or use continuous monitoring for hemodynamic instability, respiratory compromise, neurologic change, active resuscitation, procedural sedation, or rapidly evolving disease."
+        "text": "Frequent vitals during the first 6 hours and any symptomatic period. Use continuous cardiorespiratory monitoring for systemic toxicity, shock, altered mental status, significant acidosis, or deferoxamine infusion. Increase reassessment frequency during active resuscitation."
       },
       {
         "number": 3,
         "label": "Monitoring",
-        "text": "Continuous monitoring when symptomatic; GI losses, perfusion, neurologic status and urine output."
+        "text": "Classic toxicity phases overlap: 0-6 h GI toxicity (vomiting, diarrhea, abdominal pain, hematemesis/melena, fluid loss/shock); 6-12 h apparent improvement/latent phase while iron shifts intracellularly; 12-48 h systemic toxicity with vasodilatory shock, third-spacing, high-anion-gap metabolic acidosis and hepatorenal injury; 2-5 d acute hepatic failure; 2-6 wk delayed GI scarring/stricture and other chronic sequelae. Do not be falsely reassured by transient symptom improvement."
       },
       {
         "number": 4,
         "label": "Respiratory support",
-        "text": "Respiratory support for shock, encephalopathy or respiratory failure."
+        "text": "Support airway and ventilation as clinically indicated for shock, encephalopathy, aspiration risk, or respiratory failure. Severe systemic toxicity belongs in a monitored/PICU setting."
       },
       {
         "number": 5,
         "label": "IV access",
-        "text": "Obtain IV access for significant illness, parenteral therapy, urgent investigations, procedural care or instability. Consider a second IV/IO during resuscitation."
+        "text": "Obtain reliable IV access for significant or symptomatic ingestion. Consider a second IV or IO during shock/resuscitation. Draw timed serum iron and metabolic/hepatic studies promptly without delaying stabilization."
       },
       {
         "number": 6,
         "label": "Fluids / diet",
-        "text": "NPO during significant toxicity. Use isotonic resuscitation and glucose support as needed."
+        "text": "NPO during significant toxicity or while GI decontamination/procedural intervention is being considered. Restore circulating volume early when there are GI losses, vasodilation, or third-spacing. LITFL suggests 10-20 mL/kg isotonic crystalloid boluses with frequent reassessment; tailor further resuscitation to perfusion, cardiac status, urine output, and Poison Centre/PICU guidance."
       },
       {
         "number": 7,
         "label": "Labs",
-        "text": "Timed serum iron level, CBC, electrolytes, gas/lactate, glucose, renal/liver profile, coagulation and acetaminophen level for intentional ingestion."
+        "text": "Obtain a serum iron concentration timed for approximately 4-6 hours after ingestion because levels typically peak then; after 6 hours the level may fall as iron shifts intracellularly. Clinical toxicity does not correlate perfectly with the level, but >90 micromol/L (about 500 mcg/dL) at 4-6 h is generally associated with systemic toxicity in LITFL. Obtain blood gas and anion gap; HAGMA is an important marker of systemic toxicity and bicarbonate may be a useful surrogate if iron levels are unavailable. Also obtain glucose, electrolytes/renal function, LFTs, coagulation studies, CBC, lactate as indicated, and acetaminophen level for intentional/unknown co-ingestion."
       },
       {
         "number": 8,
         "label": "Imaging",
-        "text": "Abdominal radiograph may identify radiopaque tablets but a negative image does not exclude ingestion."
+        "text": "Abdominal radiograph can demonstrate radiopaque iron tablets and help confirm ingestion/tablet burden. A negative film does not exclude ingestion. Persistent large tablet burden may influence whole-bowel irrigation or endoscopic/surgical discussion."
       },
       {
         "number": 9,
         "label": "Medications / treatment",
-        "text": "Contact Poison Centre immediately. Whole-bowel irrigation and deferoxamine are indication-specific. Activated charcoal does not bind iron effectively."
+        "text": "Contact Poison Centre/toxicology early. Activated charcoal does NOT adsorb iron effectively. LITFL describes whole-bowel irrigation for confirmed ingestion >60 mg/kg; consider endoscopic or surgical tablet removal for potentially lethal ingestion (for example >120 mg/kg) or when WBI is not feasible, with expert consultation. Deferoxamine (desferrioxamine) is indicated for systemic toxicity, shock, metabolic acidosis, altered mental status, or a 4-6 h iron level >90 micromol/L. LITFL dosing: IV infusion 15 mg/kg/hour initially; reduce if hypotension occurs and, in severe toxicity, titration up to 40 mg/kg/hour may be used with toxicology/PICU guidance and mandatory cardiac monitoring. Treatment endpoints are controversial; LITFL suggests stopping once clinically stable and serum iron is <60 micromol/L. Avoid unnecessarily prolonged infusion because ARDS risk increases with prolonged therapy."
       },
       {
         "number": 10,
         "label": "Consults",
-        "text": "Poison Centre/toxicology, PICU and gastroenterology/surgery for retained tablets or severe GI injury."
+        "text": "Ontario/provincial Poison Centre or medical toxicology for all significant or uncertain ingestions. PICU for systemic toxicity or chelation requiring intensive monitoring. Gastroenterology/surgery for retained tablet burden, severe GI injury, or when endoscopic/surgical decontamination is being considered."
       },
       {
         "number": 11,
         "label": "Nursing / RT instructions",
-        "text": "Record product elemental-iron content, timing and tablets potentially ingested. Monitor emesis/stool and chelation effects."
+        "text": "Document exact product, strength, formulation, estimated tablets ingested, time of ingestion, and calculated ELEMENTAL iron dose. Monitor emesis/stool losses, perfusion, neurologic status, urine output, acid-base status, and serial laboratory timing. Deferoxamine can produce vin-rose urine from ferrioxamine excretion, but urine color is not a reliable marker of adequate chelation. Watch for hypotension/hypersensitivity and prolonged-infusion complications."
       },
       {
         "number": 12,
         "label": "Reassessment / contingency",
-        "text": "Escalate shock, acidosis, altered mental status, coagulopathy, hepatic injury or worsening level/symptoms."
+        "text": "Reassess frequently through the first 6-12 hours and after every intervention. Escalate immediately for persistent vomiting/hematemesis, worsening abdominal pain, shock, HAGMA, altered mental status, coagulopathy, rising transaminases, renal injury, or other systemic toxicity. Do not use a falling late serum iron level alone as reassurance because intracellular redistribution can lower the circulating level. Disposition and observation duration should follow Poison Centre/local toxicology guidance."
       }
     ],
     "treatments": [
       {
         "group": "Support",
-        "text": "Respiratory support for shock, encephalopathy or respiratory failure. NPO during significant toxicity. Use isotonic resuscitation and glucose support as needed."
+        "text": "ABCs, early treatment of hypovolemia/shock, NPO during significant toxicity, frequent reassessment, and monitoring for the latent phase followed by systemic toxicity. Use 10-20 mL/kg isotonic crystalloid boluses for perfusion deficit with frequent reassessment."
       },
       {
-        "group": "Medications / treatment",
-        "text": "Contact Poison Centre immediately. Whole-bowel irrigation and deferoxamine are indication-specific. Activated charcoal does not bind iron effectively."
+        "group": "GI decontamination",
+        "text": "Activated charcoal is ineffective for iron. LITFL describes whole-bowel irrigation for confirmed >60 mg/kg elemental iron ingestion. Consider endoscopic/surgical tablet removal for potentially lethal ingestion or when WBI is not feasible, with Poison Centre/toxicology and GI/surgery involvement."
+      },
+      {
+        "group": "Deferoxamine",
+        "text": "For systemic toxicity, shock, metabolic acidosis, altered mental status, or 4-6 h serum iron >90 micromol/L. LITFL: IV 15 mg/kg/hour initially; reduce for hypotension and consider titration up to 40 mg/kg/hour in severe toxicity only with toxicology/PICU guidance and cardiac monitoring. LITFL suggests stopping when clinically stable and serum iron <60 micromol/L; endpoint decisions should be individualized with Poison Centre/toxicology."
       }
     ],
-    "guidance": "Ontario Poison Centre and current iron-poisoning pathway.",
-    "contentStatus": "Structured PedsFlow reference — local clinical review required",
-    "lastUpdated": "2026-07-17",
+    "guidance": "Use Ontario/provincial Poison Centre and current local toxicology pathways as the primary bedside authority. Expanded with LITFL Iron Overdose for elemental-iron risk stratification, clinical phases, investigations, GI decontamination, and deferoxamine guidance.",
+    "contentStatus": "Structured PedsFlow reference - local/Poison Centre confirmation required",
+    "lastUpdated": "2026-09-21",
     "sourceLabels": [
+      "Ontario/provincial Poison Centre and current local toxicology pathway",
+      "LITFL - Iron Overdose",
       "Canadian Paediatric Society",
       "TREKK pediatric emergency resources",
       "CHEO pediatric clinical and drug resources",
-      "IWK pediatric drug and clinical resources",
-      "Current Ontario/local institutional pathways"
+      "IWK pediatric drug and clinical resources"
     ]
   },
   {
