@@ -26164,18 +26164,20 @@
     "name": "Alteplase",
     "category": "Hematology & coagulation",
     "aliases": [
-      "tPA"
+      "tPA",
+      "Cathflo"
     ],
     "linkedPlans": [],
     "summary": "Expanded high-yield pediatric medication monograph. Verify indication-specific dosing, age/weight limits, organ adjustment, preparation, compatibility, and local policy before prescribing.",
     "doseStatus": "Structured dosing added; local verification required",
-    "administration": "Use the route, dilution, concentration, infusion time, and compatibility specified by the current hospital formulary and pharmacy.",
-    "monitoring": "Monitor clinical response and indication-specific adverse effects; verify renal/hepatic adjustment and local monitoring requirements.",
-    "warnings": "Major bleeding risk. Confirm indication, contraindications, fibrinogen/platelets, and exact protocol before use.",
+    "administration": "For CVAD occlusion, use intracatheter alteplase. Reconstituted concentration is 1 mg/mL. Use a 10 mL syringe for instillation. Reconstitute immediately before use, gently swirl (do not shake), and use within 1 hour when prepared at the bedside. For other indications, follow the indication-specific protocol and local formulary.",
+    "monitoring": "Before use for CVAD occlusion, rule out mechanical or non-thrombotic causes such as catheter malposition, kinking, mechanical failure, suture constriction, lipid deposits, or drug precipitate. During dwell time, monitor for allergic reactions and bleeding, particularly at recent trauma or venipuncture sites.",
+    "warnings": "HIGH ALERT thrombolytic. For pediatric CVAD occlusion, dosing is per lumen and depends on lumen volume/weight. Pediatric guidelines are not clearly established; consider hematology consultation for patients ≤10 kg or <2 years. Verify the current institutional policy before use.",
     "sourceLabels": [
       "CHEO Pediatric Parenteral Manual",
       "Local thrombosis protocol",
-      "LHSC / Children's Hospital of Western Ontario PCCU Dosing Handbook (2020)"
+      "LHSC / Children's Hospital of Western Ontario PCCU Dosing Handbook (2020)",
+      "LHSC Alteplase for Central Venous Catheters PDAM (2026)"
     ],
     "verificationStatus": "Expanded 2026 medication audit; requires local clinical/pharmacy verification",
     "doseSections": [
@@ -26185,6 +26187,14 @@
         "text": "Blocked catheter 10 kg or under — 0.5 mg diluted in NS to volume required to fill lumen — leave in lumen 2-4 hours then remove\nover 10 kg — 1mg/mL to a max amount of 2 mg/ 2 mL (amount required to fill volume of lumen) — leave in lumen 2-4 hours then remove\nintrapleural 30 kg or less — 0.1 mg/kg in 10-30 mL NS intrapleural ONCE daily — reassess daily, may repeat x3 days total suggest 0.1 mg/mL final concentration\nOver 30 kg — 4 mg in 40 mL NS intrapleural ONCE daily — reassess daily, may repeat x3 days total suggest 0.1 mg/mL final concentration",
         "source": "LHSC / Children's Hospital of Western Ontario PCCU Dosing Handbook (2020)",
         "sourceDate": "2020 edition",
+        "requiresVerification": true
+      },
+      {
+        "title": "LHSC pediatric CVAD occlusion (2026)",
+        "routeGroup": "Intracatheter",
+        "text": "Use a 10 mL syringe. If lumen prime volume is known: administer alteplase in a volume equal to 110% of the lumen volume. If prime volume is unknown: children ≤10 kg — 0.5 mg (0.5 mL) per lumen, instilled over 1–2 minutes; children >10 kg — 1 mg (1 mL) per lumen, instilled over 1–2 minutes; maximum 2 mg (2 mL) per lumen. Leave in the lumen for 1–2 hours, then aspirate alteplase from the catheter and flush with Sodium Chloride 0.9%. For multilumen catheters, treat one lumen at a time. If needed, the dose may be repeated; maximum total dose 2 mg. Pediatric guidelines are not clearly established; hematology consultation may be advisable for patients ≤10 kg or <2 years of age.",
+        "source": "LHSC Alteplase for Central Venous Catheters PDAM",
+        "sourceDate": "2026-02-17",
         "requiresVerification": true
       },
       {
@@ -26204,7 +26214,7 @@
         "requiresVerification": true
       }
     ],
-    "sourceSummary": "CHEO Pediatric Parenteral Manual; Local thrombosis protocol. Reviewed for PedsFlow expansion July 2026. Includes a separately labeled LHSC/Children's Hospital of Western Ontario PCCU 2020 handbook section. The handbook itself advises consulting current literature and pediatric pharmacists; verify current local formulary and patient-specific dosing before prescribing.",
+    "sourceSummary": "Includes current LHSC Alteplase for Central Venous Catheters PDAM revised February 17, 2026, plus previously included pediatric references and the separately labeled LHSC/Children's Hospital of Western Ontario PCCU 2020 handbook section. Verify current local policy and patient-specific dosing before prescribing.",
     "currentCanadianMonograph": "Verify current Health Canada product monograph and institutional pediatric formulary."
   },
   {
@@ -29203,7 +29213,10 @@
     "id": 412,
     "name": "Granisetron",
     "category": "Gastroenterology & nutrition",
-    "aliases": ["5-HT3 antagonist", "Kytril"],
+    "aliases": [
+      "5-HT3 antagonist",
+      "Kytril"
+    ],
     "linkedPlans": [
       {
         "planId": 219,
@@ -29217,7 +29230,10 @@
     "administration": "PO or IV according to the oncology, postoperative or specialist protocol. Do not combine casually with another 5-HT3 antagonist.",
     "monitoring": "Clinical response, constipation, headache, QTc and potassium/magnesium when risk factors or other QT-active medications are present.",
     "warnings": "QT prolongation and class duplication with ondansetron/palonosetron. Correct significant electrolyte abnormalities and review interacting medications.",
-    "sourceLabels": ["Health Canada product information", "Current pediatric oncology and local formulary protocols"],
+    "sourceLabels": [
+      "Health Canada product information",
+      "Current pediatric oncology and local formulary protocols"
+    ],
     "verificationStatus": "Verify indication, age, weight, route, formulation, maximum dose, organ function, QT risk and the current local protocol before prescribing.",
     "doseSections": [
       {
@@ -29236,7 +29252,10 @@
     "id": 413,
     "name": "Palonosetron",
     "category": "Gastroenterology & nutrition",
-    "aliases": ["Aloxi", "long-acting 5-HT3 antagonist"],
+    "aliases": [
+      "Aloxi",
+      "long-acting 5-HT3 antagonist"
+    ],
     "linkedPlans": [
       {
         "planId": 219,
@@ -29250,7 +29269,10 @@
     "administration": "Usually administered as a protocol-timed IV dose in pediatric oncology. Verify product, concentration and administration time.",
     "monitoring": "Clinical response, headache, constipation, interacting serotonergic/QT-active therapy and protocol-specific monitoring.",
     "warnings": "Do not stack with ondansetron or granisetron without an explicit specialist protocol. Pediatric indications and dosing are regimen-specific.",
-    "sourceLabels": ["Health Canada product information", "Current pediatric oncology protocols"],
+    "sourceLabels": [
+      "Health Canada product information",
+      "Current pediatric oncology protocols"
+    ],
     "verificationStatus": "Verify indication, age, weight, route, formulation, maximum dose, interactions and the current oncology/local formulary protocol.",
     "doseSections": [
       {
@@ -29269,7 +29291,10 @@
     "id": 414,
     "name": "Chlorpromazine",
     "category": "Gastroenterology & nutrition",
-    "aliases": ["Largactil", "phenothiazine antiemetic"],
+    "aliases": [
+      "Largactil",
+      "phenothiazine antiemetic"
+    ],
     "linkedPlans": [
       {
         "planId": 219,
@@ -29283,7 +29308,11 @@
     "administration": "If used, administer only in a monitored setting according to local IV administration policy and with an explicit rescue plan.",
     "monitoring": "Continuous or frequent cardiorespiratory monitoring as clinically indicated; blood pressure, respiratory status, sedation, dystonia/akathisia and QTc/electrolytes.",
     "warnings": "Can cause marked sedation, respiratory depression, hypotension, dystonia/akathisia and QT prolongation. Avoid casual combination with other dopamine antagonists, sedatives or QT-active medications.",
-    "sourceLabels": ["NASPGHAN pediatric cyclic vomiting syndrome consensus statement", "Health Canada product information", "Current local formulary/pharmacy"],
+    "sourceLabels": [
+      "NASPGHAN pediatric cyclic vomiting syndrome consensus statement",
+      "Health Canada product information",
+      "Current local formulary/pharmacy"
+    ],
     "verificationStatus": "High-risk specialist rescue medication. Verify age, weight, indication, dose, route, monitoring, interactions and current local protocol before prescribing.",
     "doseSections": [
       {
@@ -29302,7 +29331,10 @@
     "id": 415,
     "name": "Fosaprepitant",
     "category": "Gastroenterology & nutrition",
-    "aliases": ["IV NK1 antagonist", "Emend IV"],
+    "aliases": [
+      "IV NK1 antagonist",
+      "Emend IV"
+    ],
     "linkedPlans": [
       {
         "planId": 219,
@@ -29316,7 +29348,10 @@
     "administration": "IV infusion according to the current oncology or specialist protocol; verify concentration, dilution, compatibility and infusion time.",
     "monitoring": "Infusion reaction, hepatic function and clinically important CYP3A4 drug interactions.",
     "warnings": "Major drug-interaction potential. Not routine treatment for gastroenteritis or undifferentiated vomiting; do not improvise conversion from oral aprepitant.",
-    "sourceLabels": ["Health Canada product information", "Current pediatric oncology and pharmacy protocols"],
+    "sourceLabels": [
+      "Health Canada product information",
+      "Current pediatric oncology and pharmacy protocols"
+    ],
     "verificationStatus": "Verify indication, age, weight, regimen day, interactions, hepatic function, route and current specialist protocol before prescribing.",
     "doseSections": [
       {
@@ -29335,7 +29370,11 @@
     "id": 416,
     "name": "Scopolamine",
     "category": "Gastroenterology & nutrition",
-    "aliases": ["hyoscine", "transdermal scopolamine", "Transderm-V"],
+    "aliases": [
+      "hyoscine",
+      "transdermal scopolamine",
+      "Transderm-V"
+    ],
     "linkedPlans": [
       {
         "planId": 219,
@@ -29349,7 +29388,10 @@
     "administration": "Apply the prescribed patch behind the ear with handwashing after handling; onset is delayed, so it is unsuitable for immediate rescue.",
     "monitoring": "Dry mouth, blurred vision/mydriasis, urinary retention, confusion, agitation and excessive anticholinergic burden.",
     "warnings": "Avoid routine use in young children and use cautiously with glaucoma, urinary retention, delirium risk or other anticholinergics. Accidental eye exposure can cause unilateral mydriasis.",
-    "sourceLabels": ["Health Canada product information", "Current local pediatric formulary"],
+    "sourceLabels": [
+      "Health Canada product information",
+      "Current local pediatric formulary"
+    ],
     "verificationStatus": "Verify minimum age, product strength, indication, duration, contraindications and current local formulary before prescribing.",
     "doseSections": [
       {
@@ -29368,7 +29410,11 @@
     "id": 417,
     "name": "Sumatriptan",
     "category": "Neurology",
-    "aliases": ["Imitrex", "triptan", "5-HT1 agonist"],
+    "aliases": [
+      "Imitrex",
+      "triptan",
+      "5-HT1 agonist"
+    ],
     "linkedPlans": [
       {
         "planId": 58,
@@ -29388,7 +29434,11 @@
     "administration": "Give early in the migraine/CVS prodrome using the child's established plan. Intranasal, oral and subcutaneous products are not dose-equivalent.",
     "monitoring": "Clinical response, chest/neck symptoms, blood pressure and serotonergic/vasoconstrictive contraindications.",
     "warnings": "Avoid in significant vascular disease and review hemiplegic/brainstem-aura migraine, uncontrolled hypertension, serotonergic interactions and recent ergot/other triptan use according to current guidance.",
-    "sourceLabels": ["NASPGHAN pediatric cyclic vomiting syndrome consensus statement", "Canadian pediatric acute migraine guidance", "Health Canada product information"],
+    "sourceLabels": [
+      "NASPGHAN pediatric cyclic vomiting syndrome consensus statement",
+      "Canadian pediatric acute migraine guidance",
+      "Health Canada product information"
+    ],
     "verificationStatus": "Verify diagnosis, minimum age, formulation, dose, maximum, contraindications and current migraine/CVS pathway before prescribing.",
     "doseSections": [
       {
@@ -29407,7 +29457,11 @@
     "id": 418,
     "name": "Cyproheptadine",
     "category": "Gastroenterology & nutrition",
-    "aliases": ["Periactin", "CVS prophylaxis", "appetite stimulant"],
+    "aliases": [
+      "Periactin",
+      "CVS prophylaxis",
+      "appetite stimulant"
+    ],
     "linkedPlans": [
       {
         "planId": 219,
@@ -29421,7 +29475,11 @@
     "administration": "PO in divided doses or sometimes at bedtime to reduce daytime sedation; titrate according to the individualized prevention plan.",
     "monitoring": "Sedation, appetite/weight gain, anticholinergic effects and treatment response across at least several CVS cycles.",
     "warnings": "May cause substantial appetite stimulation, weight gain, sedation and anticholinergic effects. Do not start solely from an acute admission medication list without diagnostic and follow-up planning.",
-    "sourceLabels": ["NASPGHAN pediatric cyclic vomiting syndrome consensus statement", "Health Canada product information", "Current pediatric GI formulary"],
+    "sourceLabels": [
+      "NASPGHAN pediatric cyclic vomiting syndrome consensus statement",
+      "Health Canada product information",
+      "Current pediatric GI formulary"
+    ],
     "verificationStatus": "Verify diagnosis, age, weight, dose, formulation, contraindications and the current pediatric GI prevention plan before prescribing.",
     "doseSections": [
       {
@@ -29440,7 +29498,11 @@
     "id": 419,
     "name": "Pizotifen",
     "category": "Gastroenterology & nutrition",
-    "aliases": ["Sandomigran", "pizotyline", "CVS prophylaxis"],
+    "aliases": [
+      "Sandomigran",
+      "pizotyline",
+      "CVS prophylaxis"
+    ],
     "linkedPlans": [
       {
         "planId": 219,
@@ -29454,7 +29516,11 @@
     "administration": "PO with gradual titration according to pediatric GI/neurology guidance; bedtime initiation may reduce daytime sedation.",
     "monitoring": "Sedation, appetite/weight gain, anticholinergic effects and response over several symptom cycles.",
     "warnings": "Not for acute rescue. May cause sedation and clinically important weight gain; avoid empirical initiation without a confirmed diagnosis and follow-up plan.",
-    "sourceLabels": ["NASPGHAN pediatric cyclic vomiting syndrome consensus statement", "Health Canada product information", "Current pediatric GI/neurology formulary"],
+    "sourceLabels": [
+      "NASPGHAN pediatric cyclic vomiting syndrome consensus statement",
+      "Health Canada product information",
+      "Current pediatric GI/neurology formulary"
+    ],
     "verificationStatus": "Verify diagnosis, minimum age, dose, maximum, interactions and current specialist prevention protocol before prescribing.",
     "doseSections": [
       {
