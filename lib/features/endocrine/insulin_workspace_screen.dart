@@ -107,7 +107,7 @@ class _InsulinWorkspaceScreenState extends State<InsulinWorkspaceScreen> {
     final low = current != null && current < 3.9;
     final canCombine = _reviewed && !low &&
         meal != null && correction != null;
-    final combined = canCombine ? meal + correction : null;
+    final combined = canCombine ? meal! + correction! : null;
     final rounded = InsulinMath.nearestIncrement(combined, _doseStep);
     return Scaffold(
       appBar: AppBar(title: const Text('ICR / ISF workspace'),
