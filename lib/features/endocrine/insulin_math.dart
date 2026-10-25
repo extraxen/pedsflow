@@ -63,7 +63,7 @@ class InsulinMath {
       return null;
     }
     if (currentMmolL! <= targetMmolL!) return 0;
-    return (currentMmolL - targetMmolL) / prescribedIsfMmolLPerUnit!;
+    return (currentMmolL! - targetMmolL!) / prescribedIsfMmolLPerUnit!;
   }
 
   /// A mathematical device-resolution illustration, not a dosing rule.
@@ -74,7 +74,7 @@ class InsulinMath {
         !const [1.0, 0.5, 0.1, 0.05].contains(increment)) {
       return null;
     }
-    return (units! / increment).round() * increment;
+    return ((units! / increment).round() * increment).toDouble();
   }
 
   /// Arithmetic only; no recommended basal percentage is implied.
