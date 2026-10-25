@@ -82,4 +82,78 @@ void main() {
       expect(InsulinMath.basalFromApprovedPercentage(40, 110), isNull);
     });
   });
+  group('TDD and basal workflows', () {
+    test('weight multiplied by clinician-selected factor', () {
+      expect(InsulinMath.estimatedTddFromWeight(
+        weightKg: 30,
+        clinicianSelectedUnitsPerKgDay: 0.7,
+      ), closeTo(21, 0.00001));
+      final tdd = InsulinMath.estimatedTddFromWeight(
+        weightKg: 30,
+        clinicianSelectedUnitsPerKgDay: 0.7,
+      );
+      final basal = InsulinMath.basalFromApprovedPercentage(tdd, 40);
+      expect(basal, closeTo(8.4, 0.00001));
+      expect(InsulinMath.bolusFromTotalAndBasal(tdd, basal),
+          closeTo(12.6, 0.00001));
+    });
+    test('observed 24-hour total is delivered basal plus boluses', () {
+      final total = InsulinMath.observedTdd(
+        basalUnitsLast24h: 11.5,
+        rapidBolusUnitsLast24h: 14.5,
+      );
+      expect(total, 26);
+      expect(InsulinMath.basalPercentOfTdd(total, 11.5),
+          closeTo(44.23076923, 0.00001));
+      expect(InsulinMath.tddPerKg(total, 40), 0.65);
+    });
+    test('fails closed for missing, zero, invalid and extreme factors', () {
+      for (final factor in <double?>[
+        null, 0, -0.5, 6, double.infinity, double.nan
+      ]) {
+        expect(InsulinMath.estimatedTddFromWeight(
+          weightKg: 30,
+          clinicianSelectedUnitsPerKgDay: factor,
+        ), isNull);
+      }
+      expect(InsulinMath.estimatedTddFromWeight(
+        weightKg: null,
+        clinicianSelectedUnitsPerKgDay: 0.5,
+      ), isNull);
+      expect(InsulinMath.estimatedTddFromWeight(
+        weightKg: 300,
+        clinicianSelectedUnitsPerKgDay: 5,
+      ), isNull);
+      expect(InsulinMath.estimatedTddFromWeight(
+        weightKg: -1,
+        clinicianSelectedUnitsPerKgDay: 0.5,
+      ), isNull);
+    });
+    test('rejects incomplete 24-hour history and impossible totals', () {
+      expect(InsulinMath.observedTdd(
+        basalUnitsLast24h: 10,
+        rapidBolusUnitsLast24h: null,
+      ), isNull);
+      expect(InsulinMath.observedTdd(
+        basalUnitsLast24h: 10,
+        rapidBolusUnitsLast24h: -2,
+      ), isNull);
+      expect(InsulinMath.observedTdd(
+        basalUnitsLast24h: 0,
+        rapidBolusUnitsLast24h: 0,
+      ), isNull);
+      expect(InsulinMath.observedTdd(
+        basalUnitsLast24h: 450,
+        rapidBolusUnitsLast24h: 250,
+      ), isNull);
+    });
+    test('does not allow basal exceeding total or bad weight', () {
+      expect(InsulinMath.bolusFromTotalAndBasal(20, 21), isNull);
+      expect(InsulinMath.basalPercentOfTdd(20, 21), isNull);
+      expect(InsulinMath.bolusFromTotalAndBasal(20, 0), 20);
+      expect(InsulinMath.tddPerKg(20, 0), isNull);
+      expect(InsulinMath.tddPerKg(20, double.nan), isNull);
+    });
+  });
+
 }
