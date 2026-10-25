@@ -7,6 +7,9 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../dka/dka_calculator_screen.dart';
+import 'di_workflow_screen.dart';
+import 'insulin_workspace_screen.dart';
+import 'insulin_transition_screen.dart';
 
 class EndocrineHubScreen extends StatelessWidget {
   const EndocrineHubScreen({super.key});
@@ -16,10 +19,12 @@ class EndocrineHubScreen extends StatelessWidget {
       _EndoItem('Pediatric DKA', 'CPS/TREKK fluids, insulin, electrolytes and cerebral injury', Icons.water_drop_outlined, const DkaCalculatorScreen()),
       _EndoItem('Adrenal crisis', 'Stress hydrocortisone, shock, glucose and electrolyte support', Icons.bolt_outlined, const AdrenalCrisisScreen()),
       _EndoItem('Hypoglycemia', 'Immediate assessment and glucose rescue framework', Icons.bloodtype_outlined, const PediatricHypoglycemiaScreen()),
-      _EndoItem('DI / SIADH', 'Polyuria-hypernatremia and water-retention-hyponatremia framework', Icons.water_outlined, const DiSiadhScreen()),
+      _EndoItem('DI / AVP deficiency', 'Paired labs, urine-output calculator, sodium alerts and desmopressin safety', Icons.water_outlined, const DiWorkflowScreen()),
       _EndoItem('Calcium emergencies', 'Ionized calcium, ECG, Mg/phosphate and escalation', Icons.science_outlined, const CalciumEmergencyScreen()),
       _EndoItem('Thyroid emergencies', 'Thyroid storm and severe hypothyroidism/myxedema framework', Icons.thermostat_outlined, const ThyroidEmergencyScreen()),
-      _EndoItem('Insulin calculators', 'TDD, basal split, carb ratio, correction factor and dose estimate', Icons.calculate_outlined, const InsulinCalculatorScreen()),
+      _EndoItem('ICR / ISF calculators', 'Estimated versus prescribed ratios, Canadian units, transparent meal and correction arithmetic', Icons.calculate_outlined, const InsulinWorkspaceScreen()),
+      _EndoItem('IV to SC insulin transition', 'Readiness, basal-bolus plan, overlap and handover', Icons.swap_horiz_outlined, const SubcutaneousTransitionScreen()),
+      _EndoItem('Pump support and failure', 'Basal profiles, AID, IOB, sick days and IV-to-pump transition', Icons.settings_input_component_outlined, const InsulinPumpSupportScreen()),
     ];
     String query = '';
     return StatefulBuilder(builder: (context, setLocal) {
@@ -55,14 +60,6 @@ class _PediatricHypoglycemiaScreenState extends State<PediatricHypoglycemiaScree
  const Text('Recheck glucose after rescue and provide ongoing carbohydrate/dextrose to prevent recurrence. Review insulin/sulfonylurea exposure, fasting/illness, adrenal/pituitary disease, metabolic disease, liver disease and sepsis where relevant.'),
  ]);}}
 
-class DiSiadhScreen extends StatelessWidget{const DiSiadhScreen({super.key});@override Widget build(BuildContext context)=>_endoPage(context,'DI / SIADH',const[
- Card(child:Padding(padding:EdgeInsets.all(14),child:Text('DI and SIADH can both produce dangerous sodium disorders but require opposite fluid strategies. Confirm serum sodium/osmolality, urine output, urine osmolality/specific gravity and clinical volume status before acting.'))),
- ListTile(leading:Icon(Icons.water_outlined),title:Text('Central / nephrogenic DI',style:TextStyle(fontWeight:FontWeight.w900)),subtitle:Text('Polyuria + dilute urine with high/raising serum sodium/osmolality. Never restrict free access to water in suspected/known DI. Inpatients require strict fluid balance and close sodium monitoring. Discuss all desmopressin starts/changes with endocrinology.')),
- ListTile(leading:Icon(Icons.opacity),title:Text('Desmopressin safety',style:TextStyle(fontWeight:FontWeight.w900)),subtitle:Text('RCH: verify serum Na ≥135 mmol/L (or higher specialist target) within 1–2 h before dose, document dilute urine, and allow a period of diuresis before further doses. Dose routes are not equivalent.')),
- ListTile(leading:Icon(Icons.water_drop_outlined),title:Text('SIADH pattern',style:TextStyle(fontWeight:FontWeight.w900)),subtitle:Text('Hyponatremia with inappropriately concentrated urine and low serum osmolality in a clinically euvolemic patient after excluding adrenal, thyroid, renal and medication causes. Fluid restriction and treatment of cause are common principles; symptomatic hyponatremia is an emergency.')),
- Text('Source: RCH Diabetes insipidus guideline and local hyponatremia/SIADH pathway.'),
-]);}
-
 class CalciumEmergencyScreen extends StatelessWidget{const CalciumEmergencyScreen({super.key});@override Widget build(BuildContext context)=>_endoPage(context,'Calcium emergencies',const[
  Card(child:Padding(padding:EdgeInsets.all(14),child:Text('Use ionized calcium when available in the acutely ill child. Total calcium is affected by albumin and pH. Severe symptomatic hypo- or hypercalcemia requires monitored specialist management.'))),
  ListTile(leading:Icon(Icons.monitor_heart_outlined),title:Text('Hypocalcemia',style:TextStyle(fontWeight:FontWeight.w900)),subtitle:Text('Tetany, seizures, stridor, paresthesia or prolonged QT: obtain ionized Ca, Mg, phosphate, renal function and ECG; correct coexisting hypomagnesemia. IV calcium is a high-alert medication—use local concentration/rate/line protocol.')),
@@ -75,17 +72,6 @@ class ThyroidEmergencyScreen extends StatelessWidget{const ThyroidEmergencyScree
  ListTile(leading:Icon(Icons.ac_unit_outlined),title:Text('Severe hypothyroidism / myxedema physiology',style:TextStyle(fontWeight:FontWeight.w900)),subtitle:Text('Hypothermia, bradycardia, hypoventilation, altered mental status, hyponatremia/hypoglycemia and cardiovascular instability require PICU/endocrinology. Consider coexisting adrenal insufficiency before thyroid hormone escalation.')),
  Text('These are recognition/escalation pathways rather than autonomous medication order sets.'),
 ]);}
-
-class InsulinCalculatorScreen extends StatefulWidget{const InsulinCalculatorScreen({super.key});@override State<InsulinCalculatorScreen> createState()=>_InsulinCalculatorScreenState();}
-class _InsulinCalculatorScreenState extends State<InsulinCalculatorScreen>{final weight=TextEditingController(text:'40'),tdd=TextEditingController(text:'30'),carbs=TextEditingController(text:'60'),bg=TextEditingController(text:'12'),target=TextEditingController(text:'6');double basalPct=.45;@override void dispose(){weight.dispose();tdd.dispose();carbs.dispose();bg.dispose();target.dispose();super.dispose();}double? n(c)=>double.tryParse(c.text.trim());@override Widget build(BuildContext context){final T=n(tdd),C=n(carbs),B=n(bg),Tg=n(target);final basal=T==null?null:T*basalPct;final icr=T==null||T<=0?null:500/T;final isf=T==null||T<=0?null:100/T;final carbDose=icr==null||C==null?null:C/icr;final corr=isf==null||B==null||Tg==null?null:math.max(0,(B-Tg)/isf);return _endoPage(context,'Insulin calculators',[
- _endoNotice(context,'Educational dose-estimation workspace. Existing individualized diabetes plans, pump settings and endocrinology orders supersede formula estimates. Do not use these rules to create a new insulin regimen without clinical review.'),
- Row(children:[Expanded(child:_endoField(weight,'Weight','kg',()=>setState((){}))),const SizedBox(width:8),Expanded(child:_endoField(tdd,'Known TDD','units/day',()=>setState((){})))]),
- Text('Basal fraction ${(basalPct*100).round()}%'),Slider(value:basalPct,min:.3,max:.6,divisions:30,onChanged:(v)=>setState(()=>basalPct=v)),
- if(basal!=null)_endoResult('Basal estimate','${basal.toStringAsFixed(1)} units/day'),if(icr!=null)_endoResult('500-rule carb-ratio estimate','1 unit per ${icr.toStringAsFixed(1)} g carbohydrate'),if(isf!=null)_endoResult('100-rule ISF estimate','1 unit lowers glucose by ~${isf.toStringAsFixed(1)} mmol/L'),
- const Divider(),Row(children:[Expanded(child:_endoField(carbs,'Carbohydrate','g',()=>setState((){}))),const SizedBox(width:8),Expanded(child:_endoField(bg,'Current BG','mmol/L',()=>setState((){}))),const SizedBox(width:8),Expanded(child:_endoField(target,'Target BG','mmol/L',()=>setState((){})))]),
- if(carbDose!=null)_endoResult('Carbohydrate dose estimate','${carbDose.toStringAsFixed(2)} units'),if(corr!=null)_endoResult('Correction estimate','${corr.toStringAsFixed(2)} units'),if(carbDose!=null&&corr!=null)_endoResult('Combined estimate','${(carbDose+corr).toStringAsFixed(2)} units BEFORE individualized rounding/IOB review'),
- const Text('Before dosing: check active insulin/insulin-on-board, exercise, illness/ketones, meal timing, pump status, hypoglycemia risk and the patient-specific correction/carb ratios.'),
- ]);}}
 
 Widget _endoPage(BuildContext context,String title,List<Widget> children)=>Scaffold(appBar:AppBar(title:Text(title,style:const TextStyle(fontWeight:FontWeight.w900))),body:ListView(padding:const EdgeInsets.fromLTRB(16,8,16,28),children:children.map((w)=>Padding(padding:const EdgeInsets.only(bottom:10),child:w)).toList()));
 Widget _endoNotice(BuildContext context,String text)=>Card(color:Theme.of(context).colorScheme.primaryContainer,child:Padding(padding:const EdgeInsets.all(14),child:Text(text)));
