@@ -63,7 +63,7 @@ class InsulinMath {
       return null;
     }
     if (currentMmolL! <= targetMmolL!) return 0;
-    return (currentMmolL! - targetMmolL!) / prescribedIsfMmolLPerUnit!;
+    return (currentMmolL - targetMmolL) / prescribedIsfMmolLPerUnit!;
   }
 
   /// A mathematical device-resolution illustration, not a dosing rule.
