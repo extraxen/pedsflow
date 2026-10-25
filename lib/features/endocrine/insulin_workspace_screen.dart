@@ -17,7 +17,7 @@ class _InsulinWorkspaceScreenState extends State<InsulinWorkspaceScreen> {
   final _carbs = TextEditingController();
   final _glucose = TextEditingController();
   final _target = TextEditingController();
-  int _icrRule = 500;
+  int? _icrRule;
   double? _doseStep;
   bool _reviewed = false;
 
@@ -39,7 +39,7 @@ class _InsulinWorkspaceScreenState extends State<InsulinWorkspaceScreen> {
       c.clear();
     }
     setState(() {
-      _icrRule = 500;
+      _icrRule = null;
       _doseStep = null;
       _reviewed = false;
     });
@@ -91,7 +91,7 @@ class _InsulinWorkspaceScreenState extends State<InsulinWorkspaceScreen> {
   @override
   Widget build(BuildContext context) {
     final total = _read(_tdd);
-    final icrEstimate = InsulinMath.estimatedIcr(total, rule: _icrRule);
+    final icrEstimate = InsulinMath.estimatedIcr(total, rule: _icrRule ?? -1);
     final isfEstimate = InsulinMath.estimatedIsf(total);
     final meal = InsulinMath.mealUnits(
       carbohydrateGrams: _read(_carbs),
@@ -127,25 +127,28 @@ class _InsulinWorkspaceScreenState extends State<InsulinWorkspaceScreen> {
             _field(_tdd, 'Known total daily insulin', 'U/day'),
             SizedBox(width: 225, child: DropdownButtonFormField<int>(
               initialValue: _icrRule,
-              decoration: const InputDecoration(labelText: 'ICR estimation rule',
+              decoration: const InputDecoration(labelText: 'Select ICR estimation rule',
                 border: OutlineInputBorder()),
               items: const [
                 DropdownMenuItem(value: 500, child: Text('500 / TDD')),
                 DropdownMenuItem(value: 330, child: Text('330 / TDD (preschool)')),
                 DropdownMenuItem(value: 250, child: Text('250 / TDD (preschool)')),
               ],
-              onChanged: (v) => setState(() => _icrRule = v ?? 500),
+              onChanged: (v) => setState(() => _icrRule = v),
             )),
           ]),
-          if (icrEstimate != null) ...[
-            _result('Estimated ICR', '1 U per ${icrEstimate.toStringAsFixed(1)} g carbohydrate'),
+          if (icrEstimate != null)
+            _result('Estimated ICR', '1 U per ${icrEstimate.toStringAsFixed(1)} g carbohydrate')
+          else if (isfEstimate != null)
+            const Text('Select an ICR estimation rule to view its result.'),
+          if (isfEstimate != null)
             _result('Estimated ISF (100-rule)',
-              '${isfEstimate!.toStringAsFixed(2)} mmol/L per U '
-              '(~${(isfEstimate! * 18.0182).toStringAsFixed(1)} mg/dL per U)'),
-          ] else
-            const Text('Enter a valid, known TDD to view estimates. '
+              '${isfEstimate.toStringAsFixed(2)} mmol/L per U '
+              '(~${(isfEstimate * 18.0182).toStringAsFixed(1)} mg/dL per U)')
+          else
+            const Text('Enter a valid, known TDD to view an ISF estimate. '
                 'TDD is not inferred from weight.'),
-          if (_icrRule != 500)
+          if (_icrRule == 330 || _icrRule == 250)
             const Text('The 330/250 rules are preschool-specific alternatives, '
                 'not universal pediatric defaults.'),
           ExpansionTile(title: const Text('Why these formulas?'),
@@ -155,8 +158,12 @@ class _InsulinWorkspaceScreenState extends State<InsulinWorkspaceScreen> {
                   'These are starting rules; breakfast, exercise, puberty, '
                   'honeymoon phase and other circumstances may change requirements.'),
               const SizedBox(height: 8),
-              const Text('ISPAD 2024, Insulin and Adjunctive Treatments, '
-                  'pp. 596-597. Local SickKids starting-rule policy not verified.'),
+              const Text('ISPAD 2024 also discusses 1500/TDD in mg/dL '
+                  'in selected insulin-resistant settings or regular-insulin '
+                  'contexts. This workspace implements the 100/TDD rapid-acting '
+                  'estimate only. Local SickKids starting rules are unverified.'),
+              const Text('Source: ISPAD 2024, Insulin and Adjunctive Treatments, '
+                  'pp. 596-597.'),
             ]),
         ], icon: Icons.auto_graph_outlined),
         _panel('2. Calculate using established patient settings', [
