@@ -86,4 +86,59 @@ class InsulinMath {
         !_valid(clinicianSelectedPercent, 0, 100)) return null;
     return prescribedTotalDailyUnits! * clinicianSelectedPercent! / 100;
   }
+  /// Educational starting calculation; the clinician must choose the
+  /// weight-based factor. ISPAD 2024, ch. 9, p. 594 describes marked
+  /// variability by age, puberty, remission and illness; no default factor.
+  static double? estimatedTddFromWeight({
+    required double? weightKg,
+    required double? clinicianSelectedUnitsPerKgDay,
+  }) {
+    if (!_valid(weightKg, 0.01, 300) ||
+        !_valid(clinicianSelectedUnitsPerKgDay, 0.01, 5)) return null;
+    final total = weightKg! * clinicianSelectedUnitsPerKgDay!;
+    return _valid(total, 0.01, 500) ? total : null;
+  }
+
+  /// Total actually given in the last 24 hours. For pumps use delivered
+  /// basal rather than programmed basal, plus all delivered boluses.
+  /// Missing or partial history MUST NOT be treated as a complete TDD.
+  static double? observedTdd({
+    required double? basalUnitsLast24h,
+    required double? rapidBolusUnitsLast24h,
+  }) {
+    if (!_valid(basalUnitsLast24h, 0, 500) ||
+        !_valid(rapidBolusUnitsLast24h, 0, 500)) return null;
+    final sum = basalUnitsLast24h! + rapidBolusUnitsLast24h!;
+    return _valid(sum, 0.01, 500) ? sum : null;
+  }
+
+  /// A clinician-selected basal fraction is not a starting prescription.
+  /// Returns complementary daily bolus allocation for education only.
+  static double? bolusFromTotalAndBasal(
+    double? totalDailyUnits,
+    double? basalUnits,
+  ) {
+    if (!_valid(totalDailyUnits, 0.01, 500) ||
+        !_valid(basalUnits, 0, 500) ||
+        basalUnits! > totalDailyUnits!) return null;
+    return totalDailyUnits - basalUnits;
+  }
+
+  /// For analysis of an established, complete 24-hour regimen only.
+  static double? basalPercentOfTdd(
+    double? totalDailyUnits,
+    double? basalUnits,
+  ) {
+    if (bolusFromTotalAndBasal(totalDailyUnits, basalUnits) == null) {
+      return null;
+    }
+    return basalUnits! / totalDailyUnits! * 100;
+  }
+
+  static double? tddPerKg(double? totalDailyUnits, double? weightKg) {
+    if (!_valid(totalDailyUnits, 0.01, 500) ||
+        !_valid(weightKg, 0.01, 300)) return null;
+    return totalDailyUnits! / weightKg!;
+  }
+
 }
