@@ -212,7 +212,7 @@ class _InsulinWorkspaceScreenState extends State<InsulinWorkspaceScreen> {
           _answer(
             'Remaining daily bolus allocation — NOT an order',
             '${bolus.toStringAsFixed(2)} U/day',
-            '${total!.toStringAsFixed(2)} U/day − '
+            '${total.toStringAsFixed(2)} U/day − '
                 '${basal.toStringAsFixed(2)} U/day. '
                 'Not automatically divided into meal doses.',
           ),
@@ -282,7 +282,7 @@ class _InsulinWorkspaceScreenState extends State<InsulinWorkspaceScreen> {
           _answer(
             'Estimated ICR — not prescribed',
             '1 U : ${estimatedIcr.toStringAsFixed(1)} g',
-            '\$_icrRule / ${total.toStringAsFixed(2)} U/day',
+            '$_icrRule / ${total.toStringAsFixed(2)} U/day',
           ),
         if (estimatedIsf != null)
           _answer(
