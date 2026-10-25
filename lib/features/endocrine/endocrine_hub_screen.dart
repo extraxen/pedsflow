@@ -24,7 +24,7 @@ class EndocrineHubScreen extends StatelessWidget {
       _EndoItem('Thyroid emergencies', 'Thyroid storm and severe hypothyroidism/myxedema framework', Icons.thermostat_outlined, const ThyroidEmergencyScreen()),
       _EndoItem('ICR / ISF calculators', 'Estimated versus prescribed ratios, Canadian units, transparent meal and correction arithmetic', Icons.calculate_outlined, const InsulinWorkspaceScreen()),
       _EndoItem('IV to SC insulin transition', 'Readiness, basal-bolus plan, overlap and handover', Icons.swap_horiz_outlined, const SubcutaneousTransitionScreen()),
-      _EndoItem('Pump support and failure', 'Basal profiles, AID, IOB, sick days and IV-to-pump transition', Icons.settings_input_component_outlined, const InsulinPumpSupportScreen()),
+      _EndoItem('Pump support and failure', 'Basal profiles, AID, IOB, sick days and IV-to-pump transition', Icons.settings_outlined, const InsulinPumpSupportScreen()),
     ];
     String query = '';
     return StatefulBuilder(builder: (context, setLocal) {
