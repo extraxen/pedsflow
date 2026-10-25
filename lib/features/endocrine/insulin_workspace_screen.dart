@@ -15,6 +15,11 @@ class InsulinWorkspaceScreen extends StatefulWidget {
 
 class _InsulinWorkspaceScreenState extends State<InsulinWorkspaceScreen> {
   final _tdd = TextEditingController();
+  final _weight = TextEditingController();
+  final _perKg = TextEditingController();
+  final _basalPercent = TextEditingController();
+  final _actualBasal = TextEditingController();
+  final _actualRapid = TextEditingController();
   final _icr = TextEditingController();
   final _isf = TextEditingController();
   final _carbs = TextEditingController();
@@ -22,13 +27,16 @@ class _InsulinWorkspaceScreenState extends State<InsulinWorkspaceScreen> {
   final _target = TextEditingController();
 
   int _selectedTool = 0;
+  bool _historyMode = false;
   int? _icrRule;
   double? _doseStep;
   bool _reviewed = false;
 
   @override
   void dispose() {
-    for (final c in [_tdd, _icr, _isf, _carbs, _glucose, _target]) {
+    for (final c in [_tdd, _weight, _perKg, _basalPercent,
+                     _actualBasal, _actualRapid,
+                     _icr, _isf, _carbs, _glucose, _target]) {
       c.dispose();
     }
     super.dispose();
@@ -45,6 +53,7 @@ class _InsulinWorkspaceScreenState extends State<InsulinWorkspaceScreen> {
     }
     setState(() {
       _icrRule = null;
+      _historyMode = false;
       _doseStep = null;
       _reviewed = false;
     });
@@ -119,6 +128,183 @@ class _InsulinWorkspaceScreenState extends State<InsulinWorkspaceScreen> {
         Text(explanation, style: Theme.of(context).textTheme.bodySmall),
       ]),
     );
+  }
+
+
+  Widget _startingPlanCalculator() {
+    final weight = _value(_weight);
+    final factor = _value(_perKg);
+    final basalPercent = _value(_basalPercent);
+    final observedBasal = _value(_actualBasal);
+    final observedRapid = _value(_actualRapid);
+    final total = _historyMode
+        ? InsulinMath.observedTdd(
+            basalUnitsLast24h: observedBasal,
+            rapidBolusUnitsLast24h: observedRapid,
+          )
+        : InsulinMath.estimatedTddFromWeight(
+            weightKg: weight,
+            clinicianSelectedUnitsPerKgDay: factor,
+          );
+    final basal = _historyMode
+        ? observedBasal
+        : InsulinMath.basalFromApprovedPercentage(total, basalPercent);
+    final bolus = InsulinMath.bolusFromTotalAndBasal(total, basal);
+    final actualBasalFraction = _historyMode
+        ? InsulinMath.basalPercentOfTdd(total, basal)
+        : null;
+    final perKg = InsulinMath.tddPerKg(total, weight);
+    final estimatedIcr =
+        InsulinMath.estimatedIcr(total, rule: _icrRule ?? -1);
+    final estimatedIsf = InsulinMath.estimatedIsf(total);
+
+    return _card('Starting Insulin Plan / TDD', [
+      const Text(
+        'Calculate total daily insulin and its basal/bolus components. '
+        'All quantities below are arithmetic estimates or previously '
+        'delivered insulin, not new orders.',
+      ),
+      Wrap(spacing: 8, runSpacing: 8, children: [
+        ChoiceChip(
+          label: const Text('Weight-based estimate'),
+          selected: !_historyMode,
+          onSelected: (_) => setState(() => _historyMode = false),
+        ),
+        ChoiceChip(
+          label: const Text('Actual past 24 hours'),
+          selected: _historyMode,
+          onSelected: (_) => setState(() => _historyMode = true),
+        ),
+      ]),
+      if (!_historyMode) ...[
+        const Text(
+          'The clinician must choose the U/kg/day factor based on '
+          'puberty, new diagnosis versus established T1D, remission '
+          '(honeymoon), illness and individual insulin needs. '
+          'No starting factor is pre-selected.',
+        ),
+        Wrap(spacing: 12, runSpacing: 12, children: [
+          _field(_weight, 'Patient weight', 'kg'),
+          _field(_perKg, 'Clinician-selected daily factor', 'U/kg/day'),
+          _field(_basalPercent, 'Clinician-selected basal fraction', '%'),
+        ]),
+        const Text(
+          'ISPAD 2024 describes usual daily requirements around '
+          '0.7-1.0 U/kg/day in prepubertal children outside remission; '
+          'pubertal requirements can reach 1-2 U/kg/day or more. '
+          'Partial remission is often below 0.5 U/kg/day. '
+          'These are population descriptions, NOT default starting orders.',
+        ),
+        if (total != null)
+          _answer(
+            'Estimated TDD — NOT a prescription',
+            '${total.toStringAsFixed(2)} U/day',
+            '${weight!.toStringAsFixed(2)} kg × '
+                '${factor!.toStringAsFixed(2)} U/kg/day',
+          ),
+        if (basal != null && bolus != null) ...[
+          _answer(
+            'Estimated daily basal — NOT an order',
+            '${basal.toStringAsFixed(2)} U/day',
+            '${total!.toStringAsFixed(2)} U/day × '
+                '${basalPercent!.toStringAsFixed(1)}%',
+          ),
+          _answer(
+            'Remaining daily bolus allocation — NOT an order',
+            '${bolus.toStringAsFixed(2)} U/day',
+            '${total!.toStringAsFixed(2)} U/day − '
+                '${basal.toStringAsFixed(2)} U/day. '
+                'Not automatically divided into meal doses.',
+          ),
+        ],
+        if (total == null || basal == null)
+          const Text(
+            'Enter valid weight, clinician-selected U/kg/day factor and '
+            'basal percentage. Both values must be selected deliberately.',
+          ),
+      ] else ...[
+        const Text(
+          'Enter ALL insulin actually delivered during the last 24 hours, '
+          'including basal and meal/correction boluses. For pumps, use '
+          'delivered basal and all delivered boluses rather than the '
+          'programmed basal profile. An incomplete history is not a TDD.',
+        ),
+        Wrap(spacing: 12, runSpacing: 12, children: [
+          _field(_actualBasal, 'Basal delivered in 24 h', 'U'),
+          _field(_actualRapid, 'All boluses delivered in 24 h', 'U'),
+          _field(_weight, 'Patient weight (optional)', 'kg'),
+        ]),
+        if (total != null && bolus != null) ...[
+          _answer(
+            'Observed 24-hour TDD',
+            '${total.toStringAsFixed(2)} U/day',
+            '${observedBasal!.toStringAsFixed(2)} U basal + '
+                '${observedRapid!.toStringAsFixed(2)} U bolus',
+          ),
+          _answer(
+            'Delivered basal and bolus distribution',
+            '${actualBasalFraction!.toStringAsFixed(1)}% basal',
+            '${observedBasal.toStringAsFixed(2)} U basal; '
+                '${bolus.toStringAsFixed(2)} U bolus; '
+                '${(100 - actualBasalFraction).toStringAsFixed(1)}% bolus',
+          ),
+          if (perKg != null)
+            _answer(
+              'Observed weight-normalized TDD',
+              '${perKg.toStringAsFixed(2)} U/kg/day',
+              '${total.toStringAsFixed(2)} U/day ÷ '
+                  '${weight!.toStringAsFixed(2)} kg',
+            ),
+        ] else
+          const Text('Enter complete delivered basal and bolus totals '
+              'from the same 24-hour interval.'),
+      ],
+      if (total != null) ...[
+        const Divider(),
+        const Text('Optional ICR / ISF estimates from this TDD — '
+            'never transferred into prescribed patient settings.'),
+        DropdownButtonFormField<int>(
+          key: ValueKey(_icrRule),
+          initialValue: _icrRule,
+          isExpanded: true,
+          decoration: const InputDecoration(
+            labelText: 'Select ICR estimation rule (optional)',
+            border: OutlineInputBorder(),
+          ),
+          items: const [
+            DropdownMenuItem(value: 500, child: Text('500 / TDD')),
+            DropdownMenuItem(value: 330, child: Text('330 / TDD (preschool)')),
+            DropdownMenuItem(value: 250, child: Text('250 / TDD (preschool)')),
+          ],
+          onChanged: (rule) => setState(() => _icrRule = rule),
+        ),
+        if (estimatedIcr != null)
+          _answer(
+            'Estimated ICR — not prescribed',
+            '1 U : ${estimatedIcr.toStringAsFixed(1)} g',
+            '\$_icrRule / ${total.toStringAsFixed(2)} U/day',
+          ),
+        if (estimatedIsf != null)
+          _answer(
+            'Estimated ISF — not prescribed',
+            '${estimatedIsf.toStringAsFixed(2)} mmol/L/U',
+            '100 / ${total.toStringAsFixed(2)} U/day',
+          ),
+      ],
+      ExpansionTile(
+        title: const Text('Clinical limitations and source'),
+        tilePadding: EdgeInsets.zero,
+        children: const [
+          Text('ISPAD 2024 Chapter 9 pp. 594 and 596: actual daily insulin '
+              'requirements vary significantly. Basal may comprise '
+              '30-50% of TDD on basal-bolus regimens, but '
+              'no basal percentage is auto-selected here. '
+              'Do not use this tool to independently prescribe '
+              'new-onset insulin, choose IV-to-SC transition doses '
+              'or create pump settings. Review with the diabetes team.'),
+        ],
+      ),
+    ], icon: Icons.medication_outlined);
   }
 
   Widget _icrCalculator() {
@@ -340,25 +526,32 @@ class _InsulinWorkspaceScreenState extends State<InsulinWorkspaceScreen> {
             padding: const EdgeInsets.fromLTRB(4, 0, 4, 12),
             child: Wrap(spacing: 8, runSpacing: 8, children: [
               ChoiceChip(
-                label: const Text('Carb Ratio'),
+                label: const Text('TDD / Basal'),
                 selected: _selectedTool == 0,
                 onSelected: (_) => setState(() => _selectedTool = 0),
               ),
               ChoiceChip(
-                label: const Text('Correction Factor'),
+                label: const Text('Carb Ratio'),
                 selected: _selectedTool == 1,
                 onSelected: (_) => setState(() => _selectedTool = 1),
               ),
               ChoiceChip(
-                label: const Text('Meal Dose'),
+                label: const Text('Correction Factor'),
                 selected: _selectedTool == 2,
                 onSelected: (_) => setState(() => _selectedTool = 2),
+              ),
+              ChoiceChip(
+                label: const Text('Meal Dose'),
+                selected: _selectedTool == 3,
+                onSelected: (_) => setState(() => _selectedTool = 3),
               ),
             ]),
           ),
           if (_selectedTool == 0)
-            _icrCalculator()
+            _startingPlanCalculator()
           else if (_selectedTool == 1)
+            _icrCalculator()
+          else if (_selectedTool == 2)
             _isfCalculator()
           else
             _mealCalculator(),
