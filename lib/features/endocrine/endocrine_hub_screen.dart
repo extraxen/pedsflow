@@ -22,7 +22,7 @@ class EndocrineHubScreen extends StatelessWidget {
       _EndoItem('DI / AVP deficiency', 'Paired labs, urine-output calculator, sodium alerts and desmopressin safety', Icons.water_outlined, const DiWorkflowScreen()),
       _EndoItem('Calcium emergencies', 'Ionized calcium, ECG, Mg/phosphate and escalation', Icons.science_outlined, const CalciumEmergencyScreen()),
       _EndoItem('Thyroid emergencies', 'Thyroid storm and severe hypothyroidism/myxedema framework', Icons.thermostat_outlined, const ThyroidEmergencyScreen()),
-      _EndoItem('Insulin Dose Calculator', 'Carb ratio, correction factor and meal-dose calculations', Icons.calculate_outlined, const InsulinWorkspaceScreen()),
+      _EndoItem('Insulin Dose Calculator', 'TDD, basal/bolus, carb ratio, correction factor and meal-dose tools', Icons.calculate_outlined, const InsulinWorkspaceScreen()),
       _EndoItem('IV to SC insulin transition', 'Readiness, basal-bolus plan, overlap and handover', Icons.swap_horiz_outlined, const SubcutaneousTransitionScreen()),
       _EndoItem('Pump support and failure', 'Basal profiles, AID, IOB, sick days and IV-to-pump transition', Icons.settings_outlined, const InsulinPumpSupportScreen()),
     ];
