@@ -141,7 +141,7 @@ class _InsulinWorkspaceScreenState extends State<InsulinWorkspaceScreen> {
             _result('Estimated ICR', '1 U per ${icrEstimate.toStringAsFixed(1)} g carbohydrate'),
             _result('Estimated ISF (100-rule)',
               '${isfEstimate!.toStringAsFixed(2)} mmol/L per U '
-              '(~${(isfEstimate * 18.0182).toStringAsFixed(1)} mg/dL per U)'),
+              '(~${(isfEstimate! * 18.0182).toStringAsFixed(1)} mg/dL per U)'),
           ] else
             const Text('Enter a valid, known TDD to view estimates. '
                 'TDD is not inferred from weight.'),
