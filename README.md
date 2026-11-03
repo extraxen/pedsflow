@@ -1,10 +1,21 @@
 # PedsFlow
 
-**Version:** 20.11.0+2110
-**Release date:** September 18, 2026
+**Version:** 20.12.0+2120
+**Release date:** November 3, 2026
 **Status:** Clean full-source release
 
 PedsFlow is a Flutter pediatric clinical reference and decision-support application. This clean release consolidates the current source into one project and removes historical patch installers, generated Flutter state, and obsolete release-note files from the project root.
+
+## Endocrine tools update (November 2026)
+
+The Endocrine Hub now includes systemic steroid equivalence (educational only),
+Katz/Hillier and distinct CPS corrected sodium estimates, standard and
+albumin-adjusted anion gap, and effective/total calculated osmolarity with
+optional osmolal gap. Each calculator is separately navigable with
+transparent units, safety notes, and tests.
+
+See docs/endocrine_lab_steroid_tools_2026.md for references, limitations and
+the pending SickKids/local verification requirements.
 
 ## Included in this release
 
