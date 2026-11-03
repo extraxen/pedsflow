@@ -10,6 +10,7 @@ import '../dka/dka_calculator_screen.dart';
 import 'di_workflow_screen.dart';
 import 'insulin_workspace_screen.dart';
 import 'insulin_transition_screen.dart';
+import 'endocrine_lab_tools_screen.dart';
 
 class EndocrineHubScreen extends StatelessWidget {
   const EndocrineHubScreen({super.key});
@@ -20,6 +21,10 @@ class EndocrineHubScreen extends StatelessWidget {
       _EndoItem('Adrenal crisis', 'Stress hydrocortisone, shock, glucose and electrolyte support', Icons.bolt_outlined, const AdrenalCrisisScreen()),
       _EndoItem('Hypoglycemia', 'Immediate assessment and glucose rescue framework', Icons.bloodtype_outlined, const PediatricHypoglycemiaScreen()),
       _EndoItem('DI / AVP deficiency', 'Paired labs, urine-output calculator, sodium alerts and desmopressin safety', Icons.water_outlined, const DiWorkflowScreen()),
+      _EndoItem('Steroid Conversion', 'Compare systemic glucocorticoid anti-inflammatory equivalents and routes', Icons.medication_outlined, const SteroidConversionScreen()),
+      _EndoItem('Corrected Sodium (Hyperglycemia)', 'Katz, Hillier and separate CPS pediatric DKA sodium corrections', Icons.water_drop_outlined, const HyperglycemiaSodiumScreen()),
+      _EndoItem('Serum Anion Gap', 'Na, chloride, bicarbonate and optional albumin adjustment', Icons.science_outlined, const SerumAnionGapScreen()),
+      _EndoItem('Serum Osmolality / Osmolarity', 'Effective and total calculated osmolarity, optional osmolal gap', Icons.opacity_outlined, const SerumOsmolarityScreen()),
       _EndoItem('Calcium emergencies', 'Ionized calcium, ECG, Mg/phosphate and escalation', Icons.science_outlined, const CalciumEmergencyScreen()),
       _EndoItem('Thyroid emergencies', 'Thyroid storm and severe hypothyroidism/myxedema framework', Icons.thermostat_outlined, const ThyroidEmergencyScreen()),
       _EndoItem('Insulin Dose Calculator', 'TDD, basal/bolus, carb ratio, correction factor and meal-dose tools', Icons.calculate_outlined, const InsulinWorkspaceScreen()),
