@@ -219,10 +219,20 @@ class NeonatalThyroidEngine {
 
     final tsh = input.tshMiuL!;
     if (input.onLevothyroxine) {
-      return result(ThyroidPriority.followUp,
-        'On levothyroxine — use treated-patient monitoring', [
+      final concerning = tsh > 20 ||
+          ft4Flag == ThyroidValueFlag.below ||
+          (ft4Flag == ThyroidValueFlag.above &&
+              tshFlag == ThyroidValueFlag.below);
+      return result(
+        concerning ? ThyroidPriority.urgent : ThyroidPriority.followUp,
+        concerning
+            ? 'On levothyroxine — concerning results need prompt review'
+            : 'On levothyroxine — use treated-patient monitoring', [
           'Review the current endocrine plan, recent dose and timing of '
               'blood collection, trajectory, adherence and symptoms.',
+          if (concerning)
+            'Contact the treating pediatric endocrine team promptly '
+                'for assessment of markedly abnormal values.',
           'Do not start, stop or change LT4 solely from this initial '
               'diagnosis pathway; contact the treating endocrine team.',
         ]);
