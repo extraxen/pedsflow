@@ -203,6 +203,11 @@ class NeonatalThyroidEngine {
           'Review paired serum TSH and FT4, collection age and screening '
               'details. A result appearing within a slide interval does '
               'not cancel an abnormal screen.',
+          if (ft4Flag == ThyroidValueFlag.below ||
+              (input.tshMiuL != null && input.tshMiuL! > 20))
+            'The serum results also raise concern for congenital '
+                'hypothyroidism. Discuss prompt levothyroxine initiation '
+                'with pediatric endocrinology using age-specific lab ranges.',
         ]);
     }
 
