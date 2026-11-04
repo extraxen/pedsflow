@@ -229,7 +229,7 @@ class NeonatalThyroidEngine {
     }
 
     if (ft4Flag == ThyroidValueFlag.below) {
-      if (tshFlag == ThyroidValueFlag.above && tsh > 20) {
+      if (tshFlag == ThyroidValueFlag.above) {
         return result(ThyroidPriority.urgent,
           'Low FT4 with elevated TSH — primary CH concern', [
             'Urgently contact pediatric endocrinology. Guidelines '
@@ -250,12 +250,14 @@ class NeonatalThyroidEngine {
         ]);
     }
 
-    if (tsh > 20 && age >= 7 && age <= 90) {
+    if (tsh > 20 && age >= 7 && age < 365) {
       return result(ThyroidPriority.urgent,
         'Serum TSH >20 mIU/L — urgent endocrine review', [
           'Contact pediatric endocrinology the same day. ENDO-ERN '
               'and AAP advise levothyroxine treatment for confirmatory '
-              'serum TSH >20 mIU/L even when free T4 is normal.',
+              'serum TSH >20 mIU/L even when free T4 is normal '
+              'in the newborn period. Beyond the newborn period, '
+              'specialist interpretation remains necessary.'
           'Confirm that the value is serum (not dried-blood-spot), '
               'review sample age and repeat sampling as directed. '
               'Treatment timing must not wait for unnecessary imaging.',
