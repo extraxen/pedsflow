@@ -11,6 +11,7 @@ import 'di_workflow_screen.dart';
 import 'insulin_workspace_screen.dart';
 import 'insulin_transition_screen.dart';
 import 'endocrine_lab_tools_screen.dart';
+import 'neonatal_thyroid_screen.dart';
 
 class EndocrineHubScreen extends StatelessWidget {
   const EndocrineHubScreen({super.key});
@@ -26,6 +27,7 @@ class EndocrineHubScreen extends StatelessWidget {
       _EndoItem('Serum Anion Gap', 'Na, chloride, bicarbonate and optional albumin adjustment', Icons.science_outlined, const SerumAnionGapScreen()),
       _EndoItem('Serum Osmolality / Osmolarity', 'Effective and total calculated osmolarity, optional osmolal gap', Icons.opacity_outlined, const SerumOsmolarityScreen()),
       _EndoItem('Calcium emergencies', 'Ionized calcium, ECG, Mg/phosphate and escalation', Icons.science_outlined, const CalciumEmergencyScreen()),
+      _EndoItem('Neonatal Thyroid (TSH / FT4)', 'Age-based serum thyroid ranges and congenital hypothyroidism next steps', Icons.child_care_outlined, const NeonatalThyroidScreen()),
       _EndoItem('Thyroid emergencies', 'Thyroid storm and severe hypothyroidism/myxedema framework', Icons.thermostat_outlined, const ThyroidEmergencyScreen()),
       _EndoItem('Insulin Dose Calculator', 'TDD, basal/bolus, carb ratio, correction factor and meal-dose tools', Icons.calculate_outlined, const InsulinWorkspaceScreen()),
       _EndoItem('IV to SC insulin transition', 'Readiness, basal-bolus plan, overlap and handover', Icons.swap_horiz_outlined, const SubcutaneousTransitionScreen()),
