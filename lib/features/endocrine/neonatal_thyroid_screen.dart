@@ -113,7 +113,9 @@ class _NeonatalThyroidScreenState extends State<NeonatalThyroidScreen> {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(label, style: Theme.of(context).textTheme.titleSmall),
         const SizedBox(height: 4),
-        Text(value == null ? 'Not entered' : '${value.toStringAsFixed(2)} ${unit}',
+        Text(value == null || !value.isFinite
+                ? 'Invalid / not entered'
+                : '${value.toStringAsFixed(2)} ${unit}',
             style: Theme.of(context).textTheme.titleLarge
                 ?.copyWith(fontWeight: FontWeight.bold)),
         Text(_flag(flag), style: const TextStyle(fontWeight: FontWeight.w600)),
