@@ -1,7 +1,7 @@
 # PedsFlow
 
-**Version:** 20.12.0+2120
-**Release date:** November 3, 2026
+**Version:** 20.13.0+2130
+**Release date:** November 4, 2026
 **Status:** Clean full-source release
 
 PedsFlow is a Flutter pediatric clinical reference and decision-support application. This clean release consolidates the current source into one project and removes historical patch installers, generated Flutter state, and obsolete release-note files from the project root.
@@ -16,6 +16,13 @@ transparent units, safety notes, and tests.
 
 See docs/endocrine_lab_steroid_tools_2026.md for references, limitations and
 the pending SickKids/local verification requirements.
+
+## Neonatal thyroid evaluation (November 2026)
+
+- Age-specific TSH and free T4 reference values transcribed from the supplied neonatal reference image, with explicit data gaps and assay-provenance warning.
+- Guideline-grounded next-step assessment for possible primary/central congenital hypothyroidism, positive newborn screening, and premature/NICU infants.
+- No autonomous levothyroxine orders; confirm serum specimen and verify local lab ranges before patient care.
+- Full provenance, warnings, and boundaries: docs/neonatal_thyroid_reference_and_triage_2026.md.
 
 ## Included in this release
 
