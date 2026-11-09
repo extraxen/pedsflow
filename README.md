@@ -1,7 +1,7 @@
 # PedsFlow
 
-**Version:** 20.13.0+2130
-**Release date:** November 4, 2026
+**Version:** 20.14.0+2140
+**Release date:** November 9, 2026
 **Status:** Clean full-source release
 
 PedsFlow is a Flutter pediatric clinical reference and decision-support application. This clean release consolidates the current source into one project and removes historical patch installers, generated Flutter state, and obsolete release-note files from the project root.
@@ -23,6 +23,13 @@ the pending SickKids/local verification requirements.
 - Guideline-grounded next-step assessment for possible primary/central congenital hypothyroidism, positive newborn screening, and premature/NICU infants.
 - No autonomous levothyroxine orders; confirm serum specimen and verify local lab ranges before patient care.
 - Full provenance, warnings, and boundaries: docs/neonatal_thyroid_reference_and_triage_2026.md.
+
+## Calcium & Bone Health update (November 9, 2026)
+
+- Replaces the brief Calcium Emergencies page with focused hypocalcemia, hypercalcemia/SCFN, neonatal/22q11, PTH-pattern, nutrition, bone-fragility and bisphosphonate-safety modules.
+- Adds calcium-intake, urine Ca/Cr, and elemental-label arithmetic with explicit unit validation.
+- Derived from user-provided educational archive without uploading private internal-only hospital algorithms, patient lists, draft drug orders or source files.
+- Uses Health Canada current intake standards and ISCD pediatric fracture criteria. See docs/calcium_bone_health_2026.md for references, conflicts and clinical limitations.
 
 ## Included in this release
 
