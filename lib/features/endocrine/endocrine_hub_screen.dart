@@ -12,6 +12,7 @@ import 'insulin_workspace_screen.dart';
 import 'insulin_transition_screen.dart';
 import 'endocrine_lab_tools_screen.dart';
 import 'neonatal_thyroid_screen.dart';
+import 'calcium_hub_screen.dart';
 
 class EndocrineHubScreen extends StatelessWidget {
   const EndocrineHubScreen({super.key});
@@ -26,7 +27,7 @@ class EndocrineHubScreen extends StatelessWidget {
       _EndoItem('Corrected Sodium (Hyperglycemia)', 'Katz, Hillier and separate CPS pediatric DKA sodium corrections', Icons.water_drop_outlined, const HyperglycemiaSodiumScreen()),
       _EndoItem('Serum Anion Gap', 'Na, chloride, bicarbonate and optional albumin adjustment', Icons.science_outlined, const SerumAnionGapScreen()),
       _EndoItem('Serum Osmolality / Osmolarity', 'Effective and total calculated osmolarity, optional osmolal gap', Icons.opacity_outlined, const SerumOsmolarityScreen()),
-      _EndoItem('Calcium emergencies', 'Ionized calcium, ECG, Mg/phosphate and escalation', Icons.science_outlined, const CalciumEmergencyScreen()),
+      _EndoItem('Calcium & Bone Health', 'Hypo/hypercalcemia, neonates, PTH, nutrition and bone fragility', Icons.science_outlined, const CalciumHubScreen()),
       _EndoItem('Neonatal Thyroid (TSH / FT4)', 'Age-based serum thyroid ranges and congenital hypothyroidism next steps', Icons.child_care_outlined, const NeonatalThyroidScreen()),
       _EndoItem('Thyroid emergencies', 'Thyroid storm and severe hypothyroidism/myxedema framework', Icons.thermostat_outlined, const ThyroidEmergencyScreen()),
       _EndoItem('Insulin Dose Calculator', 'TDD, basal/bolus, carb ratio, correction factor and meal-dose tools', Icons.calculate_outlined, const InsulinWorkspaceScreen()),
@@ -66,13 +67,6 @@ class _PediatricHypoglycemiaScreenState extends State<PediatricHypoglycemiaScree
  if(G!=null)_endoResult('Current glucose','${G.toStringAsFixed(1)} mmol/L'),if(d10!=null)_endoResult('D10 volume equivalence','2 mL/kg = ${d10.toStringAsFixed(0)} mL (200 mg/kg glucose) — verify local pediatric hypoglycemia protocol'),
  const Text('Recheck glucose after rescue and provide ongoing carbohydrate/dextrose to prevent recurrence. Review insulin/sulfonylurea exposure, fasting/illness, adrenal/pituitary disease, metabolic disease, liver disease and sepsis where relevant.'),
  ]);}}
-
-class CalciumEmergencyScreen extends StatelessWidget{const CalciumEmergencyScreen({super.key});@override Widget build(BuildContext context)=>_endoPage(context,'Calcium emergencies',const[
- Card(child:Padding(padding:EdgeInsets.all(14),child:Text('Use ionized calcium when available in the acutely ill child. Total calcium is affected by albumin and pH. Severe symptomatic hypo- or hypercalcemia requires monitored specialist management.'))),
- ListTile(leading:Icon(Icons.monitor_heart_outlined),title:Text('Hypocalcemia',style:TextStyle(fontWeight:FontWeight.w900)),subtitle:Text('Tetany, seizures, stridor, paresthesia or prolonged QT: obtain ionized Ca, Mg, phosphate, renal function and ECG; correct coexisting hypomagnesemia. IV calcium is a high-alert medication—use local concentration/rate/line protocol.')),
- ListTile(leading:Icon(Icons.warning_amber_outlined),title:Text('Hypercalcemia',style:TextStyle(fontWeight:FontWeight.w900)),subtitle:Text('Assess hydration, ECG, renal function, phosphate, PTH and vitamin D context. Severe/symptomatic hypercalcemia warrants IV hydration and endocrine/nephrology involvement; cause-directed therapies require specialist guidance.')),
- Text('PedsFlow intentionally does not invent a universal IV calcium dose/concentration because local pediatric formulations and access limits vary. Link this page to your institutional calcium replacement monograph before enabling one-tap dosing.'),
-]);}
 
 class ThyroidEmergencyScreen extends StatelessWidget{const ThyroidEmergencyScreen({super.key});@override Widget build(BuildContext context)=>_endoPage(context,'Thyroid emergencies',const[
  ListTile(leading:Icon(Icons.local_fire_department_outlined),title:Text('Thyroid storm',style:TextStyle(fontWeight:FontWeight.w900)),subtitle:Text('Consider with severe thyrotoxicosis plus fever, marked tachycardia/arrhythmia, CNS change, heart failure or GI/hepatic dysfunction. Stabilize ABCs, temperature/fluids carefully, and involve endocrinology/PICU urgently. Therapy is multi-drug and sequence-dependent; use current local endocrine protocol.')),
